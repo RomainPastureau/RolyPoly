@@ -13,6 +13,7 @@ public class Background extends JPanel {
 	
 	int lineSpace = 100;
 	
+	//Couleurs par défaut
 	Color bgCenterCol = new Color(234, 242, 255);
 	Color bgExterCol = new Color(201, 221, 252);
 	Color lineCol = new Color(201, 221, 252);
