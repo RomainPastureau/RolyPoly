@@ -10,6 +10,7 @@ public class Fenetre extends JFrame {
 	private static final long serialVersionUID = 1L;
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	int width, height;
+	PressKey pk;
 	
 	public Fenetre(){
 		//Titre de fenêtre
@@ -28,10 +29,17 @@ public class Fenetre extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//Affichage du panel
-		Background bg = new Background(false, true);
+		Background bg = new Background(true, true);
 		this.setContentPane(bg);
+		
+		
+		pk = new PressKey();
+		this.addKeyListener(pk);
 		
 		//Affichage
 		this.setVisible(true);
+	}
+	
+	public void go(){
 	}
 }
