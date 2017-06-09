@@ -3,11 +3,9 @@ package ResolutionTest;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -56,8 +54,10 @@ public class TitleLayer extends Layer {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		Font font = new Font("Calibri", Font.BOLD, 120);
-		g2d.setFont(font);
-		g2d = CenterText.center(g2d, titre, Color.BLACK, 0, 200, new Dimension(width, 200));
+		g2d = CenterText.center(g2d, titre, font, 120, Color.BLACK, 0, 200, new Dimension(width, 200));
+		
+		Button boutonLancer = new Button(width/2-width/6, height/2+height/4, new Dimension(width/3, height/10), colors.get(0), true, "Démarrer", true);
+		boutonLancer.paintComponent(g);	
 		
 	}
 }
