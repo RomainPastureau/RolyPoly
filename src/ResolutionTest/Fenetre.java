@@ -8,19 +8,19 @@ import javax.swing.JFrame;
 public class Fenetre extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	int width, height;
-	PressKey pk;
+	protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	protected int width, height;
+	protected PressKey pk;
 	
 	public Fenetre(){
 		//Titre de fenêtre
-		this.setTitle("RolyPoly Resolution Test 0.1");
+		this.setTitle("RolyPoly Resolution Test 0.3");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
 		height = (int)screenSize.getHeight();
 		this.setSize(width, height);
-		
+
 		//Plein écran
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setUndecorated(true);
@@ -28,18 +28,13 @@ public class Fenetre extends JFrame {
 		//Action à la fermeture
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//Affichage du panel
-		Background bg = new Background(true, true);
-		this.setContentPane(bg);
+		ResolutionTestPanel rtp = new ResolutionTestPanel(this.screenSize);
+		this.setContentPane(rtp);
 		
-		
+		//Entrées clavier
 		pk = new PressKey();
 		this.addKeyListener(pk);
-		
-		//Affichage
-		this.setVisible(true);
-	}
-	
-	public void go(){
-	}
+
+	}	
+
 }

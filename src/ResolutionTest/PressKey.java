@@ -23,7 +23,7 @@ public class PressKey implements KeyListener {
 	
 	//Fonction de fermeture du programme
 	public void escape(){
-		System.out.println("Fin du programme.");
+		System.out.println("Fermeture du programme.");
 		Frame[] frames = JFrame.getFrames();
 		frames[0].dispatchEvent(new WindowEvent(frames[0], WindowEvent.WINDOW_CLOSING));
 	}

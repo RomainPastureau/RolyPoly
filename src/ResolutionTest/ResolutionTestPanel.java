@@ -1,0 +1,45 @@
+package ResolutionTest;
+
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.JPanel;
+
+public class ResolutionTestPanel extends JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	protected int x, y;
+	protected Dimension d;
+	protected BackgroundLayer bg;
+	protected TitleLayer tl;
+	protected HashMap<String, ArrayList<String>> options = new HashMap<String, ArrayList<String>>();
+	protected boolean menu;
+	
+	public ResolutionTestPanel(Dimension d){
+		this.x = 0;
+		this.y = 0;
+		this.d = d;
+		this.bg = new BackgroundLayer(true, true, d);
+		this.tl = new TitleLayer("RolyPoly Resolution Test", options, d);
+		this.menu = true;
+	}
+	
+	public ResolutionTestPanel(int x, int y, Dimension d){
+		this.x = x;
+		this.y = y;
+		this.d = d;
+		this.bg = new BackgroundLayer(true, true, d);
+		this.tl = new TitleLayer("RolyPoly Resolution Test", options, d);
+		this.menu = true;
+	}
+	
+	public void paintComponent(Graphics g){
+		bg.paintComponent(g);
+		if(menu){
+			tl.paintComponent(g);
+		}
+	}
+
+}
