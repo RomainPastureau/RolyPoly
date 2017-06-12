@@ -5,8 +5,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class BackgroundLayer extends Layer {
+public class BackgroundLayer extends Layer implements MouseListener {
 	
 	//Espacement entre deux lignes du quadrillage
 	protected int lineSpace = 100;
@@ -87,6 +89,31 @@ public class BackgroundLayer extends Layer {
 	//Réglage de l'espacement entre les lignes du quadrillage
 	public void setLineSpace(int lineSpace){
 		this.lineSpace = lineSpace;
+	}
+
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -6,16 +6,20 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class TitleLayer extends Layer {
+public class TitleLayer extends Layer implements MouseListener {
 	
 	protected String titre = "<Pas de titre>";
 	protected HashMap<String, ArrayList<String>> options;
 	protected ArrayList<Color> colors = new ArrayList<Color>();
 	protected float opacity = 0.5f;
+	protected Button boutonLancer;
+	protected boolean menu;
 	
 	public TitleLayer(String titre, HashMap<String, ArrayList<String>> options, Dimension d){
 		super(d);
@@ -26,6 +30,7 @@ public class TitleLayer extends Layer {
 		Color mainColorDarker = new Color(255, 153, 0);
 		Color[] tempCol = {mainColorBrighter, mainColor, mainColorDarker};
 		this.colors.addAll(Arrays.asList(tempCol));
+		boutonLancer = new Button(width/2-width/6, height/2+height/4, new Dimension(width/3, height/10), colors.get(0), "Démarrer", true);
 	}
 	
 	public TitleLayer(String titre, HashMap<String, ArrayList<String>> options, Color mainColor, float opacity, Dimension d){
@@ -35,6 +40,7 @@ public class TitleLayer extends Layer {
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		this.colors.addAll(Arrays.asList(tempCol));
 		this.opacity = opacity;
+		boutonLancer = new Button(width/2-width/6, height/2+height/4, new Dimension(width/3, height/10), colors.get(0), "Démarrer", true);
 	}
 	
 	public TitleLayer(String titre, HashMap<String, ArrayList<String>> options, ArrayList<Color> colors, float opacity, Dimension d){
@@ -43,6 +49,7 @@ public class TitleLayer extends Layer {
 		this.options = options;
 		this.colors = colors;
 		this.opacity = opacity;
+		boutonLancer = new Button(width/2-width/6, height/2+height/4, new Dimension(width/3, height/10), colors.get(0), "Démarrer", true);
 	}
 	
 	public void paintComponent(Graphics g){
@@ -56,8 +63,32 @@ public class TitleLayer extends Layer {
 		Font font = new Font("Calibri", Font.BOLD, 120);
 		g2d = CenterText.center(g2d, titre, font, 120, Color.BLACK, 0, 200, new Dimension(width, 200));
 		
-		Button boutonLancer = new Button(width/2-width/6, height/2+height/4, new Dimension(width/3, height/10), colors.get(0), true, "Démarrer", true);
-		boutonLancer.paintComponent(g);	
 		
+		boutonLancer.paintComponent(g);	
+		menu = boutonLancer.getValue();
+	}
+
+	public void mouseClicked(MouseEvent e) {
+		boutonLancer.mouseClicked(e);
+	}
+
+	public void mouseEntered(MouseEvent e) {
+		boutonLancer.mouseEntered(e);
+	}
+
+	public void mouseExited(MouseEvent e) {
+		boutonLancer.mouseExited(e);
+	}
+
+	public void mousePressed(MouseEvent e) {
+		boutonLancer.mousePressed(e);
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		boutonLancer.mouseReleased(e);
+	}
+	
+	public boolean getMenu(){
+		return(menu);
 	}
 }
