@@ -18,6 +18,7 @@ public class TestLayer extends Layer implements KeyListener {
 	protected Color[] tempColor = {new Color(255, 156, 0), new Color(0, 111, 225), new Color(66, 166, 0),
 									new Color(128, 0, 160), new Color(255, 255, 0), new Color(0, 240, 255),
 									new Color(153, 204, 0), new Color(189, 0, 236), new Color(148, 148, 148)};
+	protected ArrayList<Window> windows;
 	protected ArrayList<Color> colors;
 	protected int alt;
 	protected int previous;
@@ -31,6 +32,10 @@ public class TestLayer extends Layer implements KeyListener {
 		this.alt = 0;
 		this.previous = nbZones;
 		this.lastAlt = false;
+		this.windows = new ArrayList<Window>();
+		for(int i = 0; i < 9; i++){
+			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
+		}
 	}
 	
 	public TestLayer(int nbZones, int x, int y, Dimension d){
@@ -41,11 +46,17 @@ public class TestLayer extends Layer implements KeyListener {
 		this.alt = 0;
 		this.previous = nbZones;
 		this.lastAlt = false;
+		this.windows = new ArrayList<Window>();
+		for(int i = 0; i < 9; i++){
+			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
+		}
 	}
 	
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setStroke(new BasicStroke(10));
+		
+		
 		if(nbZones == 1){
 			g2d.setColor(colors.get(0));
 			g2d.drawRect(x+5, y+5, width-10, height-10);
@@ -56,11 +67,11 @@ public class TestLayer extends Layer implements KeyListener {
 			for(int i = 0; i < nbZones; i++){
 				g2d.setColor(colors.get(i));
 				if(alt == 0){
-					g2d.drawRect(x+5+(i*((width)/nbZones)), y+5, (width-20)/nbZones, height-10);
+					g2d.drawRect(x+5+(i*((width)/2)), y+5, (width-20)/2, height-10);
 					lastAlt = false;
 				}
 				else{
-					g2d.drawRect(x+5, (y+5)+(i*((height/nbZones))), width-10, (height-20)/nbZones);
+					g2d.drawRect(x+5, (y+5)+(i*((height/2))), width-10, (height-20)/2);
 					lastAlt = true;
 				}
 			}
@@ -70,10 +81,22 @@ public class TestLayer extends Layer implements KeyListener {
 			for(int i = 0; i < nbZones; i++){
 				g2d.setColor(colors.get(i));
 				if(alt == 0){
-					g2d.drawRect(x+5+(i*((width)/nbZones)), y+5, (width-30)/nbZones, height-10);
+					g2d.drawRect(x+5+(i*((width)/3)), y+5, (width-30)/3, height-10);
 					lastAlt = false;
 				}
 				else if(alt == 1){
+					g2d.drawRect(x+5, y+5+(i*((height)/3)), width-10, (height-30)/3);
+					lastAlt = false;
+				}
+				else if(alt == 2){
+					switch(i){
+						case 0: g2d.drawRect(x+5, y+5, (width-20)/2, height-10); break;
+						case 1: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, (height-20)/2); break;
+						case 2: g2d.drawRect(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2); break;
+					}
+					lastAlt = false;
+				}
+				else if(alt == 3){
 					switch(i){
 						case 0: g2d.drawRect(x+5, y+5, width-10, (height-20)/2); break;
 						case 1: g2d.drawRect(x+5, y+5+height/2, (width-20)/2, (height-20)/2); break;
@@ -81,7 +104,7 @@ public class TestLayer extends Layer implements KeyListener {
 					}
 					lastAlt = false;
 				}
-				else if(alt == 2){
+				else if(alt == 4){
 					switch(i){
 						case 0: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, height-10); break;
 						case 1: g2d.drawRect(x+5, y+5, (width-20)/2, (height-20)/2); break;
@@ -89,31 +112,61 @@ public class TestLayer extends Layer implements KeyListener {
 					}
 					lastAlt = false;
 				}
-				else if(alt == 3){
+				else if(alt == 5){
 					switch(i){
 						case 0: g2d.drawRect(x+5, y+5+height/2, width-10, (height-20)/2); break;
 						case 1: g2d.drawRect(x+5, y+5, (width-20)/2, (height-20)/2); break;
 						case 2: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, (height-20)/2); break;
 					}
-					lastAlt = false;
-				}
-				else if(alt == 4){
-					switch(i){
-						case 0: g2d.drawRect(x+5, y+5, (width-20)/2, height-10); break;
-						case 1: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, (height-20)/2); break;
-						case 2: g2d.drawRect(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2); break;
-					}
 					lastAlt = true;
 				}
+
 			}
 		}
 		
 		if(nbZones == 4){
 			for(int i = 0; i < nbZones; i++){
 				g2d.setColor(colors.get(i));
-				g2d.drawRect((x+5+((i*((width)/2))%(width))), 
-						(y+5)+((int)(i/2)*(height/2)), 
-						(width-20)/2, (height-20)/2);
+				if(alt == 0){
+					g2d.drawRect((x+5+((i*((width)/2))%(width))), (y+5)+((int)(i/2)*(height/2)), (width-20)/2, (height-20)/2);
+					lastAlt = false;
+				}
+				else if(alt == 1){
+					switch(i){
+						case 0: g2d.drawRect(x+5, y+5, (width-20)/2, height-10); break;
+						case 1: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, (height-30)/3); break;
+						case 2: g2d.drawRect(x+5+width/2, y+5+height/3, (width-20)/2, (height-30)/3); break;
+						case 3: g2d.drawRect(x+5+width/2, y+5+2*height/3, (width-20)/2, (height-30)/3); break;
+					}
+					lastAlt = false;
+				}
+				else if(alt == 2){
+					switch(i){
+						case 0: g2d.drawRect(x+5, y+5, width-10, (height-20)/2); break;
+						case 1: g2d.drawRect(x+5, y+5+height/2, (width-30)/3, (height-20)/2); break;
+						case 2: g2d.drawRect(x+5+width/3, y+5+height/2, (width-30)/3, (height-20)/2); break;
+						case 3: g2d.drawRect(x+5+2*width/3, y+5+height/2, (width-30)/3, (height-20)/2); break;
+				}
+					lastAlt = false;
+				}
+				else if(alt == 3){
+					switch(i){
+						case 0: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, height-10); break;
+						case 1: g2d.drawRect(x+5, y+5, (width-20)/2, (height-30)/3); break;
+						case 2: g2d.drawRect(x+5, y+5+height/3, (width-20)/2, (height-30)/3); break;
+						case 3: g2d.drawRect(x+5, y+5+2*height/3, (width-20)/2, (height-30)/3); break;
+					}
+					lastAlt = false;
+				}
+				else if(alt == 4){
+					switch(i){
+						case 0: g2d.drawRect(x+5, y+5+height/2, width-10, (height-20)/2); break;
+						case 1: g2d.drawRect(x+5, y+5, (width-30)/3, (height-20)/2); break;
+						case 2: g2d.drawRect(x+5+width/3, y+5, (width-30)/3, (height-20)/2); break;
+						case 3: g2d.drawRect(x+5+2*width/3, y+5, (width-30)/3, (height-20)/2); break;
+					}
+					lastAlt = true;
+				}
 			}
 		}
 		
