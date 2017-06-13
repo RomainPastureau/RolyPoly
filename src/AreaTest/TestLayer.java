@@ -15,9 +15,9 @@ import Shared.Layer;
 public class TestLayer extends Layer implements KeyListener {
 	
 	protected int nbZones;
-	protected Color[] tempColor = {new Color(255, 156, 0), new Color(0, 111, 225), new Color(153, 204, 0),
-									new Color(189, 0, 236), new Color(255, 255, 0), new Color(0, 240, 255),
-									new Color(255, 0, 0), new Color(66, 166, 0), new Color(148, 148, 148)};
+	protected Color[] tempColor = {new Color(255, 156, 0), new Color(0, 111, 225), new Color(66, 166, 0),
+									new Color(128, 0, 60), new Color(255, 255, 0), new Color(0, 240, 255),
+									new Color(153, 204, 0), new Color(189, 0, 236), new Color(148, 148, 148)};
 	protected ArrayList<Color> colors;
 	
 	public TestLayer(int nbZones, Dimension d){
