@@ -3,6 +3,8 @@ package AreaTest;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import javax.swing.JPanel;
 import Shared.BackgroundLayer;
 import Shared.TitleLayer;
 
-public class AreaTestPanel extends JPanel implements MouseListener {
+public class AreaTestPanel extends JPanel implements MouseListener, KeyListener {
 	
 	private static final long serialVersionUID = 1L;
 	protected int x, y;
@@ -34,8 +36,8 @@ public class AreaTestPanel extends JPanel implements MouseListener {
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly Area Test", "0.1", options, colors, 0.5f, d);
-		//this.test = new TestLayer(10, 5, 150, d);
+		this.tl = new TitleLayer("RolyPoly Area Test", "0.2", options, colors, 0.5f, d);
+		this.test = new TestLayer(2, d);
 		this.menu = true;
 	}
 	
@@ -48,8 +50,8 @@ public class AreaTestPanel extends JPanel implements MouseListener {
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly Area Test", "0.1", options, colors, 0.5f, d);
-		//this.test = new TestLayer(10, 5, 150, d);
+		this.tl = new TitleLayer("RolyPoly Area Test", "0.2", options, colors, 0.5f, d);
+		this.test = new TestLayer(2, d);
 		this.menu = true;
 	}
 	
@@ -64,7 +66,7 @@ public class AreaTestPanel extends JPanel implements MouseListener {
 		}
 		else{
 //			try{
-//				test.paintComponent(g);
+				test.paintComponent(g);
 //				if(test.getOver() == true){
 //					menu = true;
 //					test.reboot();
@@ -85,9 +87,30 @@ public class AreaTestPanel extends JPanel implements MouseListener {
 		}
 	}
 
+	public void keyPressed(KeyEvent ke) {
+		if(menu){}
+		else{
+			test.keyPressed(ke);
+		}
+	}
+
+	
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
+
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

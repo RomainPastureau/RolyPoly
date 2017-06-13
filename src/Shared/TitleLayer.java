@@ -16,7 +16,7 @@ public class TitleLayer extends Layer implements MouseListener {
 	
 	protected String titre = "<Pas de titre>", version = "0.0";
 	protected HashMap<String, ArrayList<String>> options;
-	protected ArrayList<Color> colors = new ArrayList<Color>();
+	protected ArrayList<Color> colors;
 	protected float opacity = 0.5f;
 	protected Button boutonLancer;
 	protected boolean menu;
@@ -26,6 +26,7 @@ public class TitleLayer extends Layer implements MouseListener {
 		this.titre = titre;
 		this.version = version;
 		this.options = options;
+		this.colors = new ArrayList<Color>();
 		Color mainColor = new Color(255, 204, 0);
 		Color mainColorBrighter = new Color(255, 230, 128);
 		Color mainColorDarker = new Color(255, 153, 0);
@@ -39,6 +40,7 @@ public class TitleLayer extends Layer implements MouseListener {
 		this.titre = titre;
 		this.version = version;
 		this.options = options;
+		this.colors = new ArrayList<Color>();
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		this.colors.addAll(Arrays.asList(tempCol));
 		this.opacity = opacity;
