@@ -14,16 +14,17 @@ import java.util.HashMap;
 
 public class TitleLayer extends Layer implements MouseListener {
 	
-	protected String titre = "<Pas de titre>";
+	protected String titre = "<Pas de titre>", version = "0.0";
 	protected HashMap<String, ArrayList<String>> options;
 	protected ArrayList<Color> colors = new ArrayList<Color>();
 	protected float opacity = 0.5f;
 	protected Button boutonLancer;
 	protected boolean menu;
 	
-	public TitleLayer(String titre, HashMap<String, ArrayList<String>> options, Dimension d){
+	public TitleLayer(String titre, String version, HashMap<String, ArrayList<String>> options, Dimension d){
 		super(d);
 		this.titre = titre;
+		this.version = version;
 		this.options = options;
 		Color mainColor = new Color(255, 204, 0);
 		Color mainColorBrighter = new Color(255, 230, 128);
@@ -33,9 +34,10 @@ public class TitleLayer extends Layer implements MouseListener {
 		boutonLancer = new Button(width/2-width/6, height/2+height/4, new Dimension(width/3, height/10), colors.get(0), "Démarrer", true);
 	}
 	
-	public TitleLayer(String titre, HashMap<String, ArrayList<String>> options, Color mainColor, float opacity, Dimension d){
+	public TitleLayer(String titre, String version, HashMap<String, ArrayList<String>> options, Color mainColor, float opacity, Dimension d){
 		super(d);
 		this.titre = titre;
+		this.version = version;
 		this.options = options;
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		this.colors.addAll(Arrays.asList(tempCol));
@@ -43,9 +45,10 @@ public class TitleLayer extends Layer implements MouseListener {
 		boutonLancer = new Button(width/2-width/6, height/2+height/4, new Dimension(width/3, height/10), colors.get(0), "Démarrer", true);
 	}
 	
-	public TitleLayer(String titre, HashMap<String, ArrayList<String>> options, ArrayList<Color> colors, float opacity, Dimension d){
+	public TitleLayer(String titre, String version, HashMap<String, ArrayList<String>> options, ArrayList<Color> colors, float opacity, Dimension d){
 		super(d);
 		this.titre = titre;
+		this.version = version;
 		this.options = options;
 		this.colors = colors;
 		this.opacity = opacity;
@@ -62,6 +65,7 @@ public class TitleLayer extends Layer implements MouseListener {
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		Font font = new Font("Calibri", Font.BOLD, 120);
 		g2d = CenterText.center(g2d, titre, font, 120, Color.BLACK, 0, 200, new Dimension(width, 200));
+		g2d = CenterText.center(g2d, "Version "+version, font, 40, Color.BLACK, width-300, height-60, new Dimension(300,60));
 		
 		boutonLancer.paintComponent(g);	
 		menu = boutonLancer.getValue();

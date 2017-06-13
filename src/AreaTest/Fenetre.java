@@ -1,4 +1,4 @@
-package ResolutionTest;
+package AreaTest;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -15,11 +15,11 @@ public class Fenetre extends JFrame implements MouseListener {
 	protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	protected int width, height;
 	protected PressKey pk;
-	protected ResolutionTestPanel rtp;
+	protected AreaTestPanel mzt;
 	
 	public Fenetre(){
 		//Titre de fenêtre
-		this.setTitle("RolyPoly Resolution Test 1.2");
+		this.setTitle("RolyPoly MultiZone Test 0.1");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -33,8 +33,8 @@ public class Fenetre extends JFrame implements MouseListener {
 		//Action à la fermeture
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
-		rtp = new ResolutionTestPanel(this.screenSize);
-		this.setContentPane(rtp);
+		mzt = new AreaTestPanel(this.screenSize);
+		this.setContentPane(mzt);
 		
 		//Entrées clavier
 		pk = new PressKey();
@@ -44,12 +44,12 @@ public class Fenetre extends JFrame implements MouseListener {
 	
 	public void go(){
 		while(true){
-			rtp.repaint();
+			mzt.repaint();
 		}
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		rtp.mouseClicked(e);		
+		mzt.mouseClicked(e);		
 	}
 	
 	public void mouseEntered(MouseEvent e) {}

@@ -1,4 +1,4 @@
-package Shared;
+package ResolutionTest;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.concurrent.ThreadLocalRandom;
 
-import ResolutionTest.CircleZone;
+import Shared.Layer;
 
 public class TestLayer extends Layer implements MouseListener {
 	

@@ -4,8 +4,9 @@ import java.awt.Dimension;
 
 public abstract class Layer {
 	
-	int x, y;
-	int width, height;
+	protected int x, y;
+	protected int width;
+	protected int height;
 	
 	public Layer(Dimension d){
 		this.x = 0;
