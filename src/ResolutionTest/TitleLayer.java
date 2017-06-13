@@ -63,7 +63,6 @@ public class TitleLayer extends Layer implements MouseListener {
 		Font font = new Font("Calibri", Font.BOLD, 120);
 		g2d = CenterText.center(g2d, titre, font, 120, Color.BLACK, 0, 200, new Dimension(width, 200));
 		
-		
 		boutonLancer.paintComponent(g);	
 		menu = boutonLancer.getValue();
 	}
@@ -90,5 +89,10 @@ public class TitleLayer extends Layer implements MouseListener {
 	
 	public boolean getMenu(){
 		return(menu);
+	}
+	
+	public void setMenu(boolean menu){
+		this.menu = menu;
+		this.boutonLancer.setValue(menu);
 	}
 }

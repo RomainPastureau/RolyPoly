@@ -26,7 +26,7 @@ public class ResolutionTestPanel extends JPanel implements MouseListener {
 		this.d = d;
 		this.bg = new BackgroundLayer(true, true, d);
 		this.tl = new TitleLayer("RolyPoly Resolution Test", options, d);
-		this.test = new TestLayer(50, 5, 50, d);
+		this.test = new TestLayer(10, 5, 150, d);
 		this.menu = true;
 	}
 	
@@ -36,7 +36,7 @@ public class ResolutionTestPanel extends JPanel implements MouseListener {
 		this.d = d;
 		this.bg = new BackgroundLayer(true, true, d);
 		this.tl = new TitleLayer("RolyPoly Resolution Test", options, d);
-		this.test = new TestLayer(50, 5, 50, d);
+		this.test = new TestLayer(10, 5, 150, d);
 		this.menu = true;
 	}
 	
@@ -44,18 +44,17 @@ public class ResolutionTestPanel extends JPanel implements MouseListener {
 		bg.paintComponent(g);
 		if(menu){
 			tl.paintComponent(g);
-			System.out.println("tl");
-			if(!tl.getMenu()){
+			if(tl.getMenu() == false){
 				menu = false;
-				tl.menu = true;
+				tl.setMenu(true);
 			}
 		}
 		else{
 			try{
 				test.paintComponent(g);
-				if(test.getOver()){
+				if(test.getOver() == true){
 					menu = true;
-					test.over = false;
+					test.reboot();
 				}
 			} catch(InterruptedException ex){
 				ex.printStackTrace();
@@ -68,9 +67,9 @@ public class ResolutionTestPanel extends JPanel implements MouseListener {
 		if(menu){
 			tl.mouseClicked(e);	
 		}
-//		else{
+		else{
 			test.mouseClicked(e);
-//		}
+		}
 		
 	}
 

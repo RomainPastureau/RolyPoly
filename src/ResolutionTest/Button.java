@@ -95,4 +95,8 @@ public class Button implements MouseListener {
 	public boolean getValue(){
 		return(this.value);
 	}
+	
+	public void setValue(boolean value){
+		this.value = value;
+	}
 }

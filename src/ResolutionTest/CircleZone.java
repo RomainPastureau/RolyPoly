@@ -35,7 +35,6 @@ public class CircleZone implements MouseListener {
 
 	public void mouseClicked(MouseEvent e) {
 		//Carré
-		System.out.println("Hello mine turtle");
 		if(x < e.getX() && e.getX() < x+tailleZone && y < e.getY() && e.getY() < y+tailleZone){
 			this.clicked = true;
 		}
