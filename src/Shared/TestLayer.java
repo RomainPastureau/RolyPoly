@@ -1,10 +1,12 @@
-package ResolutionTest;
+package Shared;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.concurrent.ThreadLocalRandom;
+
+import ResolutionTest.CircleZone;
 
 public class TestLayer extends Layer implements MouseListener {
 	
@@ -32,7 +34,7 @@ public class TestLayer extends Layer implements MouseListener {
 	}
 	
 	public void paintComponent(Graphics g) throws InterruptedException{
-		if(circle.clicked){
+		if(circle.getClicked()){
 			circle.paintComponent(g);
 			this.nextOne = true;
 			if(checktime){
@@ -79,7 +81,7 @@ public class TestLayer extends Layer implements MouseListener {
 		this.nextOne = true;
 		this.checktime = true;
 		this.time = 0;
-		this.circle.clicked = false;
+		this.circle.setClicked(false);
 	}
 
 	public void mouseEntered(MouseEvent e) {}

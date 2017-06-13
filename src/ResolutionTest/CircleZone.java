@@ -47,6 +47,10 @@ public class CircleZone implements MouseListener {
 	public boolean getClicked(){
 		return(this.clicked);
 	}
+	
+	public void setClicked(boolean clicked){
+		this.clicked = clicked;
+	}
 
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}

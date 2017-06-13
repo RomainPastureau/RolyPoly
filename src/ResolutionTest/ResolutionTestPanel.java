@@ -9,6 +9,10 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
+import Shared.BackgroundLayer;
+import Shared.TestLayer;
+import Shared.TitleLayer;
+
 public class ResolutionTestPanel extends JPanel implements MouseListener {
 	
 	private static final long serialVersionUID = 1L;

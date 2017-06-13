@@ -7,6 +7,8 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
+import Shared.PressKey;
+
 public class Fenetre extends JFrame implements MouseListener {
 	
 	private static final long serialVersionUID = 1L;
@@ -17,7 +19,7 @@ public class Fenetre extends JFrame implements MouseListener {
 	
 	public Fenetre(){
 		//Titre de fenêtre
-		this.setTitle("RolyPoly Resolution Test 0.5");
+		this.setTitle("RolyPoly Resolution Test 1.2");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
