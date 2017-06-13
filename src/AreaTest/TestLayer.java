@@ -74,21 +74,34 @@ public class TestLayer extends Layer implements KeyListener {
 					lastAlt = false;
 				}
 				else if(alt == 1){
-					if(i < 2){
-						g2d.drawRect((x+5+((i*((width)/2))%(width))), 
-							(y+5)+((int)(i/2)*(height/2)), 
-							(width-20)/2, (height-20)/2);
-					} else{
-						g2d.drawRect(x+5, (y+5)+((height/2)), width-10, (height-20)/2);
+					switch(i){
+						case 0: g2d.drawRect(x+5, y+5, width-10, (height-20)/2); break;
+						case 1: g2d.drawRect(x+5, y+5+height/2, (width-20)/2, (height-20)/2); break;
+						case 2: g2d.drawRect(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2); break;
 					}
 					lastAlt = false;
 				}
-				else{
-					if(i < 2){
-						g2d.drawRect(x+5, (y+5)+(i*((height/2))), (width-20)/2, (height-20)/2);
+				else if(alt == 2){
+					switch(i){
+						case 0: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, height-10); break;
+						case 1: g2d.drawRect(x+5, y+5, (width-20)/2, (height-20)/2); break;
+						case 2: g2d.drawRect(x+5, y+5+height/2, (width-20)/2, (height-20)/2); break;
 					}
-					else{
-						g2d.drawRect(x+5+(width/2), y+5, (width-20)/2, height-10);
+					lastAlt = false;
+				}
+				else if(alt == 3){
+					switch(i){
+						case 0: g2d.drawRect(x+5, y+5+height/2, width-10, (height-20)/2); break;
+						case 1: g2d.drawRect(x+5, y+5, (width-20)/2, (height-20)/2); break;
+						case 2: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, (height-20)/2); break;
+					}
+					lastAlt = false;
+				}
+				else if(alt == 4){
+					switch(i){
+						case 0: g2d.drawRect(x+5, y+5, (width-20)/2, height-10); break;
+						case 1: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, (height-20)/2); break;
+						case 2: g2d.drawRect(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2); break;
 					}
 					lastAlt = true;
 				}
@@ -120,7 +133,7 @@ public class TestLayer extends Layer implements KeyListener {
 					}
 					lastAlt = false;
 				}
-				else{
+				else if(alt == 1){
 					if(i < 2){
 						g2d.setColor(colors.get(i));
 						g2d.drawRect((x+5+((i*((width)/2))%(width))), 
@@ -131,6 +144,26 @@ public class TestLayer extends Layer implements KeyListener {
 						g2d.drawRect(((x+5)+(((i+1)*((width)/3))%(width))), 
 								(y+5)+((int)((i+1)/3)*(height/2)), 
 								(width-30)/3, (height-20)/2);
+					}
+					lastAlt = false;
+				}
+				else if(alt == 2){
+					switch(i){
+						case 0: g2d.drawRect(x+5, y+5, (width-20)/2, height-10); break;
+						case 1: g2d.drawRect(x+5+width/2, y+5, (width-40)/4, (height-20)/2); break;
+						case 2: g2d.drawRect(x+5+3*width/4, y+5, (width-40)/4, (height-20)/2); break;
+						case 3: g2d.drawRect(x+5+width/2, y+5+height/2, (width-40)/4, (height-20)/2); break;
+						case 4: g2d.drawRect(x+5+3*width/4, y+5+height/2, (width-40)/4, (height-20)/2); break;
+					}
+					lastAlt = false;
+				}
+				else if(alt == 3){
+					switch(i){
+						case 0: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, height-10); break;
+						case 1: g2d.drawRect(x+5, y+5, (width-40)/4, (height-20)/2); break;
+						case 2: g2d.drawRect(x+5+width/4, y+5, (width-40)/4, (height-20)/2); break;
+						case 3: g2d.drawRect(x+5, y+5+height/2, (width-40)/4, (height-20)/2); break;
+						case 4: g2d.drawRect(x+5+width/4, y+5+height/2, (width-40)/4, (height-20)/2); break;
 					}
 					lastAlt = true;
 				}

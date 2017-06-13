@@ -36,7 +36,7 @@ public class AreaTestPanel extends JPanel implements MouseListener, KeyListener 
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly Area Test", "0.3", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly Area Test", "0.5", options, colors, 0.5f, d);
 		this.test = new TestLayer(2, d);
 		this.menu = true;
 	}
@@ -50,7 +50,7 @@ public class AreaTestPanel extends JPanel implements MouseListener, KeyListener 
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly Area Test", "0.3", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly Area Test", "0.5", options, colors, 0.5f, d);
 		this.test = new TestLayer(2, d);
 		this.menu = true;
 	}

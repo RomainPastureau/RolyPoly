@@ -21,7 +21,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener {
 	
 	public Fenetre(){
 		//Titre de fenêtre
-		this.setTitle("RolyPoly MultiZone Test 0.1");
+		this.setTitle("RolyPoly Area Test 0.5");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
