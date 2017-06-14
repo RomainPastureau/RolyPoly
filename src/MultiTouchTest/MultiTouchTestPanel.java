@@ -1,10 +1,9 @@
-package AreaTest;
+package MultiTouchTest;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -16,8 +15,8 @@ import javax.swing.JPanel;
 import Shared.BackgroundLayer;
 import Shared.TitleLayer;
 
-public class AreaTestPanel extends JPanel implements MouseListener, KeyListener {
-	
+public class MultiTouchTestPanel extends JPanel implements MouseListener {
+		
 	private static final long serialVersionUID = 1L;
 	protected int x, y;
 	protected Dimension d;
@@ -27,31 +26,31 @@ public class AreaTestPanel extends JPanel implements MouseListener, KeyListener 
 	protected TestLayer test;
 	protected boolean menu;
 	
-	public AreaTestPanel(Dimension d){
+	public MultiTouchTestPanel(Dimension d){
 		this.x = 0;
 		this.y = 0;
 		this.d = d;
-		this.bg = new BackgroundLayer(true, true, d);
-		Color mainColor = new Color(153, 204, 0);
+		this.bg = new BackgroundLayer(new Color(255, 220, 220), new Color(255, 180, 180), new Color(255, 180, 180), 120, d);
+		Color mainColor = new Color(255, 40, 40);
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly Area Test", "1.0", options, colors, 0.5f, d);
-		this.test = new TestLayer(2, d);
+		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "0.1", options, colors, 0.5f, d);
+		this.test = new TestLayer(d);
 		this.menu = true;
 	}
 	
-	public AreaTestPanel(int x, int y, Dimension d){
+	public MultiTouchTestPanel(int x, int y, Dimension d){
 		this.x = x;
 		this.y = y;
 		this.d = d;
-		this.bg = new BackgroundLayer(true, true, d);
-		Color mainColor = new Color(153, 204, 0);
+		this.bg = new BackgroundLayer(new Color(255, 213, 213), new Color(255, 190, 190), new Color(255, 190, 190), 120, d);
+		Color mainColor = new Color(255, 40, 40);
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly Area Test", "1.0", options, colors, 0.5f, d);
-		this.test = new TestLayer(2, x, y, d);
+		this.tl = new TitleLayer("RolyPoly Area Test", "0.1", options, colors, 0.5f, d);
+		this.test = new TestLayer(x, y, d);
 		this.menu = true;
 	}
 	
@@ -70,30 +69,11 @@ public class AreaTestPanel extends JPanel implements MouseListener, KeyListener 
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		bg.mouseClicked(e);
-		if(menu){
-			tl.mouseClicked(e);	
-		}
-		else{
-			test.mouseClicked(e);
-		}
+		this.tl.mouseClicked(e);
 	}
-
-	public void keyPressed(KeyEvent ke) {
-		if(menu){}
-		else{
-			test.keyPressed(ke);
-		}
-	}
-	
-	public void mousePressed(MouseEvent e) {
-		test.mousePressed(e);
-	}
-	
-	public void mouseReleased(MouseEvent e) {
-		test.mouseReleased(e);
-	}
-
+	public void keyPressed(KeyEvent ke) {}
+	public void mousePressed(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void keyReleased(KeyEvent e) {}

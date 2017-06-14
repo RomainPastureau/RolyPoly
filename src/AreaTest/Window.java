@@ -38,13 +38,11 @@ public class Window {
 	public boolean isInside(int x, int y){
 		if(this.x < x && x < this.x+width && this.y < y && y < this.y+height){
 			if(!this.current){
-				System.out.println("REBOOT");
 				this.canChangeColor = true;
 				this.time = System.currentTimeMillis();
 				this.now = 0;
 			}
 			else if(this.now >= 2000){
-				System.out.println("BLOCKED");
 				this.canChangeColor = false;
 			}
 			this.current = true;

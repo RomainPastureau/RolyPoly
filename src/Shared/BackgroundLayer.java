@@ -17,7 +17,6 @@ public class BackgroundLayer extends Layer implements MouseListener {
 	protected Color bgCenterCol = new Color(234, 242, 255);
 	protected Color bgExterCol = new Color(201, 221, 252);
 	protected Color lineCol = new Color(201, 221, 252);
-	protected Color[] colorList = {bgCenterCol, bgExterCol};
 	
 	protected float[] fractions = {0.0f, 0.9f};	
 	protected boolean lines, gradient;
@@ -47,6 +46,8 @@ public class BackgroundLayer extends Layer implements MouseListener {
 		this.bgExterCol = bgExterCol;
 		this.lineCol = lineCol;
 		this.lineSpace = lineSpace;
+		this.gradient = true;
+		this.lines = true;
 	}
 	
 	//Fonction d'affichage du fond
@@ -55,6 +56,7 @@ public class BackgroundLayer extends Layer implements MouseListener {
 		
 		//Ajout du dégradé s'il est présent
 		if(this.gradient){
+			Color[] colorList = {bgCenterCol, bgExterCol};
 			RadialGradientPaint gp = new RadialGradientPaint(width/2, height/2, width, fractions, colorList);
 			g2d.setPaint(gp);
 		}
