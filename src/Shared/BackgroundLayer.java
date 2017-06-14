@@ -11,7 +11,7 @@ import java.awt.event.MouseListener;
 public class BackgroundLayer extends Layer implements MouseListener {
 	
 	//Espacement entre deux lignes du quadrillage
-	protected int lineSpace = 100;
+	protected int lineSpace = 120;
 	
 	//Couleurs par défaut
 	protected Color bgCenterCol = new Color(234, 242, 255);

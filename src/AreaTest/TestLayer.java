@@ -9,8 +9,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import javax.imageio.ImageIO;
 
 import Shared.Layer;
 
@@ -22,6 +27,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener {
 									new Color(153, 204, 0), new Color(189, 0, 236), new Color(148, 148, 148)};
 	protected ArrayList<Window> windows;
 	protected ArrayList<Color> colors;
+	protected ArrayList<ImageModule> modules;
 	protected int alt;
 	protected int previous;
 	protected boolean lastAlt;
@@ -29,31 +35,44 @@ public class TestLayer extends Layer implements KeyListener, MouseListener {
 	public TestLayer(int nbZones, Dimension d){
 		super(d);
 		this.nbZones = nbZones;
-		this.colors = new ArrayList<Color>();
-		this.colors.addAll(Arrays.asList(tempColor));
-		this.alt = 0;
-		this.previous = nbZones;
-		this.lastAlt = false;
-		this.windows = new ArrayList<Window>();
-		for(int i = 0; i < 9; i++){
-			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
-		}
-		setAreaPlacement();
+		setup();
+
 	}
 	
 	public TestLayer(int nbZones, int x, int y, Dimension d){
 		super(x, y, d);
 		this.nbZones = nbZones;
+		setup();
+	}
+	
+	public void setup(){
 		this.colors = new ArrayList<Color>();
 		this.colors.addAll(Arrays.asList(tempColor));
 		this.alt = 0;
 		this.previous = nbZones;
 		this.lastAlt = false;
+		
 		this.windows = new ArrayList<Window>();
 		for(int i = 0; i < 9; i++){
 			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
 		}
+		
+		File f = new File(System.getProperty("user.dir")+"/images");
+		ArrayList<File> files = new ArrayList<File>(Arrays.asList(f.listFiles()));
+		this.modules = new ArrayList<ImageModule>();
+		System.out.print("Lecture des fichiers image...");
+		for(int i = 0; i < 9; i++){
+			try{
+				BufferedImage bim = ImageIO.read(files.get(i));
+				ImageModule mod = new ImageModule(bim, windows.get(i));
+				this.modules.add(mod);
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+		}
+		System.out.println(" Terminé.");
 		setAreaPlacement();
+		adaptModules();
 	}
 	
 	public void setAreaPlacement(){
@@ -224,11 +243,21 @@ public class TestLayer extends Layer implements KeyListener, MouseListener {
 			}
 			lastAlt = true;
 		}
+		
+	}
+	
+	public void adaptModules(){
+		for(ImageModule imod : modules){
+			imod.updateSize();
+		}
 	}
 	
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setStroke(new BasicStroke(10));
+		for(int i = 0; i < nbZones; i++){
+			modules.get(i).paintComponent(g2d);
+		}
 		for(int i = 0; i < nbZones; i++){
 			windows.get(i).paintComponent(g2d);
 		}
@@ -241,6 +270,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener {
 			else alt = 0;
 			this.previous = ke.getKeyCode()-96;
 			setAreaPlacement();
+			adaptModules();
 		}
 	}
 	
