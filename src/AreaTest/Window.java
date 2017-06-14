@@ -10,7 +10,7 @@ public class Window {
 	protected Dimension d;
 	protected boolean active;
 	protected Color color;
-	protected long time;
+	protected long time, now;
 	
 	public Window(int id, int x, int y, int width, int height, Color color){
 		this.id = id;
@@ -18,8 +18,10 @@ public class Window {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.color = color;
 		this.active = false;
 		this.time = 0;
+		this.now = 0;
 	}
 	
 	public void setPosition(int x, int y, int width, int height){
@@ -30,9 +32,10 @@ public class Window {
 	}
 	
 	public boolean isInside(int x, int y){
-		if(this.x < x && x < d.getWidth() && this.y < y && y < d.getHeight()){
+		if(this.x < x && x < this.x+width && this.y < y && y < this.y+height){
 			this.active = true;
 			this.time = System.currentTimeMillis();;
+			this.now = 0;
 			return(true);
 		}
 		this.active = false;
@@ -43,11 +46,13 @@ public class Window {
 		g2d.setColor(color);
 		g2d.drawRect(x, y, width, height);
 		if(active){
-			long now = System.currentTimeMillis()-time;
-			if(now > 255){
-				now = 255;
+			if(now < 2000){
+				now = System.currentTimeMillis()-time;
 			}
-			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 255 - (now*128)));
+			if(now >= 2000){
+				now = 2000;
+			}
+			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)(128 - ((now/1000.)*64))));
 			g2d.fillRect(x, y, width, height);
 		}
 	}

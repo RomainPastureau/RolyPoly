@@ -7,12 +7,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import Shared.Layer;
 
-public class TestLayer extends Layer implements KeyListener {
+public class TestLayer extends Layer implements KeyListener, MouseListener {
 	
 	protected int nbZones;
 	protected Color[] tempColor = {new Color(255, 156, 0), new Color(0, 111, 225), new Color(66, 166, 0),
@@ -36,6 +38,7 @@ public class TestLayer extends Layer implements KeyListener {
 		for(int i = 0; i < 9; i++){
 			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
 		}
+		setAreaPlacement();
 	}
 	
 	public TestLayer(int nbZones, int x, int y, Dimension d){
@@ -50,242 +53,185 @@ public class TestLayer extends Layer implements KeyListener {
 		for(int i = 0; i < 9; i++){
 			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
 		}
+		setAreaPlacement();
 	}
 	
-	public void paintComponent(Graphics g){
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.setStroke(new BasicStroke(10));
+	public void setAreaPlacement(){
 		
+		lastAlt = false;
 		
 		if(nbZones == 1){
-			g2d.setColor(colors.get(0));
-			g2d.drawRect(x+5, y+5, width-10, height-10);
-			lastAlt = true;
+			windows.get(0).setPosition(x+5, y+5, width-10, height-10);
 		}
 		
 		if(nbZones == 2){
-			for(int i = 0; i < nbZones; i++){
-				g2d.setColor(colors.get(i));
-				if(alt == 0){
-					g2d.drawRect(x+5+(i*((width)/2)), y+5, (width-20)/2, height-10);
-					lastAlt = false;
-				}
-				else{
-					g2d.drawRect(x+5, (y+5)+(i*((height/2))), width-10, (height-20)/2);
-					lastAlt = true;
-				}
+			if(alt == 0){
+				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
 			}
-		}
-		
-		if(nbZones == 3){
-			for(int i = 0; i < nbZones; i++){
-				g2d.setColor(colors.get(i));
-				if(alt == 0){
-					g2d.drawRect(x+5+(i*((width)/3)), y+5, (width-30)/3, height-10);
-					lastAlt = false;
-				}
-				else if(alt == 1){
-					g2d.drawRect(x+5, y+5+(i*((height)/3)), width-10, (height-30)/3);
-					lastAlt = false;
-				}
-				else if(alt == 2){
-					switch(i){
-						case 0: g2d.drawRect(x+5, y+5, (width-20)/2, height-10); break;
-						case 1: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, (height-20)/2); break;
-						case 2: g2d.drawRect(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2); break;
-					}
-					lastAlt = false;
-				}
-				else if(alt == 3){
-					switch(i){
-						case 0: g2d.drawRect(x+5, y+5, width-10, (height-20)/2); break;
-						case 1: g2d.drawRect(x+5, y+5+height/2, (width-20)/2, (height-20)/2); break;
-						case 2: g2d.drawRect(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2); break;
-					}
-					lastAlt = false;
-				}
-				else if(alt == 4){
-					switch(i){
-						case 0: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, height-10); break;
-						case 1: g2d.drawRect(x+5, y+5, (width-20)/2, (height-20)/2); break;
-						case 2: g2d.drawRect(x+5, y+5+height/2, (width-20)/2, (height-20)/2); break;
-					}
-					lastAlt = false;
-				}
-				else if(alt == 5){
-					switch(i){
-						case 0: g2d.drawRect(x+5, y+5+height/2, width-10, (height-20)/2); break;
-						case 1: g2d.drawRect(x+5, y+5, (width-20)/2, (height-20)/2); break;
-						case 2: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, (height-20)/2); break;
-					}
-					lastAlt = true;
-				}
-
-			}
-		}
-		
-		if(nbZones == 4){
-			for(int i = 0; i < nbZones; i++){
-				g2d.setColor(colors.get(i));
-				if(alt == 0){
-					g2d.drawRect((x+5+((i*((width)/2))%(width))), (y+5)+((int)(i/2)*(height/2)), (width-20)/2, (height-20)/2);
-					lastAlt = false;
-				}
-				else if(alt == 1){
-					switch(i){
-						case 0: g2d.drawRect(x+5, y+5, (width-20)/2, height-10); break;
-						case 1: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, (height-30)/3); break;
-						case 2: g2d.drawRect(x+5+width/2, y+5+height/3, (width-20)/2, (height-30)/3); break;
-						case 3: g2d.drawRect(x+5+width/2, y+5+2*height/3, (width-20)/2, (height-30)/3); break;
-					}
-					lastAlt = false;
-				}
-				else if(alt == 2){
-					switch(i){
-						case 0: g2d.drawRect(x+5, y+5, width-10, (height-20)/2); break;
-						case 1: g2d.drawRect(x+5, y+5+height/2, (width-30)/3, (height-20)/2); break;
-						case 2: g2d.drawRect(x+5+width/3, y+5+height/2, (width-30)/3, (height-20)/2); break;
-						case 3: g2d.drawRect(x+5+2*width/3, y+5+height/2, (width-30)/3, (height-20)/2); break;
-				}
-					lastAlt = false;
-				}
-				else if(alt == 3){
-					switch(i){
-						case 0: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, height-10); break;
-						case 1: g2d.drawRect(x+5, y+5, (width-20)/2, (height-30)/3); break;
-						case 2: g2d.drawRect(x+5, y+5+height/3, (width-20)/2, (height-30)/3); break;
-						case 3: g2d.drawRect(x+5, y+5+2*height/3, (width-20)/2, (height-30)/3); break;
-					}
-					lastAlt = false;
-				}
-				else if(alt == 4){
-					switch(i){
-						case 0: g2d.drawRect(x+5, y+5+height/2, width-10, (height-20)/2); break;
-						case 1: g2d.drawRect(x+5, y+5, (width-30)/3, (height-20)/2); break;
-						case 2: g2d.drawRect(x+5+width/3, y+5, (width-30)/3, (height-20)/2); break;
-						case 3: g2d.drawRect(x+5+2*width/3, y+5, (width-30)/3, (height-20)/2); break;
-					}
-					lastAlt = true;
-				}
-			}
-		}
-		
-		if(nbZones == 5){
-			for(int i = 0; i < nbZones; i++){
-				g2d.setColor(colors.get(i));
-				if(alt == 0){
-					if(i < 3){
-						g2d.drawRect(((x+5)+((i*((width)/3))%(width))), 
-								(y+5)+((int)(i/3)*(height/2)), 
-								(width-30)/3, (height-20)/2);
-					}
-					else{
-						g2d.drawRect((x+5+(((i-1)*((width)/2))%(width))), 
-								(y+5)+((int)((i-1)/2)*(height/2)), 
-								(width-20)/2, (height-20)/2);
-					}
-					lastAlt = false;
-				}
-				else if(alt == 1){
-					if(i < 2){
-						g2d.setColor(colors.get(i));
-						g2d.drawRect((x+5+((i*((width)/2))%(width))), 
-								(y+5)+((int)(i/2)*(height/2)), 
-								(width-20)/2, (height-20)/2);
-					}
-					else{
-						g2d.drawRect(((x+5)+(((i+1)*((width)/3))%(width))), 
-								(y+5)+((int)((i+1)/3)*(height/2)), 
-								(width-30)/3, (height-20)/2);
-					}
-					lastAlt = false;
-				}
-				else if(alt == 2){
-					switch(i){
-						case 0: g2d.drawRect(x+5, y+5, (width-20)/2, height-10); break;
-						case 1: g2d.drawRect(x+5+width/2, y+5, (width-40)/4, (height-20)/2); break;
-						case 2: g2d.drawRect(x+5+3*width/4, y+5, (width-40)/4, (height-20)/2); break;
-						case 3: g2d.drawRect(x+5+width/2, y+5+height/2, (width-40)/4, (height-20)/2); break;
-						case 4: g2d.drawRect(x+5+3*width/4, y+5+height/2, (width-40)/4, (height-20)/2); break;
-					}
-					lastAlt = false;
-				}
-				else if(alt == 3){
-					switch(i){
-						case 0: g2d.drawRect(x+5+width/2, y+5, (width-20)/2, height-10); break;
-						case 1: g2d.drawRect(x+5, y+5, (width-40)/4, (height-20)/2); break;
-						case 2: g2d.drawRect(x+5+width/4, y+5, (width-40)/4, (height-20)/2); break;
-						case 3: g2d.drawRect(x+5, y+5+height/2, (width-40)/4, (height-20)/2); break;
-						case 4: g2d.drawRect(x+5+width/4, y+5+height/2, (width-40)/4, (height-20)/2); break;
-					}
-					lastAlt = true;
-				}
-			}
-		}
-		
-		if(nbZones == 6){
-			for(int i = 0; i < nbZones; i++){
-				g2d.setColor(colors.get(i));
-				g2d.drawRect(((x+5)+((i*((width)/3))%(width))), 
-						(y+5)+((int)(i/3)*(height/2)), 
-						(width-30)/3, (height-20)/2);
+			else{
+				windows.get(0).setPosition(x+5, y+5, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5+height/2, width-10, (height-20)/2);
 				lastAlt = true;
 			}
 		}
 		
+		if(nbZones == 3){
+			if(alt == 0){
+				for(int i = 0; i < 3; i++){
+					windows.get(i).setPosition(x+5+i*width/3, y+5, (width-30)/3, height-10);
+				}
+			}
+			else if(alt == 1){
+				for(int i = 0; i < 3; i++){
+					windows.get(i).setPosition(x+5, y+5+i*height/3,	width-10, (height-30)/3);
+				}
+			}
+			else if(alt == 2){
+				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5+width/2, y+5, (width-20)/2, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2);
+			}
+			else if(alt == 3){
+				windows.get(0).setPosition(x+5, y+5, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5+height/2, (width-20)/2, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2);
+			}
+			else if(alt == 4){
+				windows.get(0).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5, y+5, (width-20)/2, (height-20)/2);
+				windows.get(2).setPosition(x+5, y+5+height/2, (width-20)/2, (height-20)/2);
+			}
+			else if(alt == 5){
+				windows.get(0).setPosition(x+5, y+5+height/2, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5, (width-20)/2, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/2, y+5, (width-20)/2, (height-20)/2);
+			}
+			else if(alt == 6){
+				windows.get(0).setPosition(x+5, y+5+height/3, width-10, 2*(height-15)/3);
+				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-30)/3);
+				windows.get(2).setPosition(x+5+width/3, y+5, 2*(width-15)/3, (height-30)/3);
+				lastAlt = true;
+			}
+		}
+		
+		if(nbZones == 4){
+			if(alt == 0){
+				for(int i = 0; i < 4; i++){
+					windows.get(i).setPosition(x+5+(i*width/2)%width, y+5+(int)(i/2)*height/2, (width-20)/2, (height-20)/2);
+				}
+			}
+			else if(alt == 1){
+				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5+width/2, y+5, (width-20)/2, (height-30)/3);
+				windows.get(2).setPosition(x+5+width/2, y+5+height/3, (width-20)/2, (height-30)/3);
+				windows.get(3).setPosition(x+5+width/2, y+5+2*height/3, (width-20)/2, (height-30)/3);
+			}
+			else if(alt == 2){
+				windows.get(0).setPosition(x+5, y+5, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5+height/2, (width-30)/3, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/3, y+5+height/2, (width-30)/3, (height-20)/2);
+				windows.get(3).setPosition(x+5+2*width/3, y+5+height/2, (width-30)/3, (height-20)/2);
+			}
+			else if(alt == 3){
+				windows.get(0).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5, y+5, (width-20)/2, (height-30)/3);
+				windows.get(2).setPosition(x+5, y+5+height/3, (width-20)/2, (height-30)/3);
+				windows.get(3).setPosition(x+5, y+5+2*height/3, (width-20)/2, (height-30)/3);
+			}
+			else if(alt == 4){
+				windows.get(0).setPosition(x+5, y+5+height/2, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/3, y+5, (width-30)/3, (height-20)/2);
+				windows.get(3).setPosition(x+5+2*width/3, y+5, (width-30)/3, (height-20)/2);
+			}
+			else if(alt == 5){
+				windows.get(0).setPosition(x+5, y+5+height/3, width-10, 2*(height-15)/3);
+				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-30)/3);
+				windows.get(2).setPosition(x+5+width/3, y+5, (width-30)/3, (height-30)/3);
+				windows.get(3).setPosition(x+5+2*width/3, y+5, (width-30)/3, (height-30)/3);
+			}
+			else if(alt == 6){
+				windows.get(0).setPosition(x+5+width/3, y+5+height/3, 2*(width-15)/3, 2*(height-15)/3);
+				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-30)/3);
+				windows.get(2).setPosition(x+5+width/3, y+5, 2*(width-15)/3, (height-30)/3);
+				windows.get(3).setPosition(x+5, y+5+height/3, (width-30)/3, 2*(height-15)/3);
+				lastAlt = true;
+			}
+		}
+		
+		if(nbZones == 5){
+			if(alt == 0){
+				for(int i = 0; i < 5; i++){
+					if(i < 3) windows.get(i).setPosition(x+5+i*width/3, y+5+(int)(i/3)*height/2, (width-30)/3, (height-20)/2);
+					else windows.get(i).setPosition(x+5+((i-1)*width/2)%width, y+5+(int)((i-1)/2)*height/2, (width-20)/2, (height-20)/2);
+				}
+			}
+			else if(alt == 1){
+				for(int i = 0; i < 5; i++){
+					if(i < 2) windows.get(i).setPosition(x+5+i*width/2, y+5+(int)(i/2)*height/2, (width-20)/2, (height-20)/2);
+					else windows.get(i).setPosition(x+5+((i+1)*width/3)%width, y+5+(int)((i+1)/3)*height/2, (width-30)/3, (height-20)/2);
+				}
+			}
+			else if(alt == 2){
+				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5+width/2, y+5, (width-40)/4, (height-20)/2);
+				windows.get(2).setPosition(x+5+3*width/4, y+5, (width-40)/4, (height-20)/2);
+				windows.get(3).setPosition(x+5+width/2, y+5+height/2, (width-40)/4, (height-20)/2);
+				windows.get(4).setPosition(x+5+3*width/4, y+5+height/2, (width-40)/4, (height-20)/2);
+			}
+			else if(alt == 3){
+				windows.get(0).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5, y+5, (width-40)/4, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/4, y+5, (width-40)/4, (height-20)/2);
+				windows.get(3).setPosition(x+5, y+5+height/2, (width-40)/4, (height-20)/2);
+				windows.get(4).setPosition(x+5+width/4, y+5+height/2, (width-40)/4, (height-20)/2);
+				lastAlt = true;
+			}
+		}
+		
+		if(nbZones == 6){
+			for(int i = 0; i < 6; i++){
+				windows.get(i).setPosition(x+5+i*(width/3)%width, y+5+(int)(i/3)*(height/2), (width-30)/3, (height-20)/2);
+			}
+			lastAlt = true;
+		}
+		
 		if(nbZones == 7){
-			for(int i = 0; i < nbZones; i++){
-				g2d.setColor(colors.get(i));
+			for(int i = 0; i < 7; i++){
 				if(alt == 0){
-					if(i < 4){
-						g2d.drawRect(((x+5)+((i*((width)/4))%(width))), 
-								(y+5)+((int)(i/4)*(height/2)), 
-								(width-40)/4, (height-20)/2);
-					}
-					else{
-						g2d.drawRect(((x+5)+(((i-1)*((width)/3))%(width))), 
-								(y+5)+((int)((i-1)/3)*(height/2)), 
-								(width-30)/3, (height-20)/2);						
-					}
-					
-					lastAlt = false;
+					if(i < 4) windows.get(i).setPosition(x+5+i*width/4, y+5+(int)(i/4)*height/2, (width-40)/4, (height-20)/2);
+					else windows.get(i).setPosition(x+5+((i-1)*width/3)%width, y+5+(int)((i-1)/3)*height/2, (width-30)/3, (height-20)/2);
 				}
 				else{
-					if(i < 3){
-						g2d.drawRect(((x+5)+((i*((width)/3))%(width))), 
-								(y+5)+((int)(i/3)*(height/2)), 
-								(width-30)/3, (height-20)/2);
-					}
-					else{
-						g2d.drawRect(((x+5)+(((i+1)*((width)/4))%(width))), 
-								(y+5)+((int)((i+1)/4)*(height/2)), 
-								(width-40)/4, (height-20)/2);						
-					}
+					if(i < 3) windows.get(i).setPosition(x+5+i*width/3, y+5+(int)(i/3)*height/2, (width-30)/3, (height-20)/2);
+					else windows.get(i).setPosition(x+5+((i+1)*width/4)%width, y+5+(int)((i+1)/4)*height/2, (width-40)/4, (height-20)/2);			
 					lastAlt = true;
 				}
 			}
 		}
 		
 		if(nbZones == 8){
-			for(int i = 0; i < nbZones; i++){
-				g2d.setColor(colors.get(i));
-				g2d.drawRect(((x+5)+((i*((width)/4))%(width))), 
-						(y+5)+((int)(i/4)*(height/2)), 
-						(width-40)/4, (height-20)/2);
-				lastAlt = true;
+			for(int i = 0; i < 8; i++){
+				windows.get(i).setPosition(x+5+(i*width/4)%width, y+5+(int)(i/4)*height/2, (width-40)/4, (height-20)/2);
 			}
+			lastAlt = true;
 		}
 		
 		if(nbZones == 9){
 			for(int i = 0; i < nbZones; i++){
-				g2d.setColor(colors.get(i));
-				g2d.drawRect(((x+5)+((i*((width)/3))%(width))), 
-						(y+5)+((int)(i/3)*(height/3)), 
-						(width-30)/3, (height-30)/3);
-				lastAlt = true;
+				windows.get(i).setPosition(x+5+(i*width/3)%width, y+5+(int)(i/3)*height/3, (width-30)/3, (height-30)/3);
 			}
+			lastAlt = true;
 		}
-
+	}
+	
+	public void paintComponent(Graphics g){
+		Graphics2D g2d = (Graphics2D)g;
+		g2d.setStroke(new BasicStroke(10));
+		for(int i = 0; i < nbZones; i++){
+			windows.get(i).paintComponent(g2d);
+		}
 	}
 
 	public void keyPressed(KeyEvent ke) {
@@ -294,9 +240,20 @@ public class TestLayer extends Layer implements KeyListener {
 			if(nbZones == previous && !lastAlt) alt++;
 			else alt = 0;
 			this.previous = ke.getKeyCode()-96;
+			setAreaPlacement();
 		}
 	}
 	
+	public void mouseClicked(MouseEvent e) {
+		for(Window w : windows){
+			w.isInside(e.getX(), e.getY());
+		}
+	}
+	
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
 	public void keyReleased(KeyEvent ke) {}
 	public void keyTyped(KeyEvent ke) {}
 	
