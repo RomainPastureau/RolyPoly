@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -254,6 +256,10 @@ public class TestLayer extends Layer implements KeyListener, MouseListener {
 	
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
+		Point mouse = MouseInfo.getPointerInfo().getLocation();
+		for(ImageModule im:modules){
+			im.move((int)mouse.getX(), (int)mouse.getY());
+		}
 		g2d.setStroke(new BasicStroke(10));
 		for(int i = 0; i < nbZones; i++){
 			modules.get(i).paintComponent(g2d);
@@ -275,15 +281,27 @@ public class TestLayer extends Layer implements KeyListener, MouseListener {
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		for(Window w : windows){
-			w.isInside(e.getX(), e.getY());
-		}
+
 	}
 	
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
+	
+	public void mousePressed(MouseEvent e) {
+		for(Window w : windows){
+			w.isInside(e.getX(), e.getY());
+		}
+		
+	}
+	
+	public void mouseReleased(MouseEvent e) {
+		for(Window w:windows){
+			w.setInactive();
+		}
+		for(ImageModule im:modules){
+			im.updateCorner();
+		}
+	}
 	public void keyReleased(KeyEvent ke) {}
 	public void keyTyped(KeyEvent ke) {}
 	

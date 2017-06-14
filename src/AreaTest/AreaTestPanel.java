@@ -36,7 +36,7 @@ public class AreaTestPanel extends JPanel implements MouseListener, KeyListener 
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly Area Test", "0.8", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly Area Test", "1.0", options, colors, 0.5f, d);
 		this.test = new TestLayer(2, d);
 		this.menu = true;
 	}
@@ -50,7 +50,7 @@ public class AreaTestPanel extends JPanel implements MouseListener, KeyListener 
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly Area Test", "0.8", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly Area Test", "1.0", options, colors, 0.5f, d);
 		this.test = new TestLayer(2, d);
 		this.menu = true;
 	}
@@ -93,13 +93,17 @@ public class AreaTestPanel extends JPanel implements MouseListener, KeyListener 
 			test.keyPressed(ke);
 		}
 	}
-
 	
+	public void mousePressed(MouseEvent e) {
+		test.mousePressed(e);
+	}
+	
+	public void mouseReleased(MouseEvent e) {
+		test.mouseReleased(e);
+	}
+
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
-
 
 	@Override
 	public void keyReleased(KeyEvent e) {

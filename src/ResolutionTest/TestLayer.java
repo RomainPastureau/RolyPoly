@@ -60,7 +60,6 @@ public class TestLayer extends Layer implements MouseListener {
 			over = true;
 		}
 		circle.paintComponent(g);
-
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -83,6 +82,7 @@ public class TestLayer extends Layer implements MouseListener {
 		this.time = 0;
 		this.circle.setClicked(false);
 	}
+	
 
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
