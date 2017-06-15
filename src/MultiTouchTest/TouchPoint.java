@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 
 import Shared.CenterText;
 import TUIO.TuioCursor;
@@ -23,11 +24,14 @@ public class TouchPoint {
 	
 	public void paintComponent(Graphics2D g){
 		g.setPaint(colors[cursor.getCursorID()%12]);
-		g.fillOval((int)cursor.getX()-10, (int)cursor.getY()-10, 20, 20);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+		g.fillOval((int)cursor.getX()-20, (int)cursor.getY()-20, 40, 40);
 		Font font = new Font("Calibri", Font.BOLD, 80);
 		g.setFont(font);
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		System.out.println(cursor.getX()+" "+cursor.getY());
-		g = CenterText.center(g, ""+cursor.getCursorID(), font, 80, colors[cursor.getCursorID()%12], (int)cursor.getX(), (int)cursor.getY(), new Dimension(80, 80));
+		System.out.println(cursor.getX()*width+" "+cursor.getY()*height);
+		g = CenterText.center(g, ""+cursor.getCursorID(), font, 80, colors[cursor.getCursorID()%12], (int)(cursor.getX()*width), (int)(cursor.getY()*height), new Dimension(80, 80));
 	}
 }
