@@ -36,7 +36,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void paintComponent(Graphics g){
 		for(int i = 0; i < cursors.keySet().size(); i++){
 			try{
-				if(cursors.get(i).isVisible()){
+				if(this.stay || cursors.get(i).isVisible()){
 					cursors.get(i).paintComponent((Graphics2D)g);
 				}
 			} catch(NullPointerException e){
@@ -50,8 +50,8 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void removeTuioCursor(TuioCursor t) {
+		cursors.get(t.getCursorID()).setVisible(false);
 		if(this.stay == false){
-			cursors.get(t.getCursorID()).setVisible(false);
 			cursors.remove(t.getCursorID());
 		}
 	}
