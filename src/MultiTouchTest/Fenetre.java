@@ -10,8 +10,13 @@ import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 
 import Shared.PressKey;
+import TUIO.TuioBlob;
+import TUIO.TuioCursor;
+import TUIO.TuioListener;
+import TUIO.TuioObject;
+import TUIO.TuioTime;
 
-public class Fenetre extends JFrame implements MouseListener, KeyListener {
+public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioListener {
 	
 	private static final long serialVersionUID = 1L;
 	protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -71,5 +76,64 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener {
 	public void mouseExited(MouseEvent e) {}
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void addTuioBlob(TuioBlob arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addTuioCursor(TuioCursor tc) {
+		mtt.addTuioCursor(tc);
+	}
+
+	@Override
+	public void addTuioObject(TuioObject arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refresh(TuioTime arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeTuioBlob(TuioBlob arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeTuioCursor(TuioCursor arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeTuioObject(TuioObject arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateTuioBlob(TuioBlob arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateTuioCursor(TuioCursor arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateTuioObject(TuioObject arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

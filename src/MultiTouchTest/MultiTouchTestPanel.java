@@ -14,8 +14,13 @@ import javax.swing.JPanel;
 
 import Shared.BackgroundLayer;
 import Shared.TitleLayer;
+import TUIO.TuioBlob;
+import TUIO.TuioCursor;
+import TUIO.TuioListener;
+import TUIO.TuioObject;
+import TUIO.TuioTime;
 
-public class MultiTouchTestPanel extends JPanel implements MouseListener {
+public class MultiTouchTestPanel extends JPanel implements MouseListener, TuioListener {
 		
 	private static final long serialVersionUID = 1L;
 	protected int x, y;
@@ -78,5 +83,66 @@ public class MultiTouchTestPanel extends JPanel implements MouseListener {
 	public void mouseExited(MouseEvent e) {}
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void addTuioBlob(TuioBlob arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addTuioCursor(TuioCursor tc) {
+		if(!menu){
+			System.out.println("Curseur "+tc.getCursorID()+" - X : "+tc.getX()+" Y : "+tc.getY());
+		}
+	}
+
+	@Override
+	public void addTuioObject(TuioObject arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refresh(TuioTime arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeTuioBlob(TuioBlob arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeTuioCursor(TuioCursor arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeTuioObject(TuioObject arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateTuioBlob(TuioBlob arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateTuioCursor(TuioCursor arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateTuioObject(TuioObject arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
