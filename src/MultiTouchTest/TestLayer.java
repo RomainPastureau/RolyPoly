@@ -57,7 +57,6 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void addTuioObject(TuioObject t) {}
 	public void refresh(TuioTime t) {}
 	public void removeTuioBlob(TuioBlob t) {}
-
 	public void removeTuioObject(TuioObject t) {}
 	public void updateTuioBlob(TuioBlob t) {}
 	public void updateTuioCursor(TuioCursor t) {}
