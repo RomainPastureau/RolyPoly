@@ -37,12 +37,12 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void addTuioCursor(TuioCursor t) {
-		System.out.println("Curseur "+t.getCursorID()+" - X : "+t.getX()+" Y : "+t.getY());
-		cursors.put(t.getCursorID(), new TouchPoint(t));		
+		cursors.put(t.getCursorID(), new TouchPoint(t));
 	}
 	
 	public void removeTuioCursor(TuioCursor t) {
 		cursors.remove(t.getCursorID());
+		System.out.println("Curseur "+t.getCursorID()+" enlevé.");
 	}
 
 	public void keyPressed(KeyEvent ke) {}

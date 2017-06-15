@@ -26,7 +26,6 @@ public class TouchPoint {
 	}
 	
 	public void paintComponent(Graphics2D g){
-		
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g.setPaint(colors[cursor.getCursorID()%20]);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
