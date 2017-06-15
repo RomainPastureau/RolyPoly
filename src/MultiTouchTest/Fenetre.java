@@ -28,7 +28,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	
 	public Fenetre(){
 		//Titre de fenêtre
-		this.setTitle("RolyPoly MultiTouch Test 1.1");
+		this.setTitle("RolyPoly MultiTouch Test 1.4");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();

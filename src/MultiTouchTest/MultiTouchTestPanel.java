@@ -41,7 +41,7 @@ public class MultiTouchTestPanel extends JPanel implements MouseListener, KeyLis
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "1.1", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "1.4", options, colors, 0.5f, d);
 		this.test = new TestLayer(d);
 		this.menu = true;
 	}
@@ -55,7 +55,7 @@ public class MultiTouchTestPanel extends JPanel implements MouseListener, KeyLis
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "1.1", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "1.4", options, colors, 0.5f, d);
 		this.test = new TestLayer(x, y, d);
 		this.menu = true;
 	}
