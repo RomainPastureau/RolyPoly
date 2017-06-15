@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import TUIO.TuioListener;
 import TUIO.TuioObject;
 import TUIO.TuioTime;
 
-public class MultiTouchTestPanel extends JPanel implements MouseListener, TuioListener {
+public class MultiTouchTestPanel extends JPanel implements MouseListener, KeyListener, TuioListener {
 		
 	private static final long serialVersionUID = 1L;
 	protected int x, y;
@@ -83,7 +84,18 @@ public class MultiTouchTestPanel extends JPanel implements MouseListener, TuioLi
 		}
 	}
 	
-	public void keyPressed(KeyEvent ke) {}
+	public void removeTuioCursor(TuioCursor t) {
+		if(!menu){
+			this.test.removeTuioCursor(t);
+		}
+	}
+	
+	public void keyPressed(KeyEvent ke) {
+		if(!menu){
+			this.test.keyPressed(ke);
+		}
+	}
+	
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
@@ -94,7 +106,6 @@ public class MultiTouchTestPanel extends JPanel implements MouseListener, TuioLi
 	public void addTuioObject(TuioObject t) {}
 	public void refresh(TuioTime t) {}
 	public void removeTuioBlob(TuioBlob t) {}
-	public void removeTuioCursor(TuioCursor t) {}
 	public void removeTuioObject(TuioObject t) {}
 	public void updateTuioBlob(TuioBlob t) {}
 	public void updateTuioCursor(TuioCursor t) {}

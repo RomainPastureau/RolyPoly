@@ -19,15 +19,18 @@ import TUIO.TuioTime;
 public class TestLayer extends Layer implements KeyListener, MouseListener, TuioListener {
 	
 	protected HashMap<Integer, TouchPoint> cursors;
+	protected boolean stay;
 	
 	public TestLayer(Dimension d){
 		super(d);
 		cursors = new HashMap<Integer, TouchPoint>();
+		this.stay = true;
 	}
 	
 	public TestLayer(int x, int y, Dimension d){
 		super(x, y, d);
 		cursors = new HashMap<Integer, TouchPoint>();
+		this.stay = true;
 	}
 	
 	public void paintComponent(Graphics g){
@@ -41,11 +44,17 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void removeTuioCursor(TuioCursor t) {
-		cursors.remove(t.getCursorID());
-		System.out.println("Curseur "+t.getCursorID()+" enlevé.");
+		if(this.stay == false){
+			cursors.remove(t.getCursorID());
+		}
 	}
 
-	public void keyPressed(KeyEvent ke) {}
+	public void keyPressed(KeyEvent ke) {
+		if(ke.getKeyCode() == ke.VK_ENTER){
+			this.stay = !this.stay;
+		}
+	}
+	
 	public void mouseClicked(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}

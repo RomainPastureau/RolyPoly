@@ -64,12 +64,19 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public void addTuioCursor(TuioCursor tc) {
 		mtt.addTuioCursor(tc);
 	}
+	
+	public void removeTuioCursor(TuioCursor tc) {
+		mtt.removeTuioCursor(tc);
+	}
 
 	public void mouseClicked(MouseEvent e) {
 		mtt.mouseClicked(e);		
 	}
 	
-	public void keyPressed(KeyEvent ke) {}
+	public void keyPressed(KeyEvent ke) {
+		mtt.keyPressed(ke);
+	}
+	
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
@@ -80,7 +87,6 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public void addTuioObject(TuioObject t) {}
 	public void refresh(TuioTime t) {}
 	public void removeTuioBlob(TuioBlob t) {}
-	public void removeTuioCursor(TuioCursor t) {}
 	public void removeTuioObject(TuioObject t) {}
 	public void updateTuioBlob(TuioBlob t) {}
 	public void updateTuioCursor(TuioCursor t) {}
