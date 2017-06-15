@@ -34,7 +34,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void paintComponent(Graphics g){
-		for(int i:cursors.keySet()){
+		for(int i = 0; i < cursors.keySet().size(); i++){
 			cursors.get(i).paintComponent((Graphics2D)g);
 		}
 	}

@@ -34,6 +34,6 @@ public class TouchPoint {
 		g.fillOval((int)(cursor.getX()*width)-20, (int)(cursor.getY()*height)-20, 40, 40);
 		Font font = new Font("Calibri", Font.BOLD, 80);
 		g.setFont(font);
-		g = CenterText.center(g, ""+(cursor.getCursorID()+1), font, 80, colors[cursor.getCursorID()%12], (int)(cursor.getX()*width), (int)(cursor.getY()*height), new Dimension(80, 80));
+		g = CenterText.center(g, ""+(cursor.getCursorID()+1), font, 80, colors[cursor.getCursorID()%20], (int)(cursor.getX()*width), (int)(cursor.getY()*height), new Dimension(80, 80));
 	}
 }
