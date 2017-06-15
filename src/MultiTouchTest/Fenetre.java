@@ -52,6 +52,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		this.addKeyListener(this);
 		client = new TuioClient();
 		client.addTuioListener(this);
+		client.connect();
 	}	
 	
 	public void go(){

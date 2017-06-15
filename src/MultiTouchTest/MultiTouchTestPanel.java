@@ -76,6 +76,13 @@ public class MultiTouchTestPanel extends JPanel implements MouseListener, TuioLi
 	public void mouseClicked(MouseEvent e) {
 		this.tl.mouseClicked(e);
 	}
+	
+	public void addTuioCursor(TuioCursor tc) {
+		if(!menu){
+			this.test.addTuioCursor(tc);
+		}
+	}
+	
 	public void keyPressed(KeyEvent ke) {}
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
@@ -83,66 +90,14 @@ public class MultiTouchTestPanel extends JPanel implements MouseListener, TuioLi
 	public void mouseExited(MouseEvent e) {}
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
-
-	@Override
-	public void addTuioBlob(TuioBlob arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addTuioCursor(TuioCursor tc) {
-		if(!menu){
-			System.out.println("Curseur "+tc.getCursorID()+" - X : "+tc.getX()+" Y : "+tc.getY());
-		}
-	}
-
-	@Override
-	public void addTuioObject(TuioObject arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void refresh(TuioTime arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeTuioBlob(TuioBlob arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeTuioCursor(TuioCursor arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeTuioObject(TuioObject arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateTuioBlob(TuioBlob arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateTuioCursor(TuioCursor arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateTuioObject(TuioObject arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void addTuioBlob(TuioBlob t) {}
+	public void addTuioObject(TuioObject t) {}
+	public void refresh(TuioTime t) {}
+	public void removeTuioBlob(TuioBlob t) {}
+	public void removeTuioCursor(TuioCursor t) {}
+	public void removeTuioObject(TuioObject t) {}
+	public void updateTuioBlob(TuioBlob t) {}
+	public void updateTuioCursor(TuioCursor t) {}
+	public void updateTuioObject(TuioObject t) {}
 
 }
