@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import Shared.PressKey;
 import TUIO.TuioBlob;
+import TUIO.TuioClient;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;
 import TUIO.TuioObject;
@@ -23,6 +24,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected int width, height;
 	protected PressKey pk;
 	protected MultiTouchTestPanel mtt;
+	protected TuioClient client;
 	
 	public Fenetre(){
 		//Titre de fenêtre
@@ -48,6 +50,8 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		this.addKeyListener(pk);
 		this.addMouseListener(this);
 		this.addKeyListener(this);
+		client = new TuioClient();
+		client.addTuioListener(this);
 	}	
 	
 	public void go(){

@@ -8,8 +8,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import Shared.Layer;
+import TUIO.TuioBlob;
+import TUIO.TuioCursor;
+import TUIO.TuioListener;
+import TUIO.TuioObject;
+import TUIO.TuioTime;
 
-public class TestLayer extends Layer implements KeyListener, MouseListener {
+public class TestLayer extends Layer implements KeyListener, MouseListener, TuioListener {
 	
 	public TestLayer(Dimension d){
 		super(d);
@@ -30,5 +35,15 @@ public class TestLayer extends Layer implements KeyListener, MouseListener {
 	public void mouseReleased(MouseEvent e) {}
 	public void keyReleased(KeyEvent ke) {}
 	public void keyTyped(KeyEvent ke) {}
+	public void addTuioBlob(TuioBlob t) {}
+	public void addTuioCursor(TuioCursor t) {}
+	public void addTuioObject(TuioObject t) {}
+	public void refresh(TuioTime t) {}
+	public void removeTuioBlob(TuioBlob t) {}
+	public void removeTuioCursor(TuioCursor t) {}
+	public void removeTuioObject(TuioObject t) {}
+	public void updateTuioBlob(TuioBlob t) {}
+	public void updateTuioCursor(TuioCursor t) {}
+	public void updateTuioObject(TuioObject t) {}
 	
 }
