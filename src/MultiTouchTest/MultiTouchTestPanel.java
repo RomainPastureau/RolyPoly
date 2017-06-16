@@ -3,6 +3,7 @@ package MultiTouchTest;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -70,7 +71,7 @@ public class MultiTouchTestPanel extends JPanel implements MouseListener, KeyLis
 			}
 		}
 		else{
-			test.paintComponent(g);
+			test.paintComponent((Graphics2D)g);
 		}
 	}
 	
