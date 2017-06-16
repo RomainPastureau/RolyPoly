@@ -1,6 +1,7 @@
 package MultiTouchTest;
 
 import java.awt.Dimension;
+import java.awt.GraphicsConfiguration;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -26,7 +27,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected MultiTouchTestPanel mtt;
 	protected TuioClient client;
 	
-	public Fenetre(){
+	public Fenetre(GraphicsConfiguration gc){
+		super(gc);
+		
 		//Titre de fenêtre
 		this.setTitle("RolyPoly MultiTouch Test 1.8");
 		
@@ -41,15 +44,18 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		
 		//Action à la fermeture
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
 		mtt = new MultiTouchTestPanel(this.screenSize);
 		this.setContentPane(mtt);
 		
 		//Entrées clavier
 		pk = new PressKey();
 		this.addKeyListener(pk);
-		this.addMouseListener(this);
 		this.addKeyListener(this);
+		
+		//Entrées souris
+		this.addMouseListener(this);
+		
+		//Entrées touch
 		client = new TuioClient();
 		client.addTuioListener(this);
 		client.connect();
