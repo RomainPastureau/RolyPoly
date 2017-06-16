@@ -35,12 +35,14 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected boolean stay;
 	protected static int record;
 	protected File f = new File("record.txt");
+	protected boolean newRecord;
 	
 	public TestLayer(Dimension d){
 		super(d);
 		cursors = new HashMap<Integer, TouchPoint>();
 		this.stay = true;
 		getRecord();
+		this.newRecord = false;
 	}
 	
 	public TestLayer(int x, int y, Dimension d){
@@ -48,6 +50,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		cursors = new HashMap<Integer, TouchPoint>();
 		this.stay = true;
 		getRecord();
+		this.newRecord = false;
 	}
 	
 	public void paintComponent(Graphics g){
@@ -55,7 +58,11 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();
 		double height = screenSize.getHeight();
-		g = CenterText.center((Graphics2D)g, "Record : "+record, font, 80, new Color(200, 200, 200), 0, 0, new Dimension((int)width, (int)height));
+		Color recordColor = new Color(200, 200, 200);
+		if(newRecord){
+			recordColor = new Color(255, 0, 0);
+		}
+		g = CenterText.center((Graphics2D)g, "Record : "+record, font, 80, recordColor, 0, 0, new Dimension((int)width, (int)height));
 		for(int i = 0; i < cursors.keySet().size(); i++){
 			try{
 				if(this.stay || cursors.get(i).isVisible()){
@@ -92,7 +99,9 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void addTuioCursor(TuioCursor t) {
 		cursors.put(t.getCursorID(), new TouchPoint(t));
 		if(t.getCursorID() > record){
+			newRecord = true;
 			record = t.getCursorID();
+			System.out.println("Nouveau record ! "+record+" points en même temps.");
 			saveRecord();
 		}
 	}
