@@ -12,6 +12,8 @@ public class Main {
 		GraphicsDevice[] gs = ge.getScreenDevices();
 		GraphicsDevice gd = gs[-1];
 		GraphicsConfiguration gk = gd.getDefaultConfiguration();
+		
+		
 		Fenetre fenetre = new Fenetre(gk); 
 		fenetre.setVisible(true);
 		fenetre.go();

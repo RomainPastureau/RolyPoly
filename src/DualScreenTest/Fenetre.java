@@ -1,19 +1,15 @@
 package DualScreenTest;
 
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Rectangle2D;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import Shared.PressKey;
 import TUIO.TuioBlob;
@@ -34,17 +30,18 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	
 	public Fenetre(){
 		
-		Rectangle2D result = new Rectangle2D.Double();
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice[] gs = ge.getScreenDevices();
-		JOptionPane.showConfirmDialog((java.awt.Component) null, "Found : "+gs.length, "screen detected ?", JOptionPane.DEFAULT_OPTION);
-		for(int j = 0; j < gs.length; j++){
-			GraphicsDevice gd = gs[j];
-			JFrame frame = new JFrame(gd.getDefaultConfiguration());
-			frame.setTitle("I'm on monitor #"+j);
-			frame.setSize(400,200);
-			frame.add(new JLabel(""+j));
-			frame.setVisible(true);
+		InetAddress adresseLocale;
+		InetAddress adresseServeur;
+		
+		try{
+			adresseLocale = InetAddress.getLocalHost();
+			System.out.println("L'adresse locale est : "+adresseLocale);
+			adresseServeur = InetAddress.getByName("www.google.fr");
+			System.out.println("L'adresse du serveur de Google est : "+adresseServeur);
+			adresseServeur = InetAddress.getByName("www.facebook.fr");
+			System.out.println("L'adresse du serveur de Facebook est : "+adresseServeur);
+		} catch (UnknownHostException e){
+			e.printStackTrace();
 		}
 		
 //		System.out.println(gds[0].getDisplayModes());
