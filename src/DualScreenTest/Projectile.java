@@ -19,22 +19,23 @@ public class Projectile {
 		this.height = height;
 		this.startX = x + (width/2);
 		this.startY = y;
+		this.speed = speed;
 		this.timeCreated = System.currentTimeMillis();
 		this.exists = true;
 	}
 	
 	public void paintComponent(Graphics2D g){
 		if(this.exists){
-			long timeNow = (System.currentTimeMillis() - this.timeCreated)/1000;
+			double timeNow = (System.currentTimeMillis() - this.timeCreated)/(1000.0);
 			this.y = this.startY - (int)(timeNow*this.speed);
 			if(this.y < 0){
 				this.exists = false;
 			}
-			if((int)(timeNow/1000)%2 == 0){
-				g.setColor(new Color(255, 255*((timeNow/1000)%1000), 255*((timeNow/1000)%1000)));
+			if((int)timeNow%2 == 0){
+				g.setColor(new Color((int)(255*(timeNow%1)), 0, 255-(int)(255*(timeNow%1))));
 			}
 			else{
-				g.setColor(new Color(255, 255-255*((timeNow/1000)%1000), 255-255*((timeNow/1000)%1000)));
+				g.setColor(new Color(255-(int)(255*(timeNow%1)), 0, (int)(255*(timeNow%1))));
 			}
 			g.fillRect(x, y, width, height);
 		}

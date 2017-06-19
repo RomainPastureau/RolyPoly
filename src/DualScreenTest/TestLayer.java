@@ -27,8 +27,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	public void moveCar(){
 		if(t1 != null){
-			System.out.println("Move the car");
-			car.move((int)(t1.getX()+car.width/2));
+			car.move((int)((t1.getX()*this.width)-car.width/2));
 		}
 	}
 	

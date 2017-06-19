@@ -23,6 +23,16 @@ public class Car {
 	public void paintComponent(Graphics2D g){
 		g.setPaint(color);
 		g.fillRect(x, y, width, height);
+		int size = projectiles.size();
+		for(int i = 0; i < size; i++){
+			if(!projectiles.get(i).exists){
+				projectiles.remove(i);
+				break;
+			}
+		}
+		for(Projectile p:projectiles){
+			p.paintComponent(g);
+		}
 	}
 	
 	public void move(int x){
@@ -30,7 +40,7 @@ public class Car {
 	}
 	
 	public void shoot(){
-		Projectile p = new Projectile(x, y, 4, 10, width, 10);
+		Projectile p = new Projectile(x, y, 4, 10, width, 150);
 		projectiles.add(p);
 	}
 	
