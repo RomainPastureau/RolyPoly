@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 import javax.swing.JFrame;
 
@@ -104,7 +105,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 						System.out.println("Serveur déconecté");
 						out.close();
 						clientSocket.close();
-					} catch (IOException e) {
+					} catch (SocketException e) {
+						System.out.println("Système déconnecté.");
+					} catch (IOException e){
 						e.printStackTrace();
 					}
 				}

@@ -27,6 +27,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	public void moveCar(){
 		if(t1 != null){
+			System.out.println("Move the car");
 			car.move((int)(t1.getX()+car.width/2));
 		}
 	}
@@ -42,18 +43,15 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	public void addTuioCursor(TuioCursor tc) {
 		if(tc.getCursorID() == 0){
-			System.out.println("Press");
 			t1 = tc;
 		}
 		else if(tc.getCursorID() == 1){
-			System.out.println("Shoot");
 			car.shoot();
 		}
 	}
 	
 	public void removeTuioCursor(TuioCursor tc) {
 		if(tc.getCursorID() == 0){
-			System.out.println("Unpress");
 			t1 = null;
 		}
 	}
