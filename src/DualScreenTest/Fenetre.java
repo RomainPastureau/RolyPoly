@@ -6,7 +6,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
@@ -40,7 +43,15 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			System.out.println("L'adresse du serveur de Google est : "+adresseServeur);
 			adresseServeur = InetAddress.getByName("www.facebook.fr");
 			System.out.println("L'adresse du serveur de Facebook est : "+adresseServeur);
+			ServerSocket socketserver = new ServerSocket(0, 2);
+			System.out.println(socketserver);
+			Socket socket = new Socket("141.115.72.18", socketserver.getLocalPort());
+			Socket socketduserveur = socketserver.accept();
+			System.out.println(socketduserveur);
+			
 		} catch (UnknownHostException e){
+			e.printStackTrace();
+		} catch (IOException e){
 			e.printStackTrace();
 		}
 		
