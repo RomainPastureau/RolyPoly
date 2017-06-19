@@ -36,6 +36,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected Socket clientSocket;
 	protected PrintWriter out;
 	protected BufferedReader in;
+	protected Thread envoi, recevoir;
 	
 	public Fenetre(){
 		
@@ -59,7 +60,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		dst = new DualScreenTestPanel(this.screenSize, this.type);
 		this.setContentPane(dst);
 		
-		if(this.type == "server"){
+		if(this.type.equals("server")){
 			try{
 				serveurSocket = new ServerSocket(4242);
 				clientSocket = serveurSocket.accept();
@@ -67,14 +68,42 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			} catch(IOException e){
 				e.printStackTrace();
 			}
+			this.envoi = new Thread(new Runnable() {
+				public void run() {
+					while(true){
+						out.println(dst.getCar());
+						out.flush();
+					}	
+				}
+			});
 		}
+		
 		else{
 			try{
+				System.out.println(5.2);
 				clientSocket = new Socket("141.115.72.8",4242);
 				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			} catch(IOException e){
 				e.printStackTrace();
 			}
+			this.recevoir = new Thread(new Runnable() {
+				String msg;
+				@Override
+				public void run() {
+					try {
+						msg = in.readLine();
+						while(msg!=null){
+							System.out.println(msg);
+							msg = in.readLine();
+						}
+						System.out.println("Serveur déconecté");
+						out.close();
+						clientSocket.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		} 
 		
 		//Entrées clavier
@@ -85,44 +114,21 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		client = new TuioClient();
 		client.addTuioListener(this);
 		client.connect();
+		System.out.println(7);
 		
 	}	
 	
 	public void go(){
-		if(this.type == "server"){
+		if(this.type.equals("server")){
+			System.out.println(("Coucou je suis un serveur !"));
 			while(true){
 				dst.repaint();
-				Thread envoi = new Thread(new Runnable() {
-					public void run() {
-						while(true){
-							out.println(dst.getCar());
-							out.flush();
-						}	
-					}
-				});
 				envoi.start();
 			}
 		}
 		else{
 			while(true){
-				Thread recevoir = new Thread(new Runnable() {
-					String msg;
-					@Override
-					public void run() {
-						try {
-							msg = in.readLine();
-							while(msg!=null){
-								System.out.println(msg);
-								msg = in.readLine();
-							}
-							System.out.println("Serveur déconecté");
-							out.close();
-							clientSocket.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				});
+				System.out.println("Coucou, non.");
 				recevoir.start();
 			}
 		}
