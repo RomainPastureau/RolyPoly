@@ -3,57 +3,66 @@ package DualScreenTest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.util.Scanner;
+/*
+ * www.codeurjava.com
+ */
 public class Serveur {
-
-	public static void main(String[] args) {  
-		
-		ServerSocket socket;
-		
-		try{
-			socket = new ServerSocket(4242);
-			Thread t = new Thread(new Accepter_clients(socket));
-			t.start();
-			System.out.println("Serveur prêt.");
-			
-		} catch(IOException e){
-			e.printStackTrace();
-		}
-	}
-}
-
-class Accepter_clients implements Runnable {
-	private ServerSocket socketserver;
-	private Socket socket;
-	private int nbClient = 1;
-	protected int toAdd = 0;
-	protected int sum = 0;
-	protected BufferedReader in;
-	
-	public Accepter_clients(ServerSocket s){
-		socketserver = s;
-	}
-	
-	public void run(){
-		
-		try{
-			while(true){
-				socket = socketserver.accept();
-				InetAddress name = socket.getInetAddress();
-				System.out.println("Connexion du client n°"+nbClient+" : "+name);
-				nbClient++;
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				toAdd = Integer.valueOf(in.read()); 
-				sum += toAdd;
-				System.out.println(sum-toAdd+" + "+toAdd+" = "+sum);
-				socket.close();
-			}
-		} catch(IOException e){
-			e.printStackTrace();
-		}
-	}
-	
+ 
+   public static void main(String[] test) {
+  
+     final ServerSocket serveurSocket  ;
+     final Socket clientSocket ;
+     final BufferedReader in;
+     final PrintWriter out;
+     final Scanner sc=new Scanner(System.in);
+  
+     try {
+       serveurSocket = new ServerSocket(4242);
+       clientSocket = serveurSocket.accept();
+       out = new PrintWriter(clientSocket.getOutputStream());
+       in = new BufferedReader (new InputStreamReader (clientSocket.getInputStream()));
+       Thread envoi= new Thread(new Runnable() {
+          String msg;
+          @Override
+          public void run() {
+             while(true){
+                msg = sc.nextLine();
+                out.println(msg);
+                out.flush();
+             }
+          }
+       });
+       envoi.start();
+   
+       Thread recevoir= new Thread(new Runnable() {
+          String msg ;
+          @Override
+          public void run() {
+             try {
+                msg = in.readLine();
+                //tant que le client est connecté
+                while(msg!=null){
+                   System.out.println("Client : "+msg);
+                   msg = in.readLine();
+                }
+                //sortir de la boucle si le client a déconecté
+                System.out.println("Client déconecté");
+                //fermer le flux et la session socket
+                out.close();
+                clientSocket.close();
+                serveurSocket.close();
+             } catch (IOException e) {
+                  e.printStackTrace();
+             }
+         }
+      });
+      recevoir.start();
+      }catch (IOException e) {
+         e.printStackTrace();
+      }
+   }
 }

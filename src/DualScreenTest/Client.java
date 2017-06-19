@@ -1,54 +1,70 @@
 package DualScreenTest;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-
+/*
+ * www.codeurjava.com
+ */
 public class Client {
-	
-	public static void main(String[] args) {
-		
-		Socket socket;
-		int x = 0;
-		String server = "";
-		BufferedWriter out;
-		
-		try{
-			System.out.println("Veuillez sélectionner un serveur :");
-			System.out.println("1. 141.115.72.8 (climber)");
-			System.out.println("2. 141.115.72.18 (immer)");
-			Scanner sc = new Scanner(System.in);
-			
-			while(x != 1 && x != 2){
-				System.out.println("Votre choix : ");
-				x = sc.nextInt();
-				if(x != 1 && x != 2){
-					System.out.println("Erreur, veuillez entrer un nouveau numéro.");
-				}
-			}
-			
-			switch(x){
-				case 1: server = "141.115.72.8";
-				case 2: server = "141.115.72.18";
-			}
-			
-			socket = new Socket(server, 4242);
-			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			
-			while(x != -1){
-				x = sc.nextInt();
-				out.write(x);
-			}
-			
-			socket.close();
-			
-		} catch(IOException e){
-			e.printStackTrace();
-		}
-	}
 
+   public static void main(String[] args) {
+      
+      final Socket clientSocket;
+      final BufferedReader in;
+      final PrintWriter out;
+      final Scanner sc = new Scanner(System.in);//pour lire à partir du clavier
+  
+      try {
+         /*
+         * les informations du serveur ( port et adresse IP ou nom d'hote
+         * 127.0.0.1 est l'adresse local de la machine
+         */
+         clientSocket = new Socket("141.115.72.8",4242);
+   
+         //flux pour envoyer
+         out = new PrintWriter(clientSocket.getOutputStream());
+         //flux pour recevoir
+         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+   
+         Thread envoyer = new Thread(new Runnable() {
+             String msg;
+              @Override
+              public void run() {
+                while(true){
+                  msg = sc.nextLine();
+                  out.println(msg);
+                  out.flush();
+                }
+             }
+         });
+         envoyer.start();
+   
+        Thread recevoir = new Thread(new Runnable() {
+            String msg;
+            @Override
+            public void run() {
+               try {
+                 msg = in.readLine();
+                 while(msg!=null){
+                    System.out.println("Serveur : "+msg);
+                    msg = in.readLine();
+                 }
+                 System.out.println("Serveur déconecté");
+                 out.close();
+                 clientSocket.close();
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
+            }
+        });
+        recevoir.start();
+   
+      } catch (IOException e) {
+           e.printStackTrace();
+      }
+  }
 }
