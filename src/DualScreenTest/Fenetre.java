@@ -6,11 +6,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.InetAddress;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
 
@@ -30,72 +31,101 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected PressKey pk;
 	protected DualScreenTestPanel dst;
 	protected TuioClient client;
+	protected String type;
+	protected ServerSocket serveurSocket;
+	protected Socket clientSocket;
+	protected PrintWriter out;
+	protected BufferedReader in;
 	
 	public Fenetre(){
 		
-		InetAddress adresseLocale;
-		InetAddress adresseServeur;
+		//Titre de fenêtre
+		this.setTitle("RolyPoly DualScreen Test 0.8");
 		
-		try{
-			adresseLocale = InetAddress.getLocalHost();
-			System.out.println("L'adresse locale est : "+adresseLocale);
-			adresseServeur = InetAddress.getByName("www.google.fr");
-			System.out.println("L'adresse du serveur de Google est : "+adresseServeur);
-			adresseServeur = InetAddress.getByName("www.facebook.fr");
-			System.out.println("L'adresse du serveur de Facebook est : "+adresseServeur);
-			ServerSocket socketserver = new ServerSocket(0, 2);
-			System.out.println(socketserver);
-			Socket socket = new Socket("141.115.72.18", socketserver.getLocalPort());
-			Socket socketduserveur = socketserver.accept();
-			System.out.println(socketduserveur);
-			
-		} catch (UnknownHostException e){
-			e.printStackTrace();
-		} catch (IOException e){
-			e.printStackTrace();
+		this.type = "server";
+		
+		//Taille de la fenêtre
+		width = (int)screenSize.getWidth();
+		height = (int)screenSize.getHeight();
+		this.setSize(width, height);
+
+		//Plein écran
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setUndecorated(true);
+		
+		//Action à la fermeture
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+		dst = new DualScreenTestPanel(this.screenSize, this.type);
+		this.setContentPane(dst);
+		
+		if(this.type == "server"){
+			try{
+				serveurSocket = new ServerSocket(4242);
+				clientSocket = serveurSocket.accept();
+				out = new PrintWriter(clientSocket.getOutputStream());
+			} catch(IOException e){
+				e.printStackTrace();
+			}
 		}
+		else{
+			try{
+				clientSocket = new Socket("141.115.72.8",4242);
+				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+		} 
 		
-//		System.out.println(gds[0].getDisplayModes());
-//		for (GraphicsDevice gd : localGE.getScreenDevices()) {
-//		  for (GraphicsConfiguration graphicsConfiguration : gd.getConfigurations()) {
-//			System.out.println(graphicsConfiguration.getBounds());
-//		    result.union(result, graphicsConfiguration.getBounds(), result);
-//		  }
-//		}
-//		System.out.println("RESULT: "+result);
-		//f.setSize(result.getWidth(), result.getHeight());
-//		//Titre de fenêtre
-//		this.setTitle("RolyPoly MultiTouch Test 1.6");
-//		
-//		//Taille de la fenêtre
-//		width = (int)screenSize.getWidth();
-//		height = (int)screenSize.getHeight();
-//		this.setSize(width, height);
-//
-//		//Plein écran
-//		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//		this.setUndecorated(true);
-//		
-//		//Action à la fermeture
-//		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	
-//		dst = new DualScreenTestPanel(this.screenSize);
-//		this.setContentPane(dst);
-//		
-//		//Entrées clavier
-//		pk = new PressKey();
-//		this.addKeyListener(pk);
-//		this.addMouseListener(this);
-//		this.addKeyListener(this);
-//		client = new TuioClient();
-//		client.addTuioListener(this);
-//		client.connect();
+		//Entrées clavier
+		pk = new PressKey();
+		this.addKeyListener(pk);
+		this.addMouseListener(this);
+		this.addKeyListener(this);
+		client = new TuioClient();
+		client.addTuioListener(this);
+		client.connect();
+		
 	}	
 	
 	public void go(){
-//		while(true){
-//			dst.repaint();
-//		}
+		if(this.type == "server"){
+			while(true){
+				dst.repaint();
+				Thread envoi = new Thread(new Runnable() {
+					public void run() {
+						while(true){
+							out.println(dst.getCar());
+							out.flush();
+						}	
+					}
+				});
+				envoi.start();
+			}
+		}
+		else{
+			while(true){
+				Thread recevoir = new Thread(new Runnable() {
+					String msg;
+					@Override
+					public void run() {
+						try {
+							msg = in.readLine();
+							while(msg!=null){
+								System.out.println(msg);
+								msg = in.readLine();
+							}
+							System.out.println("Serveur déconecté");
+							out.close();
+							clientSocket.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				recevoir.start();
+			}
+		}
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {
@@ -111,6 +141,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	}
 	
 	public void keyPressed(KeyEvent ke) {
+		System.out.println(System.currentTimeMillis());
 		dst.keyPressed(ke);
 	}
 	
