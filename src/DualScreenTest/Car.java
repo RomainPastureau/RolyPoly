@@ -22,7 +22,7 @@ public class Car {
 	
 	public void paintComponent(Graphics2D g){
 		g.setPaint(color);
-		g.drawRect(x, y, width, height);
+		g.fillRect(x, y, width, height);
 	}
 	
 	public void move(int x){

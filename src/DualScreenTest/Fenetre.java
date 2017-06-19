@@ -43,7 +43,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 0.8");
 		
-		this.type = "client";
+		this.type = "server";
 		
 		if(this.type.equals("server")){
 			//Taille de la fenêtre
@@ -72,9 +72,13 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			}
 			this.envoi = new Thread(new Runnable() {
 				public void run() {
+					long time = System.currentTimeMillis();
 					while(true){
-						out.println(dst.getCar());
-						out.flush();
+						if(System.currentTimeMillis() > time+1000){
+							out.println(dst.getCar());
+							out.flush();
+							time = System.currentTimeMillis();
+						}
 					}	
 				}
 			});
@@ -144,7 +148,6 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	}
 	
 	public void keyPressed(KeyEvent ke) {
-		System.out.println(System.currentTimeMillis());
 		dst.keyPressed(ke);
 	}
 	
