@@ -43,22 +43,24 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 0.8");
 		
-		this.type = "server";
+		this.type = "client";
 		
-		//Taille de la fenêtre
-		width = (int)screenSize.getWidth();
-		height = (int)screenSize.getHeight();
-		this.setSize(width, height);
-
-		//Plein écran
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		this.setUndecorated(true);
-		
-		//Action à la fermeture
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		if(this.type.equals("server")){
+			//Taille de la fenêtre
+			width = (int)screenSize.getWidth();
+			height = (int)screenSize.getHeight();
+			this.setSize(width, height);
 	
-		dst = new DualScreenTestPanel(this.screenSize, this.type);
-		this.setContentPane(dst);
+			//Plein écran
+			this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			this.setUndecorated(true);
+			
+			//Action à la fermeture
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+			dst = new DualScreenTestPanel(this.screenSize, this.type);
+			this.setContentPane(dst);
+		}
 		
 		if(this.type.equals("server")){
 			try{
@@ -80,8 +82,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		
 		else{
 			try{
-				System.out.println(5.2);
-				clientSocket = new Socket("141.115.72.8",4242);
+				clientSocket = new Socket("141.115.72.18", 4242);
 				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			} catch(IOException e){
 				e.printStackTrace();
@@ -113,24 +114,20 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		this.addKeyListener(this);
 		client = new TuioClient();
 		client.addTuioListener(this);
-		client.connect();
-		System.out.println(7);
-		
+		client.connect();		
 	}	
 	
 	public void go(){
 		if(this.type.equals("server")){
 			System.out.println(("Coucou je suis un serveur !"));
+			envoi.start();
 			while(true){
 				dst.repaint();
-				envoi.start();
 			}
 		}
 		else{
-			while(true){
-				System.out.println("Coucou, non.");
-				recevoir.start();
-			}
+			System.out.println("Coucou, non.");
+			recevoir.start();
 		}
 	}
 	
