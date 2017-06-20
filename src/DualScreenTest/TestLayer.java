@@ -48,8 +48,10 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void paintComponent(Graphics2D g){
-		g.setStroke(new BasicStroke(6));
-		g.draw(new Line2D.Float(0, yLine, width, yLine));
+		if(type == "Serveur"){
+			g.setStroke(new BasicStroke(6));
+			g.draw(new Line2D.Float(0, yLine, width, yLine));
+		}
 		this.car.paintComponent(g);
 		moveCar();
 	}

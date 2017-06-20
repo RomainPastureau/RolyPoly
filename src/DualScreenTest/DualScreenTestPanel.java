@@ -74,6 +74,10 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 		}
 	}
 	
+	public boolean getMenu(){
+		return(this.menu);
+	}
+	
 	public void updateCoordinates(Coordinates c){
 		test.updateCoordinates(c);
 	}

@@ -1,16 +1,17 @@
 package DualScreenTest;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -44,13 +45,14 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected Thread envoi, recevoir;
 	protected ObjectOutputStream oos;
 	protected ObjectInputStream ois;
+	protected boolean menu, startThreads;
 	
 	public Fenetre(){
 		
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 0.8");
 		
-		this.type = "Client";
+		this.type = "Serveur";
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -66,6 +68,16 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	
 		dst = new DualScreenTestPanel(this.screenSize, this.type);
 		this.setContentPane(dst);
+		this.startThreads = true;
+		
+		//Entrées clavier
+		pk = new PressKey();
+		this.addKeyListener(pk);
+		this.addMouseListener(this);
+		this.addKeyListener(this);
+		client = new TuioClient();
+		client.addTuioListener(this);
+		client.connect();
 		
 		if(this.type.equals("Serveur")){
 			try{
@@ -77,16 +89,15 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			}
 			this.envoi = new Thread(new Runnable() {
 				public void run() {
-					long time = System.currentTimeMillis();
 					while(true){
-						if(System.currentTimeMillis() > time+1000){
-							try{
-								oos.writeObject(dst.getCar());
-								oos.flush();
-							} catch(IOException e){
-								e.printStackTrace();
-							}
-							time = System.currentTimeMillis();
+						try{
+							oos.writeObject(dst.getCar());
+							System.out.println(dst.getCar());
+							oos.flush();
+						} catch(NullPointerException e){
+							System.out.println("Rien n'est envoyé.");
+						} catch(IOException e){
+							e.printStackTrace();
 						}
 					}	
 				}
@@ -125,26 +136,21 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 					}
 				}
 			});
-		} 
-		
-		//Entrées clavier
-		pk = new PressKey();
-		this.addKeyListener(pk);
-		this.addMouseListener(this);
-		this.addKeyListener(this);
-		client = new TuioClient();
-		client.addTuioListener(this);
-		client.connect();		
+		} 	
 	}	
 	
 	public void go(){
-		if(this.type.equals("Serveur")){
-			envoi.start();
-		}
-		else{
-			recevoir.start();
-		}
+		dst.getMenu();
 		while(true){
+			if(!menu && startThreads){
+				if(this.type.equals("Serveur")){
+					envoi.start();
+				}
+				else{
+					recevoir.start();
+				}
+				startThreads = false;
+			}
 			dst.repaint();
 		}
 	}
@@ -162,7 +168,18 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	}
 	
 	public void keyPressed(KeyEvent ke) {
-		dst.keyPressed(ke);
+		if(ke.getKeyCode() == ke.VK_ESCAPE){
+			System.out.println("Fermeture du programme.");
+			client.disconnect();
+			try {
+				oos.close();
+				ois.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Frame[] frames = JFrame.getFrames();
+			frames[0].dispatchEvent(new WindowEvent(frames[0], WindowEvent.WINDOW_CLOSING));
+		}
 	}
 	
 	public void mousePressed(MouseEvent e) {}

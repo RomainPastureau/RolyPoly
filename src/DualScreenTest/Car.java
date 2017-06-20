@@ -43,8 +43,12 @@ public class Car {
 			}
 		}
 		if(type == "Serveur"){
-			for(Projectile p:projectiles){
-				p.paintComponent(g);
+			for(int i = 0; i < size; i++){
+				try{
+					projectiles.get(i).paintComponent(g);
+				} catch(IndexOutOfBoundsException e){
+					break;
+				}
 			}
 		}
 	}
