@@ -52,22 +52,20 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		
 		this.type = "Client";
 		
-		if(this.type.equals("Serveur")){
-			//Taille de la fenêtre
-			width = (int)screenSize.getWidth();
-			height = (int)screenSize.getHeight();
-			this.setSize(width, height);
-	
-			//Plein écran
-			this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-			this.setUndecorated(true);
-			
-			//Action à la fermeture
-			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//Taille de la fenêtre
+		width = (int)screenSize.getWidth();
+		height = (int)screenSize.getHeight();
+		this.setSize(width, height);
+
+		//Plein écran
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setUndecorated(true);
 		
-			dst = new DualScreenTestPanel(this.screenSize, this.type);
-			this.setContentPane(dst);
-		}
+		//Action à la fermeture
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+		dst = new DualScreenTestPanel(this.screenSize, this.type);
+		this.setContentPane(dst);
 		
 		if(this.type.equals("Serveur")){
 			try{
