@@ -72,7 +72,9 @@ public class Car {
 				}
 				for(int i = 0; i < size; i++){
 					try{
-						projectiles.get(i).paintComponent(g);
+						if(projectiles.get(i).exists){
+							projectiles.get(i).paintComponent(g);
+						}
 					} catch(IndexOutOfBoundsException e){
 						break;
 					}

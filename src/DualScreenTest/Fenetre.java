@@ -53,7 +53,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 1.0");
 		
-		this.type = "Client";
+		this.type = "Serveur";
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
