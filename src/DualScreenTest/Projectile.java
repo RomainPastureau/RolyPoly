@@ -2,9 +2,11 @@ package DualScreenTest;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
-public class Projectile {
+public class Projectile implements Serializable {
 	
+	private static final long serialVersionUID = 7488924923133410267L;
 	protected int x, y;
 	protected int startX, startY;
 	protected int width, height;

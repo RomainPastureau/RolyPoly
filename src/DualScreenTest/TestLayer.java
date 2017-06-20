@@ -71,6 +71,14 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 			t1 = null;
 		}
 	}
+	
+	public ArrayList<Meteor> getMeteors(){
+		return(car.getMeteors());
+	}
+	
+	public void updateMeteors(ArrayList<Meteor> m){
+		car.updateMeteors(m);
+	}
 
 	public void keyPressed(KeyEvent ke) {
 	}

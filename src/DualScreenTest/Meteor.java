@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.io.Serializable;
 
-public class Meteor {
+public class Meteor implements Serializable {
 	
 	protected int x, y, taille, speed;
 	protected int startX, startY;

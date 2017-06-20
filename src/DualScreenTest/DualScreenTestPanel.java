@@ -48,7 +48,7 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly DualScreen Test", "0.28", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly DualScreen Test", "1.0", options, colors, 0.5f, d);
 		this.type = type;
 		this.test = new TestLayer(d, type);
 		this.connect = false;
@@ -83,6 +83,14 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 	
 	public boolean getMenu(){
 		return(this.menu);
+	}
+	
+	public ArrayList<Meteor> getMeteors(){
+		return(test.getMeteors());
+	}
+	
+	public void updateMeteors(ArrayList<Meteor> m){
+		test.updateMeteors(m);
 	}
 	
 	public void setConnect(boolean connect){

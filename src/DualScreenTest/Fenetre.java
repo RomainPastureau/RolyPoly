@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -50,9 +51,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly DualScreen Test 0.28");
+		this.setTitle("RolyPoly DualScreen Test 1.0");
 		
-		this.type = "Client";
+		this.type = "Serveur";
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -123,6 +124,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 							oos.writeObject(dst.getCar());
 							oos.flush();
 							oos.reset();
+							oos.writeObject(dst.getMeteors());
+							oos.flush();
+							oos.reset();
 						} catch(NullPointerException e){
 							System.out.println("Rien n'est envoyé.");
 						} catch(IOException e){
@@ -150,13 +154,17 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			}
 			this.recevoir = new Thread(new Runnable() {
 				Coordinates c;
+				ArrayList<Meteor> m;
 				@Override
 				public void run() {
 					try {						
 						c = (Coordinates)ois.readObject();
+						
 						while(c!=null){
 							c = (Coordinates)ois.readObject();
 							dst.updateCoordinates(c);
+							m = (ArrayList<Meteor>)ois.readObject();
+							dst.updateMeteors(m);
 						}
 						System.out.println("Serveur déconnecté");
 						ois.close();

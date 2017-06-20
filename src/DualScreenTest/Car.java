@@ -18,7 +18,7 @@ public class Car {
 	protected ArrayList<Meteor> meteors;
 	protected String type;
 	protected Dimension d;
-	protected long startTime, now, timeUntilNext;
+	protected long startTime, now, timeUntilNext, timeBetween;
 	protected int randomNum;
 	protected boolean over;
 	
@@ -32,6 +32,7 @@ public class Car {
 		this.meteors = new ArrayList<Meteor>();
 		this.startTime = System.currentTimeMillis();
 		this.timeUntilNext = 5000;
+		this.timeBetween = 5000;
 		this.type = type;
 		this.d = d;
 		this.over = false;
@@ -39,8 +40,10 @@ public class Car {
 	
 	public void paintComponent(Graphics2D g){
 		if(!over){
+			int size = 0;
 			g.setPaint(color);
 			now = System.currentTimeMillis()-startTime;
+			
 			if(type == "Serveur"){
 				int posX[] = {c.getX()+width/2, c.getX(), c.getX()+width};
 				int posY[] = {c.getY(), c.getY()+height, c.getY()+height};
@@ -49,13 +52,17 @@ public class Car {
 			else{
 				g.fillRect(c.getX(), (int)d.getHeight()/2-(height/2), width, height);
 			}
-			int size = meteors.size();
-			for(int i = 0; i < size; i++){
-				if(!meteors.get(i).exists){
-					meteors.remove(i);
-					break;
+			
+			if(type == "Serveur"){
+				size = meteors.size();
+				for(int i = 0; i < size; i++){
+					if(!meteors.get(i).exists){
+						meteors.remove(i);
+						break;
+					}
 				}
 			}
+			
 			for(int i = 0; i < size; i++){
 				try{
 					meteors.get(i).paintComponent(g);
@@ -63,14 +70,16 @@ public class Car {
 					break;
 				}
 			}
-			size = projectiles.size();
-			for(int i = 0; i < size; i++){
-				if(!projectiles.get(i).exists){
-					projectiles.remove(i);
-					break;
-				}
-			}
+				
+
 			if(type == "Serveur"){
+				size = projectiles.size();
+				for(int i = 0; i < size; i++){
+					if(!projectiles.get(i).exists){
+						projectiles.remove(i);
+						break;
+					}
+				}
 				for(int i = 0; i < size; i++){
 					try{
 						projectiles.get(i).paintComponent(g);
@@ -81,11 +90,12 @@ public class Car {
 			}
 			if(now > timeUntilNext){
 				int meteorSize = ThreadLocalRandom.current().nextInt(5, 100);
-				int meteorSpeed = ThreadLocalRandom.current().nextInt(1, 50);
+				int meteorSpeed = ThreadLocalRandom.current().nextInt(10, 100);
 				int meteorX = ThreadLocalRandom.current().nextInt(0, (int)d.getWidth()-meteorSize);
 				Meteor meteor = new Meteor(meteorX, 0, meteorSize, meteorSpeed, type, d);
 				meteors.add(meteor);
-				timeUntilNext = (long)(timeUntilNext*0.95);
+				timeBetween *= 0.95;
+				timeUntilNext += timeBetween;
 			}
 			checkIfTouches();
 			checkIfOver();
@@ -126,10 +136,14 @@ public class Car {
 		
 		for(int i = 0; i < sizeMeteors; i++){
 			for(int j = 0; i < sizeProj; j++){
-				check = meteors.get(i).checkIfTouches(projectiles.get(j));
-				if(check){
-					meteors.get(i).setExists(false);;
-					projectiles.get(i).setExists(false);;
+				try{
+					check = meteors.get(i).checkIfTouches(projectiles.get(j));
+					if(check){
+						meteors.get(i).setExists(false);
+						projectiles.get(i).setExists(false);
+					}
+				} catch(IndexOutOfBoundsException e){
+					break;
 				}
 			}
 		}
@@ -137,5 +151,13 @@ public class Car {
 	
 	public void setCoordinates(Coordinates c){
 		this.c = c;
+	}
+	
+	public ArrayList<Meteor> getMeteors(){
+		return(meteors);
+	}
+	
+	public void updateMeteors(ArrayList<Meteor> m){
+		this.meteors = m;
 	}
 }
