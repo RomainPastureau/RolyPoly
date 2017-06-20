@@ -88,6 +88,10 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void paintComponent(Graphics2D g){
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		Font font = new Font("Calibri", Font.BOLD, 80);
+		if(car.getScore() > record){
+			newRecord = true;
+			record = car.getScore();
+		}
 		if(type == "Serveur"){
 			g.setStroke(new BasicStroke(6));
 			g.draw(new Line2D.Float(0, yLine, width, yLine));
@@ -95,7 +99,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 			if(newRecord){
 				recordColor = new Color(255, 0, 0);
 			}
-			g = CenterText.center((Graphics2D)g, "Score :"+car.getScore()+"\nRecord : "+record, font, 80, recordColor, 0, 0, new Dimension(width, height));
+			g = CenterText.center((Graphics2D)g, "Score :"+car.getScore()+"\n Record : "+record, font, 80, recordColor, 0, 0, new Dimension(width, height));
 			
 		}
 		this.car.paintComponent(g);
