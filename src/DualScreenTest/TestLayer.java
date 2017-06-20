@@ -3,14 +3,25 @@ package DualScreenTest;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import Shared.CenterText;
 import Shared.Layer;
 import TUIO.TuioBlob;
 import TUIO.TuioCursor;
@@ -22,9 +33,11 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	protected Car car;
 	protected TuioCursor t1;
-	protected int yLine;
+	protected int yLine, record;
 	protected Color lineColor;
 	protected String type;
+	protected boolean newRecord;
+	protected File f = new File("recordDualScreen.txt");
 	
 	public TestLayer(Dimension d, String type){
 		super(d);
@@ -32,11 +45,35 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		this.yLine = height-50;
 		this.lineColor = (new Color(156, 0, 255)).darker();
 		this.type = type;
+		getRecord();
+		this.newRecord = false;
 	}
 	
 	public void moveCar(){
 		if(t1 != null){
 			car.move((int)((t1.getX()*this.width)-car.width/2));
+		}
+	}
+	
+	public void getRecord(){
+		DataInputStream dis;
+		try{
+			dis = new DataInputStream(new BufferedInputStream(new FileInputStream(f)));
+			record = dis.readInt();
+			dis.close();
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void saveRecord(){
+		DataOutputStream dos;
+		try{
+			dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(f)));	
+			dos.writeInt(record);
+			dos.close();
+		} catch(IOException e){
+			e.printStackTrace();
 		}
 	}
 	
@@ -49,9 +86,16 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void paintComponent(Graphics2D g){
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		Font font = new Font("Calibri", Font.BOLD, 200);
 		if(type == "Serveur"){
 			g.setStroke(new BasicStroke(6));
 			g.draw(new Line2D.Float(0, yLine, width, yLine));
+			Color recordColor = new Color(200, 200, 200);
+			if(newRecord){
+				recordColor = new Color(255, 0, 0);
+			}
+			g = CenterText.center((Graphics2D)g, "Record : "+record, font, 80, recordColor, 0, 0, new Dimension((int)width, (int)height));
 		}
 		this.car.paintComponent(g);
 		moveCar();
@@ -63,6 +107,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		}
 		else if(tc.getCursorID() == 1){
 			car.shoot();
+			saveRecord();
 		}
 	}
 	

@@ -77,18 +77,19 @@ public class Car {
 						break;
 					}
 				}
+				if(now > timeUntilNext){
+					int meteorSize = ThreadLocalRandom.current().nextInt(5, 100);
+					int meteorSpeed = ThreadLocalRandom.current().nextInt(10, 100);
+					int meteorX = ThreadLocalRandom.current().nextInt(0, (int)d.getWidth()-meteorSize);
+					Meteor meteor = new Meteor(meteorX, 0, meteorSize, meteorSpeed, type, d);
+					meteors.add(meteor);
+					timeBetween *= 0.95;
+					timeUntilNext += timeBetween;
+				}
+				checkIfTouches();
+				checkIfOver();
 			}
-			if(now > timeUntilNext){
-				int meteorSize = ThreadLocalRandom.current().nextInt(5, 100);
-				int meteorSpeed = ThreadLocalRandom.current().nextInt(10, 100);
-				int meteorX = ThreadLocalRandom.current().nextInt(0, (int)d.getWidth()-meteorSize);
-				Meteor meteor = new Meteor(meteorX, 0, meteorSize, meteorSpeed, type, d);
-				meteors.add(meteor);
-				timeBetween *= 0.95;
-				timeUntilNext += timeBetween;
-			}
-			checkIfTouches();
-			checkIfOver();
+
 		}
 		else{
 			g.setColor(new Color(255, 255, 255, 128));
