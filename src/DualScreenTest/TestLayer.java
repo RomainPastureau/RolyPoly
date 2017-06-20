@@ -36,7 +36,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected int yLine, record;
 	protected Color lineColor;
 	protected String type;
-	protected boolean newRecord;
+	protected boolean newRecord, canStart;
 	protected File f = new File("recordDualScreen.txt");
 	
 	public TestLayer(Dimension d, String type){
@@ -47,6 +47,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		this.type = type;
 		getRecord();
 		this.newRecord = false;
+		this.canStart = true;
 	}
 	
 	public void moveCar(){
@@ -119,6 +120,13 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void removeTuioCursor(TuioCursor tc) {
 		if(tc.getCursorID() == 0){
 			t1 = null;
+		}
+	}
+	
+	public void start(){
+		if(canStart){
+			car.start();
+			canStart = false;
 		}
 	}
 	

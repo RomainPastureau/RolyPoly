@@ -32,8 +32,8 @@ public class Car {
 		this.randomNum = ThreadLocalRandom.current().nextInt(0, 1);
 		this.meteors = new ArrayList<Meteor>();
 		this.startTime = System.currentTimeMillis();
-		this.timeUntilNext = 5000;
-		this.timeBetween = 5000;
+		this.timeUntilNext = 4000;
+		this.timeBetween = 4000;
 		this.type = type;
 		this.d = d;
 		this.over = false;
@@ -45,15 +45,6 @@ public class Car {
 			int size = 0;
 			g.setPaint(color);
 			now = System.currentTimeMillis()-startTime;
-			
-			if(type == "Serveur"){
-				int posX[] = {c.getX()+width/2, c.getX(), c.getX()+width};
-				int posY[] = {c.getY(), c.getY()+height, c.getY()+height};
-				g.fillPolygon(posX, posY, 3);
-			}
-			else{
-				g.fillRect(c.getX(), (int)d.getHeight()/2-(height/2), width, height);
-			}
 			
 			for(int i = 0; i < meteors.size(); i++){
 				try{
@@ -81,18 +72,36 @@ public class Car {
 						break;
 					}
 				}
+				size = meteors.size();
+				for(int i = 0; i < size; i++){
+					if(!meteors.get(i).exists){
+						meteors.remove(i);
+						break;
+					}
+				}
 				if(now > timeUntilNext){
-					int meteorSize = ThreadLocalRandom.current().nextInt(5, 100);
+					int meteorSize = ThreadLocalRandom.current().nextInt(10, 100);
 					int meteorSpeed = ThreadLocalRandom.current().nextInt(10, 100);
 					int meteorX = ThreadLocalRandom.current().nextInt(0, (int)d.getWidth()-meteorSize);
 					Meteor meteor = new Meteor(meteorX, 0, meteorSize, meteorSpeed, type, d);
 					meteors.add(meteor);
-					System.out.println(timeBetween);
-					timeBetween *= 0.95;
+					timeBetween *= 0.97;
 					timeUntilNext += timeBetween;
 				}
 				checkIfTouches();
 			}
+			
+			if(type == "Serveur"){
+				g.setColor(color);
+				int posX[] = {c.getX()+width/2, c.getX(), c.getX()+width};
+				int posY[] = {c.getY(), c.getY()+height, c.getY()+height};
+				g.fillPolygon(posX, posY, 3);
+			}
+			else{
+				g.setPaint(new Color(color.getRed(), color.getGreen(), color.getBlue(), 100));
+				g.fillRect(c.getX(), (int)d.getHeight()/2-(height/2), width, height);
+			}
+			
 			checkIfOver();
 
 		}
@@ -108,8 +117,12 @@ public class Car {
 		c.setX(x);
 	}
 	
+	public void start(){
+		this.startTime = System.currentTimeMillis();
+	}
+	
 	public void shoot(){
-		Projectile p = new Projectile(c.getX(), c.getY(), 4, 10, width, 150);
+		Projectile p = new Projectile(c.getX(), c.getY(), 4, 10, width, 200);
 		projectiles.add(p);
 	}
 	
