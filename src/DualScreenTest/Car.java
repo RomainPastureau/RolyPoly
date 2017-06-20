@@ -53,17 +53,7 @@ public class Car {
 				g.fillRect(c.getX(), (int)d.getHeight()/2-(height/2), width, height);
 			}
 			
-			if(type == "Serveur"){
-				size = meteors.size();
-				for(int i = 0; i < size; i++){
-					if(!meteors.get(i).exists){
-						meteors.remove(i);
-						break;
-					}
-				}
-			}
-			
-			for(int i = 0; i < size; i++){
+			for(int i = 0; i < meteors.size(); i++){
 				try{
 					meteors.get(i).paintComponent(g);
 				} catch(IndexOutOfBoundsException e){
@@ -123,7 +113,7 @@ public class Car {
 	
 	public void checkIfOver(){
 		for(Meteor m:meteors){
-			if(m.y >= d.getHeight()-height-50){
+			if(m.y >= d.getHeight()-height-50 && m.exists == true){
 				over = true;
 			}
 		}
