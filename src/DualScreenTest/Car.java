@@ -44,19 +44,19 @@ public class Car {
 			g.fillRect(c.getX(), (int)d.getHeight()/2-(height/2), width, height);
 		}
 		int size = meteors.size();
-		for(int i = 0; i < size; i++){
-			if(!meteors.get(i).exists){
-				meteors.remove(i);
-				break;
-			}
-		}
-		for(int i = 0; i < size; i++){
-			try{
-				meteors.get(i).paintComponent(g);
-			} catch(IndexOutOfBoundsException e){
-				break;
-			}
-		}
+//		for(int i = 0; i < size; i++){
+//			if(!meteors.get(i).exists){
+//				meteors.remove(i);
+//				break;
+//			}
+//		}
+//		for(int i = 0; i < size; i++){
+//			try{
+//				meteors.get(i).paintComponent(g);
+//			} catch(IndexOutOfBoundsException e){
+//				break;
+//			}
+//		}
 		size = projectiles.size();
 		for(int i = 0; i < size; i++){
 			if(!projectiles.get(i).exists){
@@ -73,15 +73,15 @@ public class Car {
 				}
 			}
 		}
-		if(now > timeUntilNext){
-			int meteorSize = ThreadLocalRandom.current().nextInt(5, 100);
-			int meteorSpeed = ThreadLocalRandom.current().nextInt(1, 50);
-			int meteorX = ThreadLocalRandom.current().nextInt(0, meteorSize);
-			Meteor meteor = new Meteor(meteorX, 0, meteorSize, meteorSpeed, type, d);
-			meteors.add(meteor);
-			timeUntilNext = (long)(timeUntilNext*0.95);
-		}
-		checkIfTouches();
+//		if(now > timeUntilNext){
+//			int meteorSize = ThreadLocalRandom.current().nextInt(5, 100);
+//			int meteorSpeed = ThreadLocalRandom.current().nextInt(1, 50);
+//			int meteorX = ThreadLocalRandom.current().nextInt(0, meteorSize);
+//			Meteor meteor = new Meteor(meteorX, 0, meteorSize, meteorSpeed, type, d);
+//			meteors.add(meteor);
+//			timeUntilNext = (long)(timeUntilNext*0.95);
+//		}
+//		checkIfTouches();
 	}
 	
 	public void move(int x){
@@ -97,21 +97,21 @@ public class Car {
 		return(c);
 	}
 	
-	public void checkIfTouches(){
-		int sizeProj = projectiles.size();
-		int sizeMeteors = meteors.size();
-		boolean check = false;
-		
-		for(int i = 0; i < sizeMeteors; i++){
-			for(int j = 0; i < sizeProj; j++){
-				check = meteors.get(i).checkIfTouches(projectiles.get(j));
-				if(check){
-					meteors.get(i).setExists(false);;
-					projectiles.get(i).setExists(false);;
-				}
-			}
-		}
-	}
+//	public void checkIfTouches(){
+//		int sizeProj = projectiles.size();
+//		int sizeMeteors = meteors.size();
+//		boolean check = false;
+//		
+//		for(int i = 0; i < sizeMeteors; i++){
+//			for(int j = 0; i < sizeProj; j++){
+//				check = meteors.get(i).checkIfTouches(projectiles.get(j));
+//				if(check){
+//					meteors.get(i).setExists(false);;
+//					projectiles.get(i).setExists(false);;
+//				}
+//			}
+//		}
+//	}
 	
 	public void setCoordinates(Coordinates c){
 		this.c = c;

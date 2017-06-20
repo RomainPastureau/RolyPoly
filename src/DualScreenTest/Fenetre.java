@@ -80,10 +80,11 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	
 	public void go(){
 		System.out.println(6);
-		dst.getMenu();
+		menu = dst.getMenu();
+		initThreads();
 		while(true){
+			menu = dst.getMenu();
 			if(!menu && startThreads){
-				initThreads();
 				if(this.type.equals("Serveur")){
 					envoi.start();
 				}
@@ -104,13 +105,12 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			try{
 				serveurSocket = new ServerSocket(4242);
 				clientSocket = serveurSocket.accept();
-				ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
+				oos = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
 				System.out.println("Connexion OK");
 			} catch(IOException e){
 				e.printStackTrace();
 			}
 			dst.setConnect(true);
-			System.out.println("oos : "+oos);
 			this.envoi = new Thread(new Runnable() {
 				public void run() {
 					while(true){
@@ -149,7 +149,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 							c = (Coordinates)ois.readObject();
 							dst.updateCoordinates(c);
 						}
-						System.out.println("Serveur déconecté");
+						System.out.println("Serveur déconnecté");
 						ois.close();
 						clientSocket.close();
 					} catch (NullPointerException e){
