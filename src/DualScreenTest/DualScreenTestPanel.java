@@ -2,6 +2,7 @@ package DualScreenTest;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 
 import Shared.BackgroundLayer;
+import Shared.CenterText;
 import Shared.TitleLayer;
 import TUIO.TuioBlob;
 import TUIO.TuioCursor;
@@ -42,12 +44,12 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly DualScreen Test", "0.11", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly DualScreen Test", "0.15", options, colors, 0.5f, d);
 		this.type = type;
-		this.test = new TestLayer(d);
+		this.test = new TestLayer(d, type);
 	}
 	
-	public Car getCar(){
+	public Coordinates getCar(){
 		return(test.getCar());
 	}
 
@@ -55,6 +57,8 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 		bg.paintComponent(g);
 		if(menu){
 			tl.paintComponent(g);
+			Font font = new Font("Calibri", Font.ITALIC, 80);
+			CenterText.center((Graphics2D)g, type, font, 80, Color.BLACK, width-300, height-140, new Dimension(300, 60));
 			if(tl.getMenu() == false){
 				menu = false;
 				tl.setMenu(true);
@@ -63,6 +67,10 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 		else{
 			test.paintComponent((Graphics2D)g);
 		}
+	}
+	
+	public void updateCoordinates(Coordinates c){
+		test.updateCoordinates(c);
 	}
 	
 	public void mouseClicked(MouseEvent e) {

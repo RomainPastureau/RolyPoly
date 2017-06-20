@@ -19,10 +19,16 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	protected Car car;
 	protected TuioCursor t1;
+	protected int yLine;
+	protected Color lineColor;
+	protected String type;
 	
-	public TestLayer(Dimension d){
+	public TestLayer(Dimension d, String type){
 		super(d);
-		this.car = new Car(width/2-50, height-150, 100, 100, Color.RED);
+		this.car = new Car(width/2-50, height-150, 100, 100, new Color(156, 0, 255), type, d);
+		this.yLine = height-50;
+		this.lineColor = (new Color(156, 0, 255)).darker();
+		this.type = type;
 	}
 	
 	public void moveCar(){
@@ -31,11 +37,16 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		}
 	}
 	
-	public Car getCar(){
-		return(car);
+	public Coordinates getCar(){
+		return(car.getCar());
+	}
+	
+	public void updateCoordinates(Coordinates c){
+		car.setCoordinates(c);
 	}
 	
 	public void paintComponent(Graphics2D g){
+		g.drawLine(0, yLine, width, yLine);
 		this.car.paintComponent(g);
 		moveCar();
 	}

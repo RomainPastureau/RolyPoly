@@ -6,9 +6,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -38,15 +42,17 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected PrintWriter out;
 	protected BufferedReader in;
 	protected Thread envoi, recevoir;
+	protected ObjectOutputStream oos;
+	protected ObjectInputStream ois;
 	
 	public Fenetre(){
 		
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 0.8");
 		
-		this.type = "server";
+		this.type = "Serveur";
 		
-		if(this.type.equals("server")){
+		if(this.type.equals("Serveur")){
 			//Taille de la fenêtre
 			width = (int)screenSize.getWidth();
 			height = (int)screenSize.getHeight();
@@ -63,11 +69,11 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			this.setContentPane(dst);
 		}
 		
-		if(this.type.equals("server")){
+		if(this.type.equals("Serveur")){
 			try{
 				serveurSocket = new ServerSocket(4242);
 				clientSocket = serveurSocket.accept();
-				out = new PrintWriter(clientSocket.getOutputStream());
+				ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
 			} catch(IOException e){
 				e.printStackTrace();
 			}
@@ -76,8 +82,12 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 					long time = System.currentTimeMillis();
 					while(true){
 						if(System.currentTimeMillis() > time+1000){
-							out.println(dst.getCar());
-							out.flush();
+							try{
+								oos.writeObject(dst.getCar());
+								oos.flush();
+							} catch(IOException e){
+								e.printStackTrace();
+							}
 							time = System.currentTimeMillis();
 						}
 					}	
@@ -88,26 +98,29 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		else{
 			try{
 				clientSocket = new Socket("141.115.72.18", 4242);
-				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				ois = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
 			} catch(IOException e){
 				e.printStackTrace();
 			}
 			this.recevoir = new Thread(new Runnable() {
-				String msg;
+				Coordinates c;
 				@Override
 				public void run() {
-					try {
-						msg = in.readLine();
-						while(msg!=null){
-							System.out.println(msg);
-							msg = in.readLine();
+					try {						
+						c = (Coordinates)ois.readObject();
+						while(c!=null){
+							System.out.println(c);
+							c = (Coordinates)ois.readObject();
+							dst.updateCoordinates(c);
 						}
 						System.out.println("Serveur déconecté");
-						out.close();
+						ois.close();
 						clientSocket.close();
 					} catch (SocketException e) {
 						System.out.println("Système déconnecté.");
 					} catch (IOException e){
+						e.printStackTrace();
+					} catch (ClassNotFoundException e){
 						e.printStackTrace();
 					}
 				}
@@ -125,15 +138,13 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	}	
 	
 	public void go(){
-		if(this.type.equals("server")){
-			System.out.println(("Coucou je suis un serveur !"));
+		if(this.type.equals("Serveur")){
 			envoi.start();
 			while(true){
 				dst.repaint();
 			}
 		}
 		else{
-			System.out.println("Coucou, non.");
 			recevoir.start();
 		}
 	}
