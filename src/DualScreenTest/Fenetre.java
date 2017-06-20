@@ -120,11 +120,10 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				public void run() {
 					while(true){
 						try{
-							oos.writeLong(System.currentTimeMillis());
-//							oos.flush();
-//							oos.writeObject(dst.getCar());
-//							System.out.println(dst.getCar());
+							oos.writeObject(dst.getCar());
+							System.out.println(dst.getCar());
 							oos.flush();
+							oos.reset();
 						} catch(NullPointerException e){
 							System.out.println("Rien n'est envoyé.");
 						} catch(IOException e){
@@ -152,18 +151,14 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			}
 			this.recevoir = new Thread(new Runnable() {
 				Coordinates c;
-				Long l;
 				@Override
 				public void run() {
 					try {						
-//						c = (Coordinates)ois.readObject();
-						l = (long)ois.readLong();
+						c = (Coordinates)ois.readObject();
 						while(c!=null){
-							l = (long)ois.readLong();
-							System.out.println(l);
-//							System.out.println(c);
-//							c = (Coordinates)ois.readObject();
-//							dst.updateCoordinates(c);
+							System.out.println(c);
+							c = (Coordinates)ois.readObject();
+							dst.updateCoordinates(c);
 						}
 						System.out.println("Serveur déconnecté");
 						ois.close();
