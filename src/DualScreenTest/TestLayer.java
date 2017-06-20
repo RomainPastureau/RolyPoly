@@ -26,8 +26,6 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected Color lineColor;
 	protected String type;
 	
-	
-	
 	public TestLayer(Dimension d, String type){
 		super(d);
 		this.car = new Car(width/2-50, height-150, 100, 100, new Color(156, 0, 255), type, d);
