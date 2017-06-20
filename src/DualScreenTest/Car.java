@@ -21,6 +21,7 @@ public class Car {
 	protected long startTime, now, timeUntilNext, timeBetween;
 	protected int randomNum;
 	protected boolean over;
+	protected int score;
 	
 	public Car(int x, int y, int width, int height, Color color, String type, Dimension d){
 		this.c = new Coordinates(x, y);
@@ -36,6 +37,7 @@ public class Car {
 		this.type = type;
 		this.d = d;
 		this.over = false;
+		this.score = 0;
 	}
 	
 	public void paintComponent(Graphics2D g){
@@ -85,12 +87,13 @@ public class Car {
 					int meteorX = ThreadLocalRandom.current().nextInt(0, (int)d.getWidth()-meteorSize);
 					Meteor meteor = new Meteor(meteorX, 0, meteorSize, meteorSpeed, type, d);
 					meteors.add(meteor);
+					System.out.println(timeBetween);
 					timeBetween *= 0.95;
 					timeUntilNext += timeBetween;
 				}
 				checkIfTouches();
-				checkIfOver();
 			}
+			checkIfOver();
 
 		}
 		else{
@@ -132,6 +135,7 @@ public class Car {
 				try{
 					check = meteors.get(i).checkIfTouches(projectiles.get(j));
 					if(check){
+						score++;
 						meteors.get(i).setExists(false);
 						projectiles.get(i).setExists(false);
 					}
@@ -155,5 +159,9 @@ public class Car {
 			met.setType("Client");
 		}
 		this.meteors = m;
+	}
+	
+	public int getScore(){
+		return score;
 	}
 }

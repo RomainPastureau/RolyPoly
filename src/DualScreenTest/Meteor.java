@@ -40,12 +40,12 @@ public class Meteor implements Serializable {
 		}
 		else{
 			int perspectiveTaille = (int)(taille*(y/d.getHeight())*2);
-			g.fillOval(x-perspectiveTaille/2, (int)d.getHeight()/2-taille, perspectiveTaille, perspectiveTaille);
+			g.fillOval(x-perspectiveTaille/2, (int)d.getHeight()/2-perspectiveTaille/2, perspectiveTaille, perspectiveTaille);
 		}
 	}
 	
 	public boolean checkIfTouches(Projectile p){
-		if(this.x < p.x && p.x < this.x+taille && this.y < p.y && p.y < this.y+taille){
+		if(this.x < p.x && p.x < this.x+taille && this.y < p.y && p.y < this.y+taille && p.exists && this.exists){
 			this.exists = false;
 			return(true);
 		}
