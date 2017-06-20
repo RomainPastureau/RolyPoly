@@ -1,5 +1,6 @@
 package DualScreenTest;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -7,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Line2D;
 
 import Shared.Layer;
 import TUIO.TuioBlob;
@@ -46,7 +48,8 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void paintComponent(Graphics2D g){
-		g.drawLine(0, yLine, width, yLine);
+		g.setStroke(new BasicStroke(6));
+		g.draw(new Line2D.Float(0, yLine, width, yLine));
 		this.car.paintComponent(g);
 		moveCar();
 	}

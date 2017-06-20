@@ -50,7 +50,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 0.8");
 		
-		this.type = "Serveur";
+		this.type = "Client";
 		
 		if(this.type.equals("Serveur")){
 			//Taille de la fenêtre
@@ -116,6 +116,8 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 						System.out.println("Serveur déconecté");
 						ois.close();
 						clientSocket.close();
+					} catch (NullPointerException e){
+						System.out.println("Rien n'a été reçu.");
 					} catch (SocketException e) {
 						System.out.println("Système déconnecté.");
 					} catch (IOException e){
@@ -140,12 +142,12 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public void go(){
 		if(this.type.equals("Serveur")){
 			envoi.start();
-			while(true){
-				dst.repaint();
-			}
 		}
 		else{
 			recevoir.start();
+		}
+		while(true){
+			dst.repaint();
 		}
 	}
 	
