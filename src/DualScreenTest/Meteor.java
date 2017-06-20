@@ -52,6 +52,10 @@ public class Meteor implements Serializable {
 		return(false);
 	}
 	
+	public void setType(String type){
+		this.type = type;
+	}
+	
 	public void setExists(boolean exists){
 		this.exists = exists;
 	}

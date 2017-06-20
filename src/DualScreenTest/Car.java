@@ -55,7 +55,9 @@ public class Car {
 			
 			for(int i = 0; i < meteors.size(); i++){
 				try{
-					meteors.get(i).paintComponent(g);
+					if(meteors.get(i).exists){
+						meteors.get(i).paintComponent(g);
+					}
 				} catch(IndexOutOfBoundsException e){
 					break;
 				}
@@ -72,9 +74,7 @@ public class Car {
 				}
 				for(int i = 0; i < size; i++){
 					try{
-						if(projectiles.get(i).exists){
-							projectiles.get(i).paintComponent(g);
-						}
+						projectiles.get(i).paintComponent(g);
 					} catch(IndexOutOfBoundsException e){
 						break;
 					}
@@ -147,10 +147,13 @@ public class Car {
 	}
 	
 	public ArrayList<Meteor> getMeteors(){
-		return(meteors);
+		return((ArrayList<Meteor>)meteors.clone());
 	}
 	
 	public void updateMeteors(ArrayList<Meteor> m){
+		for(Meteor met:m){
+			met.setType("Client");
+		}
 		this.meteors = m;
 	}
 }
