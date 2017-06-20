@@ -40,5 +40,9 @@ public class Projectile {
 			g.fillRect(x, y, width, height);
 		}
 	}
+	
+	public void setExists(boolean exists){
+		this.exists = exists;
+	}
 
 }

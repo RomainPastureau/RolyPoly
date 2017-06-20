@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 import Shared.Layer;
 import TUIO.TuioBlob;
@@ -24,6 +25,8 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected int yLine;
 	protected Color lineColor;
 	protected String type;
+	
+	
 	
 	public TestLayer(Dimension d, String type){
 		super(d);

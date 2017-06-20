@@ -1,8 +1,57 @@
 package DualScreenTest;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
 public class Meteor {
 	
-	protected int x, y;
-	protected boolean destroyed;
+	protected int x, y, taille, speed;
+	protected int startX, startY;
+	protected boolean exists;
+	protected long timeCreated;
+	protected String type;
+	protected Dimension d;
 
+	public Meteor(int x, int y, int taille, int speed, String type, Dimension d){
+		this.x = x;
+		this.y = y;
+		this.startX = x;
+		this.startY = y;
+		this.taille = taille;
+		this.speed = speed;
+		this.exists = true;
+		this.type = type;
+		this.timeCreated = System.currentTimeMillis();
+		this.d = d;
+	}
+	
+	public void paintComponent(Graphics2D g){
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		if(this.exists){
+			double timeNow = (System.currentTimeMillis() - this.timeCreated)/(1000.0);
+			this.y = this.startY + (int)(timeNow*this.speed);
+		}
+		g.setColor(new Color(189, 0, 236));
+		if(this.type.equals("Serveur")){
+			g.fillOval(x, y, taille, taille);
+		}
+		else{
+			int perspectiveTaille = (int)(taille*(y/d.getHeight())*2);
+			g.fillOval(x-perspectiveTaille/2, (int)d.getHeight()/2-taille, perspectiveTaille, perspectiveTaille);
+		}
+	}
+	
+	public boolean checkIfTouches(Projectile p){
+		if(this.x < p.x && p.x < this.x+taille && this.y < p.y && p.y < this.y+taille){
+			this.exists = false;
+			return(true);
+		}
+		return(false);
+	}
+	
+	public void setExists(boolean exists){
+		this.exists = exists;
+	}
 }
