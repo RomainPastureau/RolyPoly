@@ -50,9 +50,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly DualScreen Test 0.19");
+		this.setTitle("RolyPoly DualScreen Test 0.20");
 		
-		this.type = "Client";
+		this.type = "Serveur";
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -76,8 +76,27 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		this.addMouseListener(this);
 		this.addKeyListener(this);
 		
-		System.out.println(1);
-		
+	}	
+	
+	public void go(){
+		System.out.println(6);
+		dst.getMenu();
+		while(true){
+			if(!menu && startThreads){
+				initThreads();
+				if(this.type.equals("Serveur")){
+					envoi.start();
+				}
+				else{
+					recevoir.start();
+				}
+				startThreads = false;
+			}
+			dst.repaint();
+		}
+	}
+	
+	public void initThreads(){
 		if(this.type.equals("Serveur")){
 			client = new TuioClient();
 			client.addTuioListener(this);
@@ -86,6 +105,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				serveurSocket = new ServerSocket(4242);
 				clientSocket = serveurSocket.accept();
 				ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
+				System.out.println("Connexion OK");
 			} catch(IOException e){
 				e.printStackTrace();
 			}
@@ -113,6 +133,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			} catch(IOException e){
 				e.printStackTrace();
 			}
+			System.out.println("Connexion OK");
 			this.recevoir = new Thread(new Runnable() {
 				Coordinates c;
 				@Override
@@ -138,25 +159,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 					}
 				}
 			});
-			System.out.println(2);
 		} 	
-	}	
-	
-	public void go(){
-		System.out.println(3);
-		dst.getMenu();
-		while(true){
-			if(!menu && startThreads){
-				if(this.type.equals("Serveur")){
-					envoi.start();
-				}
-				else{
-					recevoir.start();
-				}
-				startThreads = false;
-			}
-			dst.repaint();
-		}
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {
