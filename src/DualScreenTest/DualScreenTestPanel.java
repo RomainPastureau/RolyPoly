@@ -34,6 +34,7 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 	protected TitleLayer tl;
 	protected TestLayer test;
 	protected HashMap<String, ArrayList<String>> options = new HashMap<String, ArrayList<String>>();
+	protected boolean connect;
 
 	public DualScreenTestPanel(Dimension d, String type){
 		this.width = (int)d.getWidth();
@@ -47,6 +48,7 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 		this.tl = new TitleLayer("RolyPoly DualScreen Test", "0.20", options, colors, 0.5f, d);
 		this.type = type;
 		this.test = new TestLayer(d, type);
+		this.connect = false;
 	}
 	
 	public Coordinates getCar(){
@@ -58,7 +60,14 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 		if(menu){
 			tl.paintComponent(g);
 			Font font = new Font("Calibri", Font.ITALIC, 80);
-			CenterText.center((Graphics2D)g, type, font, 80, Color.BLACK, width-300, height-140, new Dimension(300, 60));
+			Color col;
+			if(!connect){
+				col = Color.RED;
+			}
+			else{
+				col = new Color(153, 204, 0);
+			}
+			CenterText.center((Graphics2D)g, type, font, 80, col, width-300, height-140, new Dimension(300, 60));
 			if(tl.getMenu() == false){
 				menu = false;
 				tl.setMenu(true);
@@ -71,6 +80,10 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 	
 	public boolean getMenu(){
 		return(this.menu);
+	}
+	
+	public void setConnect(boolean connect){
+		this.connect = connect;
 	}
 	
 	public void updateCoordinates(Coordinates c){

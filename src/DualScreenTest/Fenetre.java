@@ -109,6 +109,8 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			} catch(IOException e){
 				e.printStackTrace();
 			}
+			dst.setConnect(true);
+			System.out.println("oos : "+oos);
 			this.envoi = new Thread(new Runnable() {
 				public void run() {
 					while(true){
@@ -133,6 +135,8 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			} catch(IOException e){
 				e.printStackTrace();
 			}
+			dst.setConnect(true);
+			System.out.println("ois : "+ois);
 			System.out.println("Connexion OK");
 			this.recevoir = new Thread(new Runnable() {
 				Coordinates c;
