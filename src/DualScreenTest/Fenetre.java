@@ -50,7 +50,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly DualScreen Test 0.20");
+		this.setTitle("RolyPoly DualScreen Test 0.26");
 		
 		this.type = "Serveur";
 		
@@ -79,7 +79,6 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	}	
 	
 	public void go(){
-		System.out.println(6);
 		menu = dst.getMenu();
 		initThreads();
 		while(true){
@@ -111,6 +110,12 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				e.printStackTrace();
 			}
 			dst.setConnect(true);
+			try {
+				oos.writeUTF("Hello");
+				oos.flush();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			this.envoi = new Thread(new Runnable() {
 				public void run() {
 					while(true){
@@ -138,6 +143,11 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			dst.setConnect(true);
 			System.out.println("ois : "+ois);
 			System.out.println("Connexion OK");
+			try {
+				System.out.println(ois.readUTF());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			this.recevoir = new Thread(new Runnable() {
 				Coordinates c;
 				@Override
