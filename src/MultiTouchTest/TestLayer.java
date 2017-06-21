@@ -112,7 +112,11 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void removeTuioCursor(TuioCursor t) {
-		cursors.get(t.getCursorID()).setVisible(false);
+		try{
+			cursors.get(t.getCursorID()).setVisible(false);
+		} catch (NullPointerException e){
+			System.out.println("Mal codé");
+		}
 		if(this.stay == false){
 			cursors.remove((int)t.getCursorID());
 		}

@@ -27,8 +27,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected MultiTouchTestPanel mtt;
 	protected TuioClient client;
 	
-	public Fenetre(GraphicsConfiguration gc){
-		super(gc);
+	public Fenetre(){
 		
 		//Titre de fenêtre
 		this.setTitle("RolyPoly MultiTouch Test 1.8");

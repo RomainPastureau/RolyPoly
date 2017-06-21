@@ -54,7 +54,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 1.7");
 		
-		this.type = "Client";
+		this.type = "Serveur";
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -83,8 +83,11 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	
 	public void go(){
 		menu = dst.getMenu();
-		initThreads();
+		
 		while(true){
+			if(!this.on && menu){
+				initThreads();
+			}
 			menu = dst.getMenu();
 			if(!menu && startThreads){
 				if(this.type.equals("Serveur") && this.on){
@@ -101,13 +104,14 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	
 	public void initThreads(){
 		
+		client = new TuioClient();
+		client.addTuioListener(this);
+		client.connect();
+		
 		this.it = new InitThread(this.type, this);
-		this.it.run();
+		this.it.start();
 		
 		if(this.type == "Client"){
-			client = new TuioClient();
-			client.addTuioListener(this);
-			client.connect();
 			this.recevoir = new Thread(new Runnable() {
 				Coordinates c;
 				ArrayList<Meteor> m;

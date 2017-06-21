@@ -100,7 +100,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 			if(newRecord){
 				recordColor = new Color(255, 0, 0);
 			}
-			g = CenterText.center((Graphics2D)g, "Score :"+car.getScore()+"\n Record : "+record, font, 80, recordColor, 0, 0, new Dimension(width, height));
+			g = CenterText.center((Graphics2D)g, "Score : "+car.getScore()+" -\n Record : "+record, font, 80, recordColor, 0, 0, new Dimension(width, height));
 			
 		}
 		this.car.paintComponent(g);
