@@ -22,9 +22,9 @@ public class InitThread extends Thread {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		if(this.type.equals("Serveur") && !fenetre.on){
 			try{
+				System.out.println("Non connecté.");
 				fenetre.serveurSocket = new ServerSocket(4242);
 				fenetre.clientSocket = fenetre.serveurSocket.accept();
 				fenetre.oos = new ObjectOutputStream(new BufferedOutputStream(fenetre.clientSocket.getOutputStream()));

@@ -40,7 +40,7 @@ public class Meteor implements Serializable {
 		}
 		else{
 			int perspectiveTaille = (int)(taille*(y/d.getHeight())*2);
-			g.fillOval(x-perspectiveTaille/2, (int)d.getHeight()/2-perspectiveTaille/2, perspectiveTaille, perspectiveTaille);
+			g.fillOval(x, (int)d.getHeight()/2-perspectiveTaille/2, perspectiveTaille, perspectiveTaille);
 		}
 	}
 	
