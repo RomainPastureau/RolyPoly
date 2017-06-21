@@ -46,7 +46,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected Thread envoi, recevoir;
 	protected ObjectOutputStream oos;
 	protected ObjectInputStream ois;
-	protected boolean menu, startThreads, on;
+	protected boolean menu, startThreads, on, initialized;
 	protected InitThread it;
 	
 	public Fenetre(){
@@ -54,7 +54,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 1.7");
 		
-		this.type = "Serveur";
+		this.type = "Client";
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -72,12 +72,19 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		this.setContentPane(dst);
 		this.startThreads = true;
 		this.on = false;
+		this.initialized = false;
+		
+		client = new TuioClient();
+		client.addTuioListener(this);
+		client.connect();
 		
 		//Entrées clavier
 		pk = new PressKey();
 		this.addKeyListener(pk);
 		this.addMouseListener(this);
 		this.addKeyListener(this);
+		
+		
 		
 	}	
 	
@@ -104,12 +111,15 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	
 	public void initThreads(){
 		
-		client = new TuioClient();
-		client.addTuioListener(this);
-		client.connect();
-		
-		this.it = new InitThread(this.type, this);
-		this.it.start();
+		if(!initialized){
+			this.it = new InitThread(this.type, this);
+			initialized = true;
+		}
+		try{
+			this.it.start();
+		} catch(IllegalThreadStateException e){
+			
+		}
 		
 		if(this.type == "Client"){
 			this.recevoir = new Thread(new Runnable() {

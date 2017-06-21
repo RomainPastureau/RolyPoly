@@ -1,6 +1,6 @@
 package DualScreenTest;
 
-public class Main {
+public class DualScreenMain {
 
 	public static void main(String[] args) {   
 		Fenetre fenetre = new Fenetre(); 

@@ -23,7 +23,7 @@ public class InitThread extends Thread {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		if(this.type.equals("Serveur")){
+		if(this.type.equals("Serveur") && !fenetre.on){
 			try{
 				fenetre.serveurSocket = new ServerSocket(4242);
 				fenetre.clientSocket = fenetre.serveurSocket.accept();
@@ -39,11 +39,13 @@ public class InitThread extends Thread {
 				fenetre.oos.flush();
 			} catch (IOException e1) {
 				e1.printStackTrace();
+			} catch (NullPointerException e){
+				
 			}
 
 		}
 		
-		else{
+		else if(this.type.equals("Client") && !fenetre.on){
 			try{
 				System.out.println(fenetre);
 				fenetre.clientSocket = new Socket("141.115.72.18", 4242);
@@ -59,13 +61,11 @@ public class InitThread extends Thread {
 				System.out.println(fenetre.ois.readUTF());
 			} catch (IOException e1) {
 				e1.printStackTrace();
+			} catch (NullPointerException e){
+				
 			}
 
 		} 	
-	}
-	
-	public void launchRun(){
-		this.run();
 	}
 
 }
