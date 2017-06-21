@@ -4,7 +4,7 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
-public class Main {
+public class MultiTouchMain {
 
 	public static void main(String[] args) { 
 		Fenetre fenetre = new Fenetre(); 
