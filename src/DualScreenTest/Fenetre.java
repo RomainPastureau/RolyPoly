@@ -46,14 +46,15 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected Thread envoi, recevoir;
 	protected ObjectOutputStream oos;
 	protected ObjectInputStream ois;
-	protected boolean menu, startThreads;
+	protected boolean menu, startThreads, on;
+	protected InitThread it;
 	
 	public Fenetre(){
 		
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 1.7");
 		
-		this.type = "Serveur";
+		this.type = "Client";
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -70,6 +71,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		dst = new DualScreenTestPanel(this.screenSize, this.type);
 		this.setContentPane(dst);
 		this.startThreads = true;
+		this.on = false;
 		
 		//Entrées clavier
 		pk = new PressKey();
@@ -85,10 +87,10 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		while(true){
 			menu = dst.getMenu();
 			if(!menu && startThreads){
-				if(this.type.equals("Serveur")){
+				if(this.type.equals("Serveur") && this.on){
 					envoi.start();
 				}
-				else{
+				else if(this.type.equals("Client") && this.on){
 					recevoir.start();
 				}
 				startThreads = false;
@@ -98,60 +100,14 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	}
 	
 	public void initThreads(){
-		if(this.type.equals("Serveur")){
+		
+		this.it = new InitThread(this.type, this);
+		this.it.run();
+		
+		if(this.type == "Client"){
 			client = new TuioClient();
 			client.addTuioListener(this);
 			client.connect();
-			try{
-				serveurSocket = new ServerSocket(4242);
-				clientSocket = serveurSocket.accept();
-				oos = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
-				System.out.println("Connexion OK");
-			} catch(IOException e){
-				e.printStackTrace();
-			}
-			dst.setConnect(true);
-			try {
-				oos.writeUTF("Test envoi à "+System.currentTimeMillis());
-				oos.flush();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			this.envoi = new Thread(new Runnable() {
-				public void run() {
-					while(true){
-						try{
-							oos.writeObject(dst.getCar());
-							oos.flush();
-							oos.reset();
-							oos.writeObject(dst.getMeteors());
-							oos.flush();
-							oos.reset();
-						} catch(NullPointerException e){
-							System.out.println("Rien n'est envoyé.");
-						} catch(IOException e){
-							e.printStackTrace();
-						}
-					}	
-				}
-			});
-		}
-		
-		else{
-			try{
-				clientSocket = new Socket("141.115.72.18", 4242);
-				ois = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-			} catch(IOException e){
-				e.printStackTrace();
-			}
-			dst.setConnect(true);
-			System.out.println("ois : "+ois);
-			System.out.println("Connexion OK");
-			try {
-				System.out.println(ois.readUTF());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
 			this.recevoir = new Thread(new Runnable() {
 				Coordinates c;
 				ArrayList<Meteor> m;
@@ -180,7 +136,28 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 					}
 				}
 			});
-		} 	
+		}
+		
+		else if(this.type == "Serveur"){
+			this.envoi = new Thread(new Runnable() {
+				public void run() {
+					while(true){
+						try{
+							oos.writeObject(dst.getCar());
+							oos.flush();
+							oos.reset();
+							oos.writeObject(dst.getMeteors());
+							oos.flush();
+							oos.reset();
+						} catch(NullPointerException e){
+							System.out.println("Rien n'est envoyé.");
+						} catch(IOException e){
+							e.printStackTrace();
+						}
+					}	
+				}
+			});
+		}
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {
