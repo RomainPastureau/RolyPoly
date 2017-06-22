@@ -82,6 +82,14 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		adaptModules();
 	}
 	
+	public ArrayList<Window> getWindows(){
+		return(windows);
+	}
+	
+	public ArrayList<ImageModule> getImages(){
+		return(modules);
+	}
+	
 	public void setAreaPlacement(){
 		
 		lastAlt = false;
@@ -265,7 +273,6 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		for(ImageModule im:modules){
 			im.move((int)mouse.getX(), (int)mouse.getY());
 		}
-		g2d.setStroke(new BasicStroke(10));
 		for(int i = 0; i < nbZones; i++){
 			modules.get(i).paintComponent(g2d);
 		}

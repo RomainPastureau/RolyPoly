@@ -6,6 +6,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import javax.swing.JFrame;
 
@@ -25,11 +29,17 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected PressKey pk;
 	protected TuioClient client;
 	protected SplitFocusTestPanel sft;
+	protected ServerSocket serveurSocket;
+	protected Socket clientSocket;
+	protected ObjectOutputStream oos;
+	protected boolean on, startThreads, menu;
+	protected InitThread it;
+	protected Thread envoi;
 	
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly SplitFocus Test 0.0");
+		this.setTitle("RolyPoly SplitFocus Test 0.2");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -57,12 +67,45 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		client = new TuioClient();
 		client.addTuioListener(this);
 		client.connect();
+		
+		this.on = false;
+		this.startThreads = true;
+		
+		this.it = new InitThread(this);
+		this.it.start();
+		initThreads();
 	}	
 	
 	public void go(){
 		while(true){
+			menu = sft.getMenu();
+			if(!menu && startThreads){
+				envoi.start();
+				startThreads = false;
+			}
 			sft.repaint();
 		}
+	}
+	
+	public void initThreads(){
+		this.envoi = new Thread(new Runnable() {
+			public void run() {
+				while(true){
+					try{
+						oos.writeObject(sft.getWindows());
+						oos.flush();
+						oos.reset();
+						oos.writeObject(sft.getImages());
+						oos.flush();
+						oos.reset();
+					} catch(NullPointerException e){
+						System.out.println("Rien n'est envoyé.");
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}	
+			}
+		});
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {

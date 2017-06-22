@@ -32,6 +32,7 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 	protected HashMap<String, ArrayList<String>> options = new HashMap<String, ArrayList<String>>();
 	protected TestLayer test;
 	protected boolean menu;
+	protected boolean connect;
 	
 	public SplitFocusTestPanel(Dimension d){
 		this.x = 0;
@@ -42,8 +43,9 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly SplitFocus Test", "0.0", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly SplitFocus Test", "0.2", options, colors, 0.5f, d);
 		this.test = new TestLayer(2, d);
+		this.connect = false;
 		this.menu = true;
 	}
 	
@@ -56,8 +58,9 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "0.0", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "0.2", options, colors, 0.5f, d);
 		this.test = new TestLayer(2, x, y, d);
+		this.connect = false;
 		this.menu = true;
 	}
 	
@@ -73,6 +76,22 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		else{
 			test.paintComponent((Graphics2D)g);
 		}
+	}
+	
+	public boolean getMenu(){
+		return(menu);
+	}
+	
+	public void setConnect(boolean connect){
+		this.connect = connect;
+	}
+	
+	public ArrayList<Window> getWindows(){
+		return(test.getWindows());
+	}
+	
+	public ArrayList<ImageModule> getImages(){
+		return(test.getImages());
 	}
 	
 	public void mouseClicked(MouseEvent e) {

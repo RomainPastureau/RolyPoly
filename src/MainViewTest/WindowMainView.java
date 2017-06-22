@@ -2,38 +2,33 @@ package MainViewTest;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
 
-public class Window {
-
-	protected int x, y, id, width, height;
+public class WindowMainView {
+	
+	protected int id, x, y;
 	protected int contactX, contactY;
-	protected Dimension d;
-	protected boolean active, current;
+	protected int width, height;
+	protected float ratio;
 	protected Color color;
 	protected long time, now;
-	protected boolean canChangeColor;
+	protected boolean active, current, canChangeColor;
 	
-	public Window(int id, int x, int y, int width, int height, Color color){
+	public WindowMainView(int id, int x, int y, int width, int height, float ratio, Color color){
 		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.ratio = ratio;
 		this.color = color;
 		this.active = false;
 		this.current = false;
 		this.time = 0;
 		this.now = 2000;
 		this.canChangeColor = false;
-	}
-	
-	public void setPosition(int x, int y, int width, int height){
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
 	}
 	
 	public boolean isInside(int x, int y){
@@ -75,44 +70,25 @@ public class Window {
 		g2d.fillRect(x, y, width, height);
 	}
 	
-	public Color getColor(){
-		return(this.color);
+	public void moveWindow(int x, int y){
+		if(this.active){
+			this.x = x;
+			this.y = y;
+		}
 	}
 	
-	public void setInactive(){
-		this.active = false;
+	public void updatePosition(int x, int y){
+		this.x = x;
+		this.y = y;
 	}
 	
-	public int getID(){
-		return(this.id);
+	public void updateSize(int width, int height){
+		this.width = width;
+		this.height = height;
 	}
 	
-	public int getX(){
-		return(this.x);
+	public void updateRatio(float ratio){
+		this.ratio = ratio;
 	}
-	
-	public int getY(){
-		return(this.y);
-	}
-	
-	public int getWidth(){
-		return(this.width);
-	}
-	
-	public int getHeight(){
-		return(this.height);
-	}
-	
-	public int getContactX(){
-		return(this.contactX);
-	}
-	
-	public int getContactY(){
-		return(this.contactY);
-	}
-	
-	public boolean getActive(){
-		return(this.active);
-	}
-	
+
 }

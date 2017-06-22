@@ -51,4 +51,19 @@ public class ImageModule extends Module {
 		}
 	}
 	
+	public int getStartX(){
+		return(this.startX);
+	}
+	
+	public int getStartY(){
+		return(this.startY);
+	}
+	
+	public BufferedImage getImage(){
+		return(this.img);
+	}
+	
+	public Window getWindow(){
+		return(this.window);
+	}
 }

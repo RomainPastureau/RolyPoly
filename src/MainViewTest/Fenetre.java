@@ -6,9 +6,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import DualScreenTest.Coordinates;
+import DualScreenTest.Meteor;
 import Shared.PressKey;
 import TUIO.TuioBlob;
 import TUIO.TuioClient;
@@ -25,11 +33,17 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected PressKey pk;
 	protected TuioClient client;
 	protected MainViewTestPanel sft;
+	protected ServerSocket serveurSocket;
+	protected Socket clientSocket;
+	protected ObjectInputStream ois;
+	protected boolean on, startThreads, menu;
+	protected InitThread it;
+	protected Thread recevoir;
 	
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly SplitFocus Test 0.0");
+		this.setTitle("RolyPoly SplitFocus Test 0.2");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -57,12 +71,59 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		client = new TuioClient();
 		client.addTuioListener(this);
 		client.connect();
+		
+		this.on = false;
+		this.startThreads = true;
+		
+		this.it = new InitThread(this);
+		this.it.start();
+		initThreads();
 	}	
 	
-	public void go(){
+	public void updateWindows(ArrayList<Window> windows){
+		sft.updateWindows(windows);
+	}
+	
+	public void go(){		
 		while(true){
+			menu = sft.getMenu();
+			if(!menu && startThreads){
+				recevoir.start();
+				startThreads = false;
+			}
 			sft.repaint();
-		}
+		}		
+	}
+	
+	public void initThreads(){		
+		this.recevoir = new Thread(new Runnable() {
+			ArrayList<Window> windows;
+			ArrayList<ImageModule> images;
+			@Override
+			public void run() {
+				try {				
+				windows = (ArrayList<Window>)ois.readObject();
+				images = (ArrayList<ImageModule>)ois.readObject();
+				while(windows!=null){
+					windows = (ArrayList<Window>)ois.readObject();
+					sft.updateWindows(windows);
+					images = (ArrayList<ImageModule>)ois.readObject();
+					sft.updateImages(images);
+				}
+				System.out.println("Serveur déconnecté");
+				ois.close();
+				clientSocket.close();
+				} catch (NullPointerException e){
+					System.out.println("Rien n'a été reçu.");
+				} catch (SocketException e) {
+					System.out.println("Système déconnecté.");
+				} catch (IOException e){
+					e.printStackTrace();
+				} catch (ClassNotFoundException e){
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {

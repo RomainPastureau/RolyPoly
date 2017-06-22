@@ -32,6 +32,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected ArrayList<Window> windows;
 	protected ArrayList<Color> colors;
 	protected ArrayList<ImageModule> modules;
+	protected ArrayList<WindowMainView> windowsMV;
 	protected ImageMainView currentImage;
 	protected int alt; //Définit le numéro de l'arrangement pour un nombre de fenêtres données 
 	protected int previous;
@@ -63,10 +64,12 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		
 		//Initialise la liste des fenêtres
 		this.windows = new ArrayList<Window>();
+		this.windowsMV = new ArrayList<WindowMainView>();
 		
 		//Assigne une couleur à chaucne des fenêtres
 		for(int i = 0; i < 9; i++){
 			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
+			this.windowsMV.add(new WindowMainView(i, 0, 0, 0, 0, 1.f, colors.get(i)));
 		}
 		
 		//Ouvre les fichiers image, crée les modules et les assigne aux fenêtres
@@ -85,6 +88,8 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		}
 		System.out.println(" Terminé.");
 		
+		setAreaPlacement();
+		
 		//Définit l'image à l'ouverture
 		this.currentImage = new ImageMainView(modules.get(0));
 	}
@@ -94,6 +99,202 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		
 		//Affichage de l'image en cours
 		currentImage.paintComponent(g2d);
+		
+		float ratio = currentImage.getRatio();
+		
+		for(ImageModule im : modules){
+			if(im.getImage().equals(currentImage.getImage())){
+				int x = im.getStartX();
+				int y = im.getStartY();
+				int id = im.getWindow().getID();
+				int w = windows.get(id).getWidth();
+				int h = windows.get(id).getHeight();
+				WindowMainView wmv = windowsMV.get(id);
+				wmv.updateRatio(ratio);
+				wmv.updatePosition((int)(x*ratio)+currentImage.getStartX(), (int)(y*ratio)+currentImage.getStartY());
+				wmv.updateSize((int)(w*ratio), (int)(h*ratio));
+				wmv.paintComponent(g2d);
+			}
+		}
+	}
+	
+	public void setAreaPlacement(){
+		
+		lastAlt = false;
+		
+		if(nbZones == 1){
+			windows.get(0).setPosition(x+5, y+5, width-10, height-10);
+		}
+		
+		if(nbZones == 2){
+			if(alt == 0){
+				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
+			}
+			else{
+				windows.get(0).setPosition(x+5, y+5, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5+height/2, width-10, (height-20)/2);
+				lastAlt = true;
+			}
+		}
+		
+		if(nbZones == 3){
+			if(alt == 0){
+				for(int i = 0; i < 3; i++){
+					windows.get(i).setPosition(x+5+i*width/3, y+5, (width-30)/3, height-10);
+				}
+			}
+			else if(alt == 1){
+				for(int i = 0; i < 3; i++){
+					windows.get(i).setPosition(x+5, y+5+i*height/3,	width-10, (height-30)/3);
+				}
+			}
+			else if(alt == 2){
+				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5+width/2, y+5, (width-20)/2, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2);
+			}
+			else if(alt == 3){
+				windows.get(0).setPosition(x+5, y+5, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5+height/2, (width-20)/2, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2);
+			}
+			else if(alt == 4){
+				windows.get(0).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5, y+5, (width-20)/2, (height-20)/2);
+				windows.get(2).setPosition(x+5, y+5+height/2, (width-20)/2, (height-20)/2);
+			}
+			else if(alt == 5){
+				windows.get(0).setPosition(x+5, y+5+height/2, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5, (width-20)/2, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/2, y+5, (width-20)/2, (height-20)/2);
+			}
+			else if(alt == 6){
+				windows.get(0).setPosition(x+5, y+5+height/3, width-10, 2*(height-15)/3);
+				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-30)/3);
+				windows.get(2).setPosition(x+5+width/3, y+5, 2*(width-15)/3, (height-30)/3);
+				lastAlt = true;
+			}
+		}
+		
+		if(nbZones == 4){
+			if(alt == 0){
+				for(int i = 0; i < 4; i++){
+					windows.get(i).setPosition(x+5+(i*width/2)%width, y+5+(int)(i/2)*height/2, (width-20)/2, (height-20)/2);
+				}
+			}
+			else if(alt == 1){
+				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5+width/2, y+5, (width-20)/2, (height-30)/3);
+				windows.get(2).setPosition(x+5+width/2, y+5+height/3, (width-20)/2, (height-30)/3);
+				windows.get(3).setPosition(x+5+width/2, y+5+2*height/3, (width-20)/2, (height-30)/3);
+			}
+			else if(alt == 2){
+				windows.get(0).setPosition(x+5, y+5, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5+height/2, (width-30)/3, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/3, y+5+height/2, (width-30)/3, (height-20)/2);
+				windows.get(3).setPosition(x+5+2*width/3, y+5+height/2, (width-30)/3, (height-20)/2);
+			}
+			else if(alt == 3){
+				windows.get(0).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5, y+5, (width-20)/2, (height-30)/3);
+				windows.get(2).setPosition(x+5, y+5+height/3, (width-20)/2, (height-30)/3);
+				windows.get(3).setPosition(x+5, y+5+2*height/3, (width-20)/2, (height-30)/3);
+			}
+			else if(alt == 4){
+				windows.get(0).setPosition(x+5, y+5+height/2, width-10, (height-20)/2);
+				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/3, y+5, (width-30)/3, (height-20)/2);
+				windows.get(3).setPosition(x+5+2*width/3, y+5, (width-30)/3, (height-20)/2);
+			}
+			else if(alt == 5){
+				windows.get(0).setPosition(x+5, y+5+height/3, width-10, 2*(height-15)/3);
+				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-30)/3);
+				windows.get(2).setPosition(x+5+width/3, y+5, (width-30)/3, (height-30)/3);
+				windows.get(3).setPosition(x+5+2*width/3, y+5, (width-30)/3, (height-30)/3);
+			}
+			else if(alt == 6){
+				windows.get(0).setPosition(x+5+width/3, y+5+height/3, 2*(width-15)/3, 2*(height-15)/3);
+				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-30)/3);
+				windows.get(2).setPosition(x+5+width/3, y+5, 2*(width-15)/3, (height-30)/3);
+				windows.get(3).setPosition(x+5, y+5+height/3, (width-30)/3, 2*(height-15)/3);
+				lastAlt = true;
+			}
+		}
+		
+		if(nbZones == 5){
+			if(alt == 0){
+				for(int i = 0; i < 5; i++){
+					if(i < 3) windows.get(i).setPosition(x+5+i*width/3, y+5+(int)(i/3)*height/2, (width-30)/3, (height-20)/2);
+					else windows.get(i).setPosition(x+5+((i-1)*width/2)%width, y+5+(int)((i-1)/2)*height/2, (width-20)/2, (height-20)/2);
+				}
+			}
+			else if(alt == 1){
+				for(int i = 0; i < 5; i++){
+					if(i < 2) windows.get(i).setPosition(x+5+i*width/2, y+5+(int)(i/2)*height/2, (width-20)/2, (height-20)/2);
+					else windows.get(i).setPosition(x+5+((i+1)*width/3)%width, y+5+(int)((i+1)/3)*height/2, (width-30)/3, (height-20)/2);
+				}
+			}
+			else if(alt == 2){
+				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5+width/2, y+5, (width-40)/4, (height-20)/2);
+				windows.get(2).setPosition(x+5+3*width/4, y+5, (width-40)/4, (height-20)/2);
+				windows.get(3).setPosition(x+5+width/2, y+5+height/2, (width-40)/4, (height-20)/2);
+				windows.get(4).setPosition(x+5+3*width/4, y+5+height/2, (width-40)/4, (height-20)/2);
+			}
+			else if(alt == 3){
+				windows.get(0).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
+				windows.get(1).setPosition(x+5, y+5, (width-40)/4, (height-20)/2);
+				windows.get(2).setPosition(x+5+width/4, y+5, (width-40)/4, (height-20)/2);
+				windows.get(3).setPosition(x+5, y+5+height/2, (width-40)/4, (height-20)/2);
+				windows.get(4).setPosition(x+5+width/4, y+5+height/2, (width-40)/4, (height-20)/2);
+				lastAlt = true;
+			}
+		}
+		
+		if(nbZones == 6){
+			for(int i = 0; i < 6; i++){
+				windows.get(i).setPosition(x+5+i*(width/3)%width, y+5+(int)(i/3)*(height/2), (width-30)/3, (height-20)/2);
+			}
+			lastAlt = true;
+		}
+		
+		if(nbZones == 7){
+			for(int i = 0; i < 7; i++){
+				if(alt == 0){
+					if(i < 4) windows.get(i).setPosition(x+5+i*width/4, y+5+(int)(i/4)*height/2, (width-40)/4, (height-20)/2);
+					else windows.get(i).setPosition(x+5+((i-1)*width/3)%width, y+5+(int)((i-1)/3)*height/2, (width-30)/3, (height-20)/2);
+				}
+				else{
+					if(i < 3) windows.get(i).setPosition(x+5+i*width/3, y+5+(int)(i/3)*height/2, (width-30)/3, (height-20)/2);
+					else windows.get(i).setPosition(x+5+((i+1)*width/4)%width, y+5+(int)((i+1)/4)*height/2, (width-40)/4, (height-20)/2);			
+					lastAlt = true;
+				}
+			}
+		}
+		
+		if(nbZones == 8){
+			for(int i = 0; i < 8; i++){
+				windows.get(i).setPosition(x+5+(i*width/4)%width, y+5+(int)(i/4)*height/2, (width-40)/4, (height-20)/2);
+			}
+			lastAlt = true;
+		}
+		
+		if(nbZones == 9){
+			for(int i = 0; i < nbZones; i++){
+				windows.get(i).setPosition(x+5+(i*width/3)%width, y+5+(int)(i/3)*height/3, (width-30)/3, (height-30)/3);
+			}
+			lastAlt = true;
+		}
+		
+	}
+	
+	public void updateWindows(ArrayList<Window> windows){
+		this.windows = windows;
+	}
+	
+	public void updateImages(ArrayList<ImageModule> images){
+		this.modules = images;
 	}
 
 	public void keyPressed(KeyEvent ke) {

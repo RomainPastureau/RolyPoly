@@ -54,7 +54,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly DualScreen Test 1.15");
+		this.setTitle("RolyPoly DualScreen Test 0.2");
 		
 		this.type = "Serveur";
 		this.iii = 0;

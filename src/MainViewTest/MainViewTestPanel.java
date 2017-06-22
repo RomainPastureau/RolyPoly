@@ -32,6 +32,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 	protected HashMap<String, ArrayList<String>> options = new HashMap<String, ArrayList<String>>();
 	protected TestLayer test;
 	protected boolean menu;
+	protected boolean connect;
 	
 	public MainViewTestPanel(Dimension d){
 		this.x = 0;
@@ -42,9 +43,10 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MainView Test", "0.0", options, colors, 0.5f, d);
-		this.test = new TestLayer(2, d);
+		this.tl = new TitleLayer("RolyPoly MainView Test", "0.2", options, colors, 0.5f, d);
+		this.test = new TestLayer(4, d);
 		this.menu = true;
+		this.connect = false;
 	}
 	
 	public MainViewTestPanel(int x, int y, Dimension d){
@@ -56,9 +58,10 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MainView Test", "0.0", options, colors, 0.5f, d);
-		this.test = new TestLayer(2, x, y, d);
+		this.tl = new TitleLayer("RolyPoly MainView Test", "0.2", options, colors, 0.5f, d);
+		this.test = new TestLayer(4, x, y, d);
 		this.menu = true;
+		this.connect = false;
 	}
 	
 	public void paintComponent(Graphics g){
@@ -73,6 +76,18 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		else{
 			test.paintComponent((Graphics2D)g);
 		}
+	}
+	
+	public boolean getMenu(){
+		return(this.menu);
+	}
+	
+	public void updateWindows(ArrayList<Window> windows){
+		test.updateWindows(windows);;
+	}
+	
+	public void updateImages(ArrayList<ImageModule> images){
+		test.updateImages(images);
 	}
 	
 	public void mouseClicked(MouseEvent e) {
@@ -103,6 +118,10 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 	
 	public void mouseReleased(MouseEvent e) {
 		test.mouseReleased(e);
+	}
+	
+	public void setConnect(boolean connect){
+		this.connect = connect;
 	}
 	
 	public void mouseEntered(MouseEvent e) {}

@@ -1,5 +1,6 @@
 package SplitFocusTest;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -59,6 +60,7 @@ public class Window {
 	
 	public void paintComponent(Graphics2D g2d){
 		g2d.setColor(color);
+		g2d.setStroke(new BasicStroke(10));
 		g2d.drawRect(x, y, width, height);
 		if(canChangeColor){
 			if(now < 2000){
@@ -73,8 +75,16 @@ public class Window {
 		g2d.fillRect(x, y, width, height);
 	}
 	
+	public Color getColor(){
+		return(this.color);
+	}
+	
 	public void setInactive(){
 		this.active = false;
+	}
+	
+	public int getID(){
+		return(this.id);
 	}
 	
 	public int getX(){
@@ -99,6 +109,10 @@ public class Window {
 	
 	public int getContactY(){
 		return(this.contactY);
+	}
+	
+	public boolean getActive(){
+		return(this.active);
 	}
 	
 }
