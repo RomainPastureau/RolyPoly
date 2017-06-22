@@ -28,10 +28,10 @@ public class Meteor implements Serializable {
 		this.d = d;
 	}
 	
-	public void paintComponent(Graphics2D g){
+	public void paintComponent(Graphics2D g, long now){
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		if(this.exists){
-			double timeNow = (System.currentTimeMillis() - this.timeCreated)/(1000.0);
+			double timeNow = (now - this.timeCreated)/(1000.0);
 			this.y = this.startY + (int)(timeNow*this.speed);
 		}
 		g.setColor(new Color(189, 0, 236));
@@ -58,5 +58,9 @@ public class Meteor implements Serializable {
 	
 	public void setExists(boolean exists){
 		this.exists = exists;
+	}
+	
+	public String toString(){
+		return("X: "+x+" - Y: "+y);
 	}
 }

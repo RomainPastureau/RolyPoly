@@ -18,7 +18,7 @@ public class Car {
 	protected ArrayList<Meteor> meteors;
 	protected String type;
 	protected Dimension d;
-	protected long startTime, now, timeUntilNext, timeBetween;
+	protected long startTime, now, timeUntilNext, timeBetween, nowSince;
 	protected int randomNum;
 	protected boolean over;
 	protected int score;
@@ -38,18 +38,20 @@ public class Car {
 		this.d = d;
 		this.over = false;
 		this.score = 0;
+		this.now = System.currentTimeMillis();
 	}
 	
 	public void paintComponent(Graphics2D g){
 		if(!over){
 			int size = 0;
 			g.setPaint(color);
-			now = System.currentTimeMillis()-startTime;
+			now = System.currentTimeMillis();
+			nowSince = now-startTime;
 			
 			for(int i = 0; i < meteors.size(); i++){
 				try{
 					if(meteors.get(i).exists){
-						meteors.get(i).paintComponent(g);
+						meteors.get(i).paintComponent(g, now);
 					}
 				} catch(IndexOutOfBoundsException e){
 					break;
@@ -79,7 +81,7 @@ public class Car {
 						break;
 					}
 				}
-				if(now > timeUntilNext){
+				if(nowSince > timeUntilNext){
 					int meteorSize = ThreadLocalRandom.current().nextInt(10, 100);
 					int meteorSpeed = ThreadLocalRandom.current().nextInt(10, 100);
 					int meteorX = ThreadLocalRandom.current().nextInt(0, (int)d.getWidth()-meteorSize);
@@ -128,6 +130,14 @@ public class Car {
 	
 	public Coordinates getCar(){
 		return(c);
+	}
+	
+	public long getTimeNow(){
+		return(now);
+	}
+	
+	public void updateTimeNow(long t){
+		this.now = t;
 	}
 	
 	public void checkIfOver(){

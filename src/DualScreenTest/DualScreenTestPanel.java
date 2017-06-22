@@ -94,6 +94,14 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 		test.updateMeteors(m);
 	}
 	
+	public void updateTimeNow(long t){
+		test.updateTimeNow(t);
+	}
+	
+	public long getTimeNow(){
+		return(test.getTimeNow());
+	}
+	
 	public void setConnect(boolean connect){
 		this.connect = connect;
 	}

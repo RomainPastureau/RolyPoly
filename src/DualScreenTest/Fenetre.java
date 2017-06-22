@@ -48,13 +48,16 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected ObjectInputStream ois;
 	protected boolean menu, startThreads, on, initialized;
 	protected InitThread it;
+	protected int iii;
 	
+	Integer previousmy = 0;
 	public Fenetre(){
 		
 		//Titre de fenêtre
 		this.setTitle("RolyPoly DualScreen Test 1.7");
 		
 		this.type = "Serveur";
+		this.iii = 0;
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -114,16 +117,20 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			this.recevoir = new Thread(new Runnable() {
 				Coordinates c;
 				ArrayList<Meteor> m;
+				Long t;
 				@Override
 				public void run() {
-					try {						
+					try {				
 						c = (Coordinates)ois.readObject();
 						m = (ArrayList<Meteor>)ois.readObject();
+						t = (Long)ois.readObject();
 						while(c!=null){
 							c = (Coordinates)ois.readObject();
 							dst.updateCoordinates(c);
 							m = (ArrayList<Meteor>)ois.readObject();
 							dst.updateMeteors(m);
+							t = (Long)ois.readObject();
+							dst.updateTimeNow(t);
 						}
 						System.out.println("Serveur déconnecté");
 						ois.close();
@@ -144,6 +151,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		else if(this.type == "Serveur"){
 			this.envoi = new Thread(new Runnable() {
 				public void run() {
+					Integer my = 0;
+					Coordinates c;
+					ArrayList<Meteor> m;
 					while(true){
 						try{
 							oos.writeObject(dst.getCar());
@@ -152,6 +162,10 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 							oos.writeObject(dst.getMeteors());
 							oos.flush();
 							oos.reset();
+							oos.writeObject(dst.getTimeNow());
+							oos.flush();
+							oos.reset();
+
 						} catch(NullPointerException e){
 							System.out.println("Rien n'est envoyé.");
 						} catch(IOException e){
