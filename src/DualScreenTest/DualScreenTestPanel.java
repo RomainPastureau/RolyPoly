@@ -48,7 +48,7 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly DualScreen Test", "1.7", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly DualScreen Test", "1.15", options, colors, 0.5f, d);
 		this.type = type;
 		this.test = new TestLayer(d, type);
 		this.connect = false;
