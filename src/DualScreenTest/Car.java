@@ -133,7 +133,7 @@ public class Car {
 	}
 	
 	public long getTimeNow(){
-		return(now);
+		return(now); 
 	}
 	
 	public void updateTimeNow(long t){
