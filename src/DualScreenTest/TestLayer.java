@@ -129,15 +129,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 			canStart = false;
 		}
 	}
-	
-	public void updateTimeNow(long t){
-		car.updateTimeNow(t);
-	}
-	
-	public long getTimeNow(){
-		return(car.getTimeNow());
-	}
-	
+
 	public ArrayList<Meteor> getMeteors(){
 		return(car.getMeteors());
 	}

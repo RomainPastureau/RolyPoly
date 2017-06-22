@@ -132,14 +132,6 @@ public class Car {
 		return(c);
 	}
 	
-	public long getTimeNow(){
-		return(now); 
-	}
-	
-	public void updateTimeNow(long t){
-		this.now = t;
-	}
-	
 	public void checkIfOver(){
 		for(Meteor m:meteors){
 			if(m.y >= d.getHeight()-height-50 && m.exists == true){
