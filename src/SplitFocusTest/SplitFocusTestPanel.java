@@ -87,7 +87,7 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 	}
 	
 	public boolean moves(){
-		return(this.moves());
+		return(test.moves());
 	}
 	
 	public ArrayList<Window> getWindows(){

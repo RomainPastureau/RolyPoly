@@ -97,9 +97,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 							oos.writeObject(sft.getWindows());
 							oos.flush();
 							oos.reset();
-							oos.writeObject(sft.getImages());
-							oos.flush();
-							oos.reset();
+//							oos.writeObject(sft.getImages());
+//							oos.flush();
+//							oos.reset();
 						}
 					} catch(NullPointerException e){
 						System.out.println("Rien n'est envoyé.");

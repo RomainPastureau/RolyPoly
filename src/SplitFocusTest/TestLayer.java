@@ -66,7 +66,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
 		}
 		
-		File f = new File(System.getProperty("user.dir")+"/images");
+		File f = new File(System.getProperty("user.dir")+"/images2");
 		ArrayList<File> files = new ArrayList<File>(Arrays.asList(f.listFiles()));
 		this.modules = new ArrayList<ImageModule>();
 		System.out.print("Lecture des fichiers image...");
@@ -93,6 +93,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public boolean moves(){
+		System.out.println("Mouse : "+this.movesMouse+" TUIO : "+this.movesTUIO);
 		return(this.movesMouse || this.movesTUIO);
 	}
 	
