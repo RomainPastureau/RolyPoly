@@ -1,6 +1,5 @@
 package SplitFocusTest;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -38,6 +37,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected int alt;
 	protected int previous;
 	protected boolean lastAlt;
+	protected boolean movesMouse, movesTUIO;
 	
 	public TestLayer(int nbZones, Dimension d){
 		super(d);
@@ -58,6 +58,8 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		this.alt = 0;
 		this.previous = nbZones;
 		this.lastAlt = false;
+		this.movesMouse = false;
+		this.movesTUIO = false;
 		
 		this.windows = new ArrayList<Window>();
 		for(int i = 0; i < 9; i++){
@@ -88,6 +90,10 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	public ArrayList<ImageModule> getImages(){
 		return(modules);
+	}
+	
+	public boolean moves(){
+		return(this.movesMouse || this.movesTUIO);
 	}
 	
 	public void setAreaPlacement(){
@@ -293,15 +299,19 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-
+		this.movesMouse = true;
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {
-		
+		if(tc.getCursorID() == 0){
+			this.movesTUIO = true;
+		}
 	}
 	
-	public void removeTuioCursor(TuioCursor t) {
-
+	public void removeTuioCursor(TuioCursor tc) {
+		if(tc.getCursorID() == 0){
+			this.movesTUIO = false;
+		}
 	}
 	
 	public void mouseEntered(MouseEvent e) {}
@@ -323,6 +333,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void mouseReleased(MouseEvent e) {
+		this.movesMouse = false;
 		for(Window w:windows){
 			w.setInactive();
 		}

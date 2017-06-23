@@ -2,8 +2,9 @@ package SplitFocusTest;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public class ImageModule extends Module {
+public class ImageModule extends Module implements Serializable {
 
 	protected BufferedImage img, subImg;
 	protected int startX, startY, lastStartX, lastStartY;

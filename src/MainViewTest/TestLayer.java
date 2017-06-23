@@ -36,7 +36,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected ImageMainView currentImage;
 	protected int alt; //Définit le numéro de l'arrangement pour un nombre de fenêtres données 
 	protected int previous;
-	protected boolean lastAlt;
+	protected boolean lastAlt, movesMouse, movesTUIO;
 	
 	public TestLayer(int nbZones, Dimension d){
 		super(d);
@@ -90,6 +90,9 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		
 		setAreaPlacement();
 		
+		this.movesMouse = false;
+		this.movesTUIO = false;
+		
 		//Définit l'image à l'ouverture
 		this.currentImage = new ImageMainView(modules.get(0));
 	}
@@ -116,6 +119,10 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 				wmv.paintComponent(g2d);
 			}
 		}
+	}
+	
+	public boolean moves(){
+		return(this.movesMouse || this.movesTUIO);
 	}
 	
 	public void setAreaPlacement(){
@@ -304,15 +311,19 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-
+		this.movesMouse = true;
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {
-		
+		if(tc.getCursorID() == 0){
+			this.movesTUIO = true;
+		}
 	}
 	
-	public void removeTuioCursor(TuioCursor t) {
-
+	public void removeTuioCursor(TuioCursor tc) {
+		if(tc.getCursorID() == 0){
+			this.movesTUIO = false;
+		}
 	}
 	
 	public void mouseEntered(MouseEvent e) {}
@@ -334,6 +345,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void mouseReleased(MouseEvent e) {
+		this.movesMouse = false;
 	}
 	
 	public void keyReleased(KeyEvent ke) {}

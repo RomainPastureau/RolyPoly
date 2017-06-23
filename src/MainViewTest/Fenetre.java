@@ -43,7 +43,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly SplitFocus Test 0.2");
+		this.setTitle("RolyPoly SplitFocus Test 0.3");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -101,7 +101,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			ArrayList<ImageModule> images;
 			@Override
 			public void run() {
-				try {				
+				try {
 				windows = (ArrayList<Window>)ois.readObject();
 				images = (ArrayList<ImageModule>)ois.readObject();
 				while(windows!=null){

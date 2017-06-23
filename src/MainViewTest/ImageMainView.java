@@ -4,8 +4,9 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public class ImageMainView {
+public class ImageMainView implements Serializable {
 	
 	protected BufferedImage img;
 	protected float ratio, screenRatio;

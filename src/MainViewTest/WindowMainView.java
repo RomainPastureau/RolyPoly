@@ -3,10 +3,9 @@ package MainViewTest;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
-import java.awt.Point;
+import java.io.Serializable;
 
-public class WindowMainView {
+public class WindowMainView implements Serializable {
 	
 	protected int id, x, y;
 	protected int contactX, contactY;

@@ -1,8 +1,9 @@
 package SplitFocusTest;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public abstract class Module {
+public abstract class Module implements Serializable {
 	
 	protected int x, y, width, height;
 	protected Window window;
