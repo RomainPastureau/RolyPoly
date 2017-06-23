@@ -15,8 +15,9 @@ public class Window implements Serializable {
 	protected Color color;
 	protected long time, now;
 	protected boolean canChangeColor;
+	protected int moduleID;
 	
-	public Window(int id, int x, int y, int width, int height, Color color){
+	public Window(int id, int x, int y, int width, int height, Color color, int moduleID){
 		this.id = id;
 		this.x = x;
 		this.y = y;
@@ -28,6 +29,7 @@ public class Window implements Serializable {
 		this.time = 0;
 		this.now = 2000;
 		this.canChangeColor = false;
+		this.moduleID = moduleID;
 	}
 	
 	public void setPosition(int x, int y, int width, int height){
@@ -35,6 +37,14 @@ public class Window implements Serializable {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+	}
+	
+	public void setModuleID(int moduleID){
+		this.moduleID = moduleID;
+	}
+	
+	public int getModuleID(){
+		return(this.moduleID);
 	}
 	
 	public boolean isInside(int x, int y){

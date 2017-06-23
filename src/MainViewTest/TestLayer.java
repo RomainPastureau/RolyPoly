@@ -125,6 +125,10 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		return(this.movesMouse || this.movesTUIO);
 	}
 	
+	public ArrayList<Window> getWindows(){
+		return(this.windows);
+	}
+	
 	public void setAreaPlacement(){
 		
 		lastAlt = false;

@@ -97,20 +97,19 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	
 	public void initThreads(){		
 		this.recevoir = new Thread(new Runnable() {
-			ArrayList<Window> windows;
-//			ArrayList<ImageModule> images;
+			ArrayList<Window> windows, tempW;
 			@Override
 			public void run() {
 				try {
-				windows = (ArrayList<Window>)ois.readObject();
-//				images = (ArrayList<ImageModule>)ois.readObject();
-				while(windows!=null){
-					System.out.println("Réception.");
-					windows = (ArrayList<Window>)ois.readObject();
-					sft.updateWindows(windows);
-//					images = (ArrayList<ImageModule>)ois.readObject();
-//					sft.updateImages(images);
-				}
+					windows = sft.getWindows();
+					while(windows!=null){
+						System.out.println("Réception.");
+						tempW = (ArrayList<Window>)ois.readObject();
+						if(tempW != null){
+							windows = tempW;
+							sft.updateWindows(windows);
+						}
+					}
 				System.out.println("Serveur déconnecté");
 				ois.close();
 				clientSocket.close();

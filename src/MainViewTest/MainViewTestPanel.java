@@ -90,6 +90,10 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		test.updateWindows(windows);;
 	}
 	
+	public ArrayList<Window> getWindows(){
+		return(test.getWindows());
+	}
+	
 	public void updateImages(ArrayList<ImageModule> images){
 		test.updateImages(images);
 	}
