@@ -105,6 +105,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				windows = (ArrayList<Window>)ois.readObject();
 				images = (ArrayList<ImageModule>)ois.readObject();
 				while(windows!=null){
+					System.out.println("Réception.");
 					windows = (ArrayList<Window>)ois.readObject();
 					sft.updateWindows(windows);
 					images = (ArrayList<ImageModule>)ois.readObject();

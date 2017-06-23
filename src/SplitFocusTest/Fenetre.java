@@ -93,6 +93,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				while(true){
 					try{
 						if(sft.moves()){
+							System.out.println("Move.");
 							oos.writeObject(sft.getWindows());
 							oos.flush();
 							oos.reset();
