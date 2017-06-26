@@ -34,7 +34,6 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected ArrayList<Window> windows;
 	protected ArrayList<Color> colors;
 	protected ArrayList<ImageModule> modules;
-	protected ArrayList<WindowMainView> windowsMV;
 	protected int currentImage;
 	protected int alt; //Définit le numéro de l'arrangement pour un nombre de fenêtres données 
 	protected int previous;
@@ -70,7 +69,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		//Définition des fenêtres
 		this.windows = new ArrayList<Window>();
 		for(int i = 0; i < 9; i++){
-			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i), i));
+			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i), i, 1.f));
 		}
 		
 		//Ouverture des fichiers images
@@ -114,16 +113,8 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		//Affichage des fenêtres courantes
 		for(Window win : windows){
 			if(win.getID() == currentImage){
-				int x = win.getStartX();
-				int y = win.getStartY();
-				int id = win.getID();
-				int w = windows.get(id).getWidth();
-				int h = windows.get(id).getHeight();
-				WindowMainView wmv = windowsMV.get(id);
-				wmv.updateRatio(ratio);
-				wmv.updatePosition((int)(x*ratio)+img.getStartX(), (int)(y*ratio)+img.getStartY());
-				wmv.updateSize((int)(w*ratio), (int)(h*ratio));
-				wmv.paintComponent(g2d);
+				win.setRatio(ratio, img.getStartX(), img.getStartY());
+				win.paintComponentMain(g2d);
 			}
 		}
 	}

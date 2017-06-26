@@ -10,6 +10,7 @@ public class Window implements Serializable {
 
 	private static final long serialVersionUID = 3764602074015741068L;
 	protected int x, y, id, width, height;
+	protected int mainX, mainY, mainWidth, mainHeight;
 	protected int contactX, contactY;
 	protected Dimension d;
 	protected boolean active, current;
@@ -20,12 +21,15 @@ public class Window implements Serializable {
 	protected int startX, startY, lastStartX, lastStartY;
 	protected float ratio;
 	
-	public Window(int id, int x, int y, int width, int height, Color color, int moduleID){
+	public Window(int id, int x, int y, int width, int height, Color color, int moduleID, float ratio){
 		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.ratio = ratio;
+		this.mainWidth = (int)(ratio*width);
+		this.mainHeight = (int)(ratio*height);
 		this.color = color;
 		this.active = false;
 		this.current = false;
@@ -35,6 +39,8 @@ public class Window implements Serializable {
 		this.moduleID = moduleID;
 		this.startX = 0;
 		this.startY = 0;
+		this.mainX = 0;
+		this.mainY = 0;
 		this.lastStartX = 0;
 		this.lastStartY = 0;
 	}
@@ -42,6 +48,13 @@ public class Window implements Serializable {
 	public void setPosition(int x, int y, int width, int height){
 		this.x = x;
 		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
+	
+	public void setMainPosition(int x, int y, int width, int height){
+		this.startX = x;
+		this.startY = y;
 		this.width = width;
 		this.height = height;
 	}
@@ -81,10 +94,32 @@ public class Window implements Serializable {
 		return(false);
 	}
 	
+	public boolean isInsideMain(int x, int y){
+		if(this.startX < x && x < this.startX+mainWidth && this.startY < y && y < this.startY+mainHeight){
+			if(!this.current){
+				this.canChangeColor = true;
+				this.time = System.currentTimeMillis();
+				this.now = 0;
+			}
+			else if(this.now >= 2000){
+				this.canChangeColor = false;
+			}
+			this.current = true;
+			this.active = true;
+			this.contactX = x;
+			this.contactY = y;
+			
+			return(true);
+		}
+		this.current = false;
+		this.active = false;
+		return(false);
+	}
+	
 	public void paintComponent(Graphics2D g2d){
 		g2d.setColor(color);
 		g2d.setStroke(new BasicStroke(10));
-		g2d.drawRect(x, y, width, height);
+		g2d.drawRect(mainX, mainY, width, height);
 		if(canChangeColor){
 			if(now < 2000){
 				now = System.currentTimeMillis()-time;
@@ -95,7 +130,24 @@ public class Window implements Serializable {
 			}
 		}
 		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)(128 - ((now/1000.)*64))));
-		g2d.fillRect(x, y, width, height);
+		g2d.fillRect(mainX, mainY, width, height);
+	}
+	
+	public void paintComponentMain(Graphics2D g2d){
+		g2d.setColor(color);
+		g2d.setStroke(new BasicStroke(10));
+		g2d.drawRect(startX, startY, mainWidth, mainHeight);
+		if(canChangeColor){
+			if(now < 2000){
+				now = System.currentTimeMillis()-time;
+			}
+			if(now >= 2000){
+				now = 2000;
+				canChangeColor = false;
+			}
+		}
+		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)(128 - ((now/1000.)*64))));
+		g2d.fillRect(startX, startY, mainWidth, mainHeight);  
 	}
 	
 	public Color getColor(){
@@ -160,6 +212,14 @@ public class Window implements Serializable {
 	
 	public void setStartY(int startY){
 		this.startY = startY;
+	}
+	
+	public void setRatio(float ratio, int imgStartX, int imgStartY){
+		this.ratio = ratio;
+		this.mainWidth = (int)(width*ratio);
+		this.mainHeight = (int)(height*ratio);
+		this.mainX = (int)(startX*ratio)+imgStartX; 
+		this.mainY = (int)(startY*ratio)+imgStartY; 
 	}
 	
 }

@@ -72,7 +72,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		//Définition des fenêtres
 		this.windows = new ArrayList<Window>();
 		for(int i = 0; i < 9; i++){
-			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i), i));
+			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i), i, 1.f));
 		}
 		
 		//Ouverture des fichiers images
