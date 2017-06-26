@@ -113,7 +113,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		//Affichage des fenêtres courantes
 		for(Window win : windows){
 			if(win.getID() == currentImage){
-				win.setRatio(ratio, img.getStartX(), img.getStartY());
+				win.update(ratio, img.getStartX(), img.getStartY());
 				win.paintComponentMain(g2d);
 			}
 		}

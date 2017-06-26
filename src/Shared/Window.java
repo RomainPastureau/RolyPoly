@@ -119,7 +119,7 @@ public class Window implements Serializable {
 	public void paintComponent(Graphics2D g2d){
 		g2d.setColor(color);
 		g2d.setStroke(new BasicStroke(10));
-		g2d.drawRect(mainX, mainY, width, height);
+		g2d.drawRect(x, y, width, height);
 		if(canChangeColor){
 			if(now < 2000){
 				now = System.currentTimeMillis()-time;
@@ -130,13 +130,13 @@ public class Window implements Serializable {
 			}
 		}
 		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)(128 - ((now/1000.)*64))));
-		g2d.fillRect(mainX, mainY, width, height);
+		g2d.fillRect(x, y, width, height);
 	}
 	
 	public void paintComponentMain(Graphics2D g2d){
 		g2d.setColor(color);
 		g2d.setStroke(new BasicStroke(10));
-		g2d.drawRect(startX, startY, mainWidth, mainHeight);
+		g2d.drawRect(mainX, mainY, mainWidth, mainHeight);
 		if(canChangeColor){
 			if(now < 2000){
 				now = System.currentTimeMillis()-time;
@@ -147,7 +147,7 @@ public class Window implements Serializable {
 			}
 		}
 		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)(128 - ((now/1000.)*64))));
-		g2d.fillRect(startX, startY, mainWidth, mainHeight);  
+		g2d.fillRect(mainX, mainY, mainWidth, mainHeight);  
 	}
 	
 	public Color getColor(){
@@ -214,7 +214,7 @@ public class Window implements Serializable {
 		this.startY = startY;
 	}
 	
-	public void setRatio(float ratio, int imgStartX, int imgStartY){
+	public void update(float ratio, int imgStartX, int imgStartY){
 		this.ratio = ratio;
 		this.mainWidth = (int)(width*ratio);
 		this.mainHeight = (int)(height*ratio);
