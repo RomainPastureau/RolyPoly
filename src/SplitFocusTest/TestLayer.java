@@ -18,7 +18,9 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import Shared.ImageModule;
 import Shared.Layer;
+import Shared.Window;
 import TUIO.TuioBlob;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;
@@ -53,47 +55,56 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void setup(){
+		
+		//Création de la liste de couleurs des fenêtres
 		this.colors = new ArrayList<Color>();
 		this.colors.addAll(Arrays.asList(tempColor));
+		
+		//Définition de l'arrangement de départ
 		this.alt = 0;
 		this.previous = nbZones;
 		this.lastAlt = false;
+		
+		//Définition de la mobilité
 		this.movesMouse = false;
 		this.movesTUIO = false;
 		
+		//Définition des fenêtres
 		this.windows = new ArrayList<Window>();
 		for(int i = 0; i < 9; i++){
-			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
+			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i), i));
 		}
 		
+		//Ouverture des fichiers images
 		File f = new File(System.getProperty("user.dir")+"/images2");
 		ArrayList<File> files = new ArrayList<File>(Arrays.asList(f.listFiles()));
+		
+		//Définition des modules images
 		this.modules = new ArrayList<ImageModule>();
 		System.out.print("Lecture des fichiers image...");
 		for(int i = 0; i < 9; i++){
 			try{
 				BufferedImage bim = ImageIO.read(files.get(i));
-				ImageModule mod = new ImageModule(bim, windows.get(i));
+				ImageModule mod = new ImageModule(bim);
 				this.modules.add(mod);
 			} catch(IOException e){
 				e.printStackTrace();
 			}
 		}
 		System.out.println(" Terminé.");
+		
+		//Mise en place de l'arrangement initial
 		setAreaPlacement();
-		adaptModules();
 	}
 	
 	public ArrayList<Window> getWindows(){
 		return(windows);
 	}
 	
-	public ArrayList<ImageModule> getImages(){
-		return(modules);
-	}
-	
 	public boolean moves(){
-		System.out.println("Mouse : "+this.movesMouse+" TUIO : "+this.movesTUIO);
+		if(this.movesMouse || this.movesTUIO){
+			System.out.println("MOVES");
+		}
 		return(this.movesMouse || this.movesTUIO);
 	}
 	
@@ -268,23 +279,33 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		
 	}
 	
-	public void adaptModules(){
-		for(ImageModule imod : modules){
-			imod.updateSize();
-		}
-	}
-	
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		Point mouse = MouseInfo.getPointerInfo().getLocation();
-		for(ImageModule im:modules){
-			im.move((int)mouse.getX(), (int)mouse.getY());
-		}
 		for(int i = 0; i < nbZones; i++){
-			modules.get(i).paintComponent(g2d);
-		}
-		for(int i = 0; i < nbZones; i++){
+			int mID = windows.get(i).getModuleID();
+			modules.get(mID).paintComponent(g2d, windows.get(i));
 			windows.get(i).paintComponent(g2d);
+			move((int)mouse.getX(), (int)mouse.getY(), windows.get(i), modules.get(mID));
+		}
+	}
+	
+	public void move(int a, int b, Window w, ImageModule img){
+		if(w.getActive()){
+			w.setStartX(w.getLastStartX()-(a-w.getContactX()));
+			w.setStartY(w.getLastStartY()-(b-w.getContactY()));
+		}
+		if(w.getStartX() > img.getWidth()-w.getWidth()){
+			w.setStartX(img.getWidth()-w.getWidth());
+		}
+		if(w.getStartX() < 0){
+			w.setStartX(0);
+		}
+		if(w.getStartY() > img.getHeight()-w.getHeight()){
+			w.setStartY(img.getHeight()-w.getHeight());
+		}
+		if(w.getStartY() < 0){
+			w.setStartY(0);
 		}
 	}
 
@@ -295,7 +316,6 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 			else alt = 0;
 			this.previous = ke.getKeyCode()-96;
 			setAreaPlacement();
-			adaptModules();
 		}
 	}
 	
@@ -337,11 +357,10 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		this.movesMouse = false;
 		for(Window w:windows){
 			w.setInactive();
-		}
-		for(ImageModule im:modules){
-			im.updateCorner();
+			w.updateCorner();
 		}
 	}
+	
 	public void keyReleased(KeyEvent ke) {}
 	public void keyTyped(KeyEvent ke) {}
 	

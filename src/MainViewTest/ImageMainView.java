@@ -6,6 +6,8 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
+import Shared.ImageModule;
+
 public class ImageMainView implements Serializable {
 	
 	protected BufferedImage img;

@@ -1,4 +1,4 @@
-package SplitFocusTest;
+package Shared;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class Window implements Serializable {
 
+	private static final long serialVersionUID = 3764602074015741068L;
 	protected int x, y, id, width, height;
 	protected int contactX, contactY;
 	protected Dimension d;
@@ -16,6 +17,7 @@ public class Window implements Serializable {
 	protected long time, now;
 	protected boolean canChangeColor;
 	protected int moduleID;
+	protected int startX, startY, lastStartX, lastStartY;
 	
 	public Window(int id, int x, int y, int width, int height, Color color, int moduleID){
 		this.id = id;
@@ -30,6 +32,10 @@ public class Window implements Serializable {
 		this.now = 2000;
 		this.canChangeColor = false;
 		this.moduleID = moduleID;
+		this.startX = 0;
+		this.startY = 0;
+		this.lastStartX = 0;
+		this.lastStartY = 0;
 	}
 	
 	public void setPosition(int x, int y, int width, int height){
@@ -45,6 +51,11 @@ public class Window implements Serializable {
 	
 	public int getModuleID(){
 		return(this.moduleID);
+	}
+	
+	public void updateCorner(){
+		this.lastStartX = this.startX;
+		this.lastStartY = this.startY;
 	}
 	
 	public boolean isInside(int x, int y){
@@ -124,6 +135,30 @@ public class Window implements Serializable {
 	
 	public boolean getActive(){
 		return(this.active);
+	}
+	
+	public int getStartX(){
+		return(this.startX);
+	}
+	
+	public int getStartY(){
+		return(this.startY);
+	}
+	
+	public int getLastStartX(){
+		return(this.lastStartX);
+	}
+	
+	public int getLastStartY(){
+		return(this.lastStartY);
+	}
+	
+	public void setStartX(int startX){
+		this.startX = startX;
+	}
+	
+	public void setStartY(int startY){
+		this.startY = startY;
 	}
 	
 }

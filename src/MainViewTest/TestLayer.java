@@ -16,7 +16,9 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import Shared.ImageModule;
 import Shared.Layer;
+import Shared.Window;
 import TUIO.TuioBlob;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;

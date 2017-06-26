@@ -15,7 +15,9 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 
 import Shared.BackgroundLayer;
+import Shared.ImageModule;
 import Shared.TitleLayer;
+import Shared.Window;
 import TUIO.TuioBlob;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;

@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import Shared.BackgroundLayer;
 import Shared.TitleLayer;
+import Shared.Window;
 import TUIO.TuioBlob;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;
@@ -92,10 +93,6 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 	
 	public ArrayList<Window> getWindows(){
 		return(test.getWindows());
-	}
-	
-	public ArrayList<ImageModule> getImages(){
-		return(test.getImages());
 	}
 	
 	public void mouseClicked(MouseEvent e) {

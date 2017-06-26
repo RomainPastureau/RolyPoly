@@ -15,9 +15,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import DualScreenTest.Coordinates;
-import DualScreenTest.Meteor;
 import Shared.PressKey;
+import Shared.Window;
 import TUIO.TuioBlob;
 import TUIO.TuioClient;
 import TUIO.TuioCursor;
