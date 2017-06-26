@@ -3,16 +3,19 @@ package DualScreenTest;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Shared.BackgroundLayer;
@@ -101,6 +104,19 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 	public void updateCoordinates(Coordinates c){
 		test.updateCoordinates(c);
 	}
+
+	public void keyPressed(KeyEvent ke) {
+		if(ke.getKeyCode() == ke.VK_ESCAPE){
+			escape();
+		}
+	}
+	
+	//Fonction de fermeture du programme
+	public void escape(){
+		System.out.println("Fermeture du programme.");
+		Frame[] frames = JFrame.getFrames();
+		frames[0].dispatchEvent(new WindowEvent(frames[0], WindowEvent.WINDOW_CLOSING));
+	}
 	
 	public void mouseClicked(MouseEvent e) {
 		this.tl.mouseClicked(e);
@@ -111,7 +127,8 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 	public void removeTuioCursor(TuioCursor tc) {
 		test.removeTuioCursor(tc);
 	}
-	public void keyPressed(KeyEvent ke) {}
+	
+
 	
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}

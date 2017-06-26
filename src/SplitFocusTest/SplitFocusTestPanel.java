@@ -3,16 +3,19 @@ package SplitFocusTest;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Shared.BackgroundLayer;
@@ -37,6 +40,7 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 	protected TestLayer test;
 	protected boolean menu;
 	protected boolean connect;
+	protected boolean alive;
 	
 	public SplitFocusTestPanel(Dimension d){
 		this.width = (int)d.getWidth();
@@ -53,6 +57,7 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		this.test = new TestLayer(2, d);
 		this.connect = false;
 		this.menu = true;
+		this.alive = true;
 	}
 	
 	public SplitFocusTestPanel(int x, int y, Dimension d){
@@ -70,6 +75,7 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		this.test = new TestLayer(2, x, y, d);
 		this.connect = false;
 		this.menu = true;
+		this.alive = true;
 	}
 	
 	public void paintComponent(Graphics g){
@@ -133,10 +139,25 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		}
 	}
 	
+	public boolean getAlive(){
+		return(this.alive);
+	}
+	
 	public void keyPressed(KeyEvent ke) {
 		if(!menu){
 			this.test.keyPressed(ke);
 		}
+		if(ke.getKeyCode() == ke.VK_ESCAPE){
+			escape();
+		}
+	}
+	
+	//Fonction de fermeture du programme
+	public void escape(){
+		this.alive = false;
+		System.out.println("Fermeture du programme.");
+		Frame[] frames = JFrame.getFrames();
+		frames[0].dispatchEvent(new WindowEvent(frames[0], WindowEvent.WINDOW_CLOSING));
 	}
 	
 	public void mousePressed(MouseEvent e) {

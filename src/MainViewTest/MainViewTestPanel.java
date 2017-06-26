@@ -3,16 +3,19 @@ package MainViewTest;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Shared.BackgroundLayer;
@@ -38,6 +41,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 	protected TestLayer test;
 	protected boolean menu;
 	protected boolean connect;
+	protected boolean alive;
 	
 	public MainViewTestPanel(Dimension d){
 		this.width = (int)d.getWidth();
@@ -54,6 +58,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		this.test = new TestLayer(4, d);
 		this.menu = true;
 		this.connect = false;
+		this.alive = true;
 	}
 	
 	public MainViewTestPanel(int x, int y, Dimension d){
@@ -71,6 +76,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		this.test = new TestLayer(4, x, y, d);
 		this.menu = true;
 		this.connect = false;
+		this.alive = true;
 	}
 	
 	public void paintComponent(Graphics g){
@@ -96,6 +102,13 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		}
 		else{
 			test.paintComponent((Graphics2D)g);
+		}
+		checkIfAlive();
+	}
+	
+	public void checkIfAlive(){
+		if(!this.alive){
+			escape();
 		}
 	}
 	
@@ -139,6 +152,20 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		if(!menu){
 			this.test.keyPressed(ke);
 		}
+		if(ke.getKeyCode() == ke.VK_ESCAPE){
+			escape();
+		}
+	}
+	
+	public void setAlive(boolean alive){
+		this.alive = alive;
+	}
+
+	//Fonction de fermeture du programme
+	public void escape(){
+		System.out.println("Fermeture du programme.");
+		Frame[] frames = JFrame.getFrames();
+		frames[0].dispatchEvent(new WindowEvent(frames[0], WindowEvent.WINDOW_CLOSING));
 	}
 	
 	public void mousePressed(MouseEvent e) {
