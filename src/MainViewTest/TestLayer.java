@@ -35,7 +35,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected ArrayList<Color> colors;
 	protected ArrayList<ImageModule> modules;
 	protected ArrayList<WindowMainView> windowsMV;
-	protected ImageMainView currentImage;
+	protected int currentImage;
 	protected int alt; //Définit le numéro de l'arrangement pour un nombre de fenêtres données 
 	protected int previous;
 	protected boolean lastAlt, movesMouse, movesTUIO;
@@ -53,36 +53,37 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void setup(){
-		//Ajout des couleurs des fenêtres
+		
+		//Création de la liste de couleurs des fenêtres
 		this.colors = new ArrayList<Color>();
 		this.colors.addAll(Arrays.asList(tempColor));
 		
-		//Définition de l'arrangement de base
+		//Définition de l'arrangement de départ
 		this.alt = 0;
+		this.previous = nbZones;
 		this.lastAlt = false;
 		
-		//Enregistre le nombre de fenêtres dans la précédente configuration
-		this.previous = nbZones;
+		//Définition de la mobilité
+		this.movesMouse = false;
+		this.movesTUIO = false;
 		
-		//Initialise la liste des fenêtres
+		//Définition des fenêtres
 		this.windows = new ArrayList<Window>();
-		this.windowsMV = new ArrayList<WindowMainView>();
-		
-		//Assigne une couleur à chaucne des fenêtres
 		for(int i = 0; i < 9; i++){
-			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i)));
-			this.windowsMV.add(new WindowMainView(i, 0, 0, 0, 0, 1.f, colors.get(i)));
+			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i), i));
 		}
 		
-		//Ouvre les fichiers image, crée les modules et les assigne aux fenêtres
+		//Ouverture des fichiers images
 		File f = new File(System.getProperty("user.dir")+"/images2");
 		ArrayList<File> files = new ArrayList<File>(Arrays.asList(f.listFiles()));
+		
+		//Définition des modules images
 		this.modules = new ArrayList<ImageModule>();
 		System.out.print("Lecture des fichiers image...");
 		for(int i = 0; i < 9; i++){
 			try{
 				BufferedImage bim = ImageIO.read(files.get(i));
-				ImageModule mod = new ImageModule(bim, windows.get(i));
+				ImageModule mod = new ImageModule(bim);
 				this.modules.add(mod);
 			} catch(IOException e){
 				e.printStackTrace();
@@ -90,33 +91,37 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		}
 		System.out.println(" Terminé.");
 		
-		setAreaPlacement();
-		
 		this.movesMouse = false;
 		this.movesTUIO = false;
 		
+		//Mise en place de l'arrangement initial
+		setAreaPlacement();
+		
 		//Définit l'image à l'ouverture
-		this.currentImage = new ImageMainView(modules.get(0));
+		this.currentImage = 0;
 	}
 	
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		
 		//Affichage de l'image en cours
-		currentImage.paintComponent(g2d);
+		ImageModule img = modules.get(currentImage);
+		img.paintComponent(g2d);
 		
-		float ratio = currentImage.getRatio();
+		//Calcul du ratio de l'image en cours
+		float ratio = img.getRatio();
 		
-		for(ImageModule im : modules){
-			if(im.getImage().equals(currentImage.getImage())){
-				int x = im.getStartX();
-				int y = im.getStartY();
-				int id = im.getWindow().getID();
+		//Affichage des fenêtres courantes
+		for(Window win : windows){
+			if(win.getID() == currentImage){
+				int x = win.getStartX();
+				int y = win.getStartY();
+				int id = win.getID();
 				int w = windows.get(id).getWidth();
 				int h = windows.get(id).getHeight();
 				WindowMainView wmv = windowsMV.get(id);
 				wmv.updateRatio(ratio);
-				wmv.updatePosition((int)(x*ratio)+currentImage.getStartX(), (int)(y*ratio)+currentImage.getStartY());
+				wmv.updatePosition((int)(x*ratio)+img.getStartX(), (int)(y*ratio)+img.getStartY());
 				wmv.updateSize((int)(w*ratio), (int)(h*ratio));
 				wmv.paintComponent(g2d);
 			}
@@ -312,7 +317,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 
 	public void keyPressed(KeyEvent ke) {
 		if(ke.getKeyCode() > 96 && ke.getKeyCode() < 106){
-			this.currentImage = new ImageMainView(modules.get(ke.getKeyCode()-97));
+			this.currentImage = ke.getKeyCode()-97;
 		}
 	}
 	
@@ -346,8 +351,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void mousePressed(MouseEvent e) {
 		for(Window w : windows){
 			w.isInside(e.getX(), e.getY());
-		}
-		
+		}	
 	}
 	
 	public void mouseReleased(MouseEvent e) {

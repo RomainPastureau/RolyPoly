@@ -2,6 +2,7 @@ package MainViewTest;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 
 import Shared.BackgroundLayer;
+import Shared.CenterText;
 import Shared.ImageModule;
 import Shared.TitleLayer;
 import Shared.Window;
@@ -27,6 +29,7 @@ import TUIO.TuioTime;
 public class MainViewTestPanel extends JPanel implements MouseListener, KeyListener, TuioListener {
 		
 	private static final long serialVersionUID = 1L;
+	protected int width, height;
 	protected int x, y;
 	protected Dimension d;
 	protected BackgroundLayer bg;
@@ -37,6 +40,8 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 	protected boolean connect;
 	
 	public MainViewTestPanel(Dimension d){
+		this.width = (int)d.getWidth();
+		this.height = (int)d.getHeight();
 		this.x = 0;
 		this.y = 0;
 		this.d = d;
@@ -52,6 +57,8 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 	}
 	
 	public MainViewTestPanel(int x, int y, Dimension d){
+		this.width = (int)d.getWidth();
+		this.height = (int)d.getHeight();
 		this.x = x;
 		this.y = y;
 		this.d = d;
@@ -74,6 +81,18 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 				menu = false;
 				tl.setMenu(true);
 			}
+			Font font = new Font("Calibri", Font.ITALIC, 80);
+			String con;
+			Color col;
+			if(!connect){
+				col = Color.RED;
+				con = "Non connecté";
+			}
+			else{
+				col = new Color(153, 204, 0);
+				con = "Connecté";
+			}
+			CenterText.center((Graphics2D)g, con, font, 80, col, width-300, height-140, new Dimension(300, 60));
 		}
 		else{
 			test.paintComponent((Graphics2D)g);

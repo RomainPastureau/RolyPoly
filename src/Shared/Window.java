@@ -18,6 +18,7 @@ public class Window implements Serializable {
 	protected boolean canChangeColor;
 	protected int moduleID;
 	protected int startX, startY, lastStartX, lastStartY;
+	protected float ratio;
 	
 	public Window(int id, int x, int y, int width, int height, Color color, int moduleID){
 		this.id = id;

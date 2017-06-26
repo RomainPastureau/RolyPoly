@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 public class WindowMainView implements Serializable {
 	
+	private static final long serialVersionUID = 9179235663943019364L;
 	protected int id, x, y;
 	protected int contactX, contactY;
 	protected int width, height;
