@@ -9,7 +9,7 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import TUIO.TuioListener;
 import TUIO.TuioObject;
 import TUIO.TuioTime;
 
-public class TestLayer extends Layer implements KeyListener, MouseListener, TuioListener {
+public class TestLayer extends Layer implements KeyListener, MouseMotionListener, TuioListener {
 	
 	protected int nbZones;
 	protected Color[] tempColor = {new Color(255, 156, 0), new Color(0, 111, 225), new Color(66, 166, 0),
@@ -102,9 +102,6 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public boolean moves(){
-		if(this.movesMouse || this.movesTUIO){
-			System.out.println("MOVES");
-		}
 		return(this.movesMouse || this.movesTUIO);
 	}
 	
@@ -320,7 +317,6 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		this.movesMouse = true;
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {
@@ -347,6 +343,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void updateTuioObject(TuioObject t) {}
 	
 	public void mousePressed(MouseEvent e) {
+		this.movesMouse = true;
 		for(Window w : windows){
 			w.isInside(e.getX(), e.getY());
 		}
@@ -363,5 +360,17 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	public void keyReleased(KeyEvent ke) {}
 	public void keyTyped(KeyEvent ke) {}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		this.movesMouse = true;
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

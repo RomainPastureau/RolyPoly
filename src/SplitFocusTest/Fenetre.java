@@ -32,7 +32,8 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected ServerSocket serveurSocket;
 	protected Socket clientSocket;
 	protected ObjectOutputStream oos;
-	protected boolean on, startThreads, menu;
+	protected boolean on, startThreads, menu; 
+	protected volatile boolean moves;
 	protected InitThread it;
 	protected Thread envoi;
 	
@@ -84,16 +85,21 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				startThreads = false;
 			}
 			sft.repaint();
+			this.moves = this.moves();
 		}
+	}
+	
+	public boolean moves(){
+		return(sft.moves());
 	}
 	
 	public void initThreads(){
 		this.envoi = new Thread(new Runnable() {
-			public void run() {
+			public void run(){
 				while(true){
 					try{
-						if(sft.moves()){
-							System.out.println("Move.");
+						if(moves){
+							System.out.println(System.currentTimeMillis());
 							oos.writeObject(sft.getWindows());
 							oos.flush();
 							oos.reset();
@@ -102,7 +108,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 							oos.reset();
 						}
 					} catch(NullPointerException e){
-						System.out.println("Rien n'est envoyé.");
+						//System.out.println("Rien n'est envoyé.");
 					} catch(IOException e){
 						e.printStackTrace();
 					}
