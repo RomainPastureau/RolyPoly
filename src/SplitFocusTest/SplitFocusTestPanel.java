@@ -89,12 +89,12 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 			if(!connect){
 				col = Color.RED;
 				con = "Non connecté";
-				CenterText.center((Graphics2D)g, con, font, 80, col, width-430, height-140, new Dimension(300, 60));
+				CenterText.center((Graphics2D)g, con, font, 80, col, width-418, height-140, new Dimension(300, 60));
 			}
 			else{
 				col = new Color(153, 204, 0);
 				con = "Connecté";
-				CenterText.center((Graphics2D)g, con, font, 80, col, width-320, height-140, new Dimension(300, 60));
+				CenterText.center((Graphics2D)g, con, font, 80, col, width-347, height-140, new Dimension(300, 60));
 			}
 			
 

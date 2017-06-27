@@ -43,13 +43,14 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 	protected boolean connect;
 	protected boolean alive;
 	
+	
 	public MainViewTestPanel(Dimension d){
 		this.width = (int)d.getWidth();
 		this.height = (int)d.getHeight();
 		this.x = 0;
 		this.y = 0;
 		this.d = d;
-		this.bg = new BackgroundLayer(new Color(206, 255, 243), new Color(133, 255, 225), new Color(133, 255, 225), 120, d);
+		this.bg = new BackgroundLayer(new Color(80, 80, 80), new Color(50, 50, 50), new Color(50, 50, 50), 120, d);
 		Color mainColor = new Color(0, 241, 181);
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
@@ -59,6 +60,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		this.menu = true;
 		this.connect = false;
 		this.alive = true;
+		
 	}
 	
 	public MainViewTestPanel(int x, int y, Dimension d){
@@ -67,7 +69,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		this.x = x;
 		this.y = y;
 		this.d = d;
-		this.bg = new BackgroundLayer(new Color(206, 255, 243), new Color(133, 255, 225), new Color(133, 255, 225), 120, d);
+		this.bg = new BackgroundLayer(new Color(80, 80, 80), new Color(50, 50, 50), new Color(50, 50, 50), 120, d);
 		Color mainColor = new Color(0, 241, 181);
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
@@ -93,12 +95,12 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 			if(!connect){
 				col = Color.RED;
 				con = "Non connecté";
-				CenterText.center((Graphics2D)g, con, font, 80, col, width-430, height-140, new Dimension(300, 60));
+				CenterText.center((Graphics2D)g, con, font, 80, col, width-418, height-140, new Dimension(300, 60));
 			}
 			else{
 				col = new Color(153, 204, 0);
 				con = "Connecté";
-				CenterText.center((Graphics2D)g, con, font, 80, col, width-320, height-140, new Dimension(300, 60));
+				CenterText.center((Graphics2D)g, con, font, 80, col, width-347, height-140, new Dimension(300, 60));
 			}
 			
 		}
@@ -112,6 +114,10 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		if(!this.alive){
 			escape();
 		}
+	}
+	
+	public boolean getAlive(){
+		return(this.alive);
 	}
 	
 	public boolean getMenu(){

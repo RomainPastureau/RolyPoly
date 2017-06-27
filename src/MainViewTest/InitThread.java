@@ -1,8 +1,10 @@
 package MainViewTest;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -24,14 +26,15 @@ public class InitThread extends Thread {
 			try{
 				fenetre.clientSocket = new Socket("141.115.72.18", 4242);
 				fenetre.ois = new ObjectInputStream(new BufferedInputStream(fenetre.clientSocket.getInputStream()));
+				fenetre.oos = new ObjectOutputStream(new BufferedOutputStream(fenetre.clientSocket.getOutputStream()));
 				System.out.println("Connexion OK");
+				fenetre.sft.setConnect(true);
 				fenetre.on = true;
 			} catch(ConnectException e){
 				System.out.println("Connexion refusée.");
 			} catch(IOException e){
 				e.printStackTrace();
 			} 
-			fenetre.sft.setConnect(true);
 		} 	
 		this.interrupt();
 	}

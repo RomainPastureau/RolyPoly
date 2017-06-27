@@ -160,6 +160,10 @@ public class Window implements Serializable {
 		this.active = false;
 	}
 	
+	public void setActive(){
+		this.active = true;
+	}
+	
 	public int getID(){
 		return(this.id);
 	}

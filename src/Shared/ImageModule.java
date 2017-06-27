@@ -51,6 +51,16 @@ public class ImageModule extends Module {
 		g.drawImage(img, this.screenWidth/2-this.resizedWidth/2, this.screenHeight/2-this.resizedHeight/2, resizedWidth, resizedHeight, null);
 	}
 	
+	public void paintComponent(Graphics2D g, int x, int y, int width, int height){
+		float imageRatio = (float)width/(float)height;
+		if(ratio > imageRatio){
+			g.drawImage(img, x, y+(int)((height/2)-((width/ratio)/2)), width, (int)(width/ratio), null);
+		}
+		else{
+			g.drawImage(img, x+(int)((width/2)-((height*ratio)/2)), y, (int)(height*ratio), height, null);
+		}
+	}
+	
 	public String toString(){
 		return("Screen ratio : "+screenRatio+" - Image ratio : "+ratio+" - Image width : "+width+" - Image height : "+height+" - Resized width : "+resizedWidth+" - Resized height : "+resizedHeight);
 	}

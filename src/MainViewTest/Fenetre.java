@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -35,7 +36,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected ServerSocket serveurSocket;
 	protected Socket clientSocket;
 	protected ObjectInputStream ois;
+	protected ObjectOutputStream oos;
 	protected boolean on, startThreads, menu;
+	protected volatile boolean moves;
 	protected InitThread it;
 	protected Thread envoi, recevoir;
 	
@@ -91,6 +94,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				startThreads = false;
 			}
 			sft.repaint();
+			this.moves = this.moves();
 		}		
 	}
 	
@@ -98,14 +102,14 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		this.recevoir = new Thread(new Runnable() {
 			ArrayList<Window> windows, tempW;
 			boolean alive = true;
-			boolean info = true;
+			String control = "SplitView";
 			@Override
 			public void run() {
 				windows = sft.getWindows();
 				while(alive){
 					try {
-						info = ois.readBoolean();
-						if(info){
+						control = ois.readUTF();
+						if(control == "SplitView"){
 							tempW = (ArrayList<Window>)ois.readObject();
 							if(tempW != null){
 								windows = tempW;
@@ -114,7 +118,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 						}
 						sft.setAlive(alive);
 					} catch (NullPointerException e){
-						System.out.println("Rien n'a été reçu.");
+						//System.out.println("Rien n'a été reçu.");
 					} catch (SocketException e) {
 						System.out.println("Système déconnecté.");
 					} catch (IOException e){
@@ -132,6 +136,37 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				}
 			}
 		});
+		this.envoi = new Thread(new Runnable() {
+			String control = "SplitView";
+			public void run(){
+				while(true){
+					try{
+						if(moves){
+							control = "MainView";
+						}
+						oos.writeUTF(control);
+						oos.flush();
+						oos.reset();
+						if(control == "MainView"){
+							oos.writeObject(sft.getWindows());
+							oos.flush();
+							oos.reset();
+						}
+						oos.writeBoolean(sft.getAlive());
+						oos.flush();
+						oos.reset();
+					} catch(NullPointerException e){
+						System.out.println("Rien n'est envoyé.");
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}	
+			}
+		});
+	}
+	
+	public boolean moves(){
+		return(sft.moves());
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {

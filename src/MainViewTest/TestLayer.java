@@ -38,6 +38,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected int alt; //Définit le numéro de l'arrangement pour un nombre de fenêtres données 
 	protected int previous;
 	protected boolean lastAlt, movesMouse, movesTUIO;
+	protected LateralBar lb;
 	
 	public TestLayer(int nbZones, Dimension d){
 		super(d);
@@ -94,10 +95,19 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		this.movesTUIO = false;
 		
 		//Mise en place de l'arrangement initial
-		setAreaPlacement();
+		if(nbZones == 4){
+			if(alt == 0){
+				for(int i = 0; i < 4; i++){
+					windows.get(i).setPosition(x+5+(i*width/2)%width, y+5+(int)(i/2)*height/2, (width-20)/2, (height-20)/2);
+				}
+			}
+		}
 		
 		//Définit l'image à l'ouverture
 		this.currentImage = 0;
+		
+		//Définition de la barre latérale
+		this.lb = new LateralBar("Vertical", "Droite", windows, modules, currentImage);
 	}
 	
 	public void paintComponent(Graphics g){
@@ -112,11 +122,18 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		
 		//Affichage des fenêtres courantes
 		for(Window win : windows){
-			if(win.getID() == currentImage){
+			if(win.getActive()){
+				currentImage = win.getModuleID();
+			}
+			if(win.getModuleID() == currentImage){
 				win.update(ratio, img.getStartX(), img.getStartY());
 				win.paintComponentMain(g2d);
 			}
 		}
+		
+		//Affichage de la barre latérale
+		lb.update(windows, currentImage);
+		lb.paintComponent(g2d);
 	}
 	
 	public boolean moves(){
@@ -127,179 +144,28 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		return(this.windows);
 	}
 	
-	public void setAreaPlacement(){
-		
-		lastAlt = false;
-		
-		if(nbZones == 1){
-			windows.get(0).setPosition(x+5, y+5, width-10, height-10);
+	public void move(int a, int b, Window w, ImageModule img){
+		if(w.getActive()){
+			w.setStartX(w.getLastStartX()-(a-w.getContactX()));
+			w.setStartY(w.getLastStartY()-(b-w.getContactY()));
 		}
-		
-		if(nbZones == 2){
-			if(alt == 0){
-				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
-				windows.get(1).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
-			}
-			else{
-				windows.get(0).setPosition(x+5, y+5, width-10, (height-20)/2);
-				windows.get(1).setPosition(x+5, y+5+height/2, width-10, (height-20)/2);
-				lastAlt = true;
-			}
+		if(w.getStartX() > img.getWidth()-w.getWidth()){
+			w.setStartX(img.getWidth()-w.getWidth());
 		}
-		
-		if(nbZones == 3){
-			if(alt == 0){
-				for(int i = 0; i < 3; i++){
-					windows.get(i).setPosition(x+5+i*width/3, y+5, (width-30)/3, height-10);
-				}
-			}
-			else if(alt == 1){
-				for(int i = 0; i < 3; i++){
-					windows.get(i).setPosition(x+5, y+5+i*height/3,	width-10, (height-30)/3);
-				}
-			}
-			else if(alt == 2){
-				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
-				windows.get(1).setPosition(x+5+width/2, y+5, (width-20)/2, (height-20)/2);
-				windows.get(2).setPosition(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2);
-			}
-			else if(alt == 3){
-				windows.get(0).setPosition(x+5, y+5, width-10, (height-20)/2);
-				windows.get(1).setPosition(x+5, y+5+height/2, (width-20)/2, (height-20)/2);
-				windows.get(2).setPosition(x+5+width/2, y+5+height/2, (width-20)/2, (height-20)/2);
-			}
-			else if(alt == 4){
-				windows.get(0).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
-				windows.get(1).setPosition(x+5, y+5, (width-20)/2, (height-20)/2);
-				windows.get(2).setPosition(x+5, y+5+height/2, (width-20)/2, (height-20)/2);
-			}
-			else if(alt == 5){
-				windows.get(0).setPosition(x+5, y+5+height/2, width-10, (height-20)/2);
-				windows.get(1).setPosition(x+5, y+5, (width-20)/2, (height-20)/2);
-				windows.get(2).setPosition(x+5+width/2, y+5, (width-20)/2, (height-20)/2);
-			}
-			else if(alt == 6){
-				windows.get(0).setPosition(x+5, y+5+height/3, width-10, 2*(height-15)/3);
-				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-30)/3);
-				windows.get(2).setPosition(x+5+width/3, y+5, 2*(width-15)/3, (height-30)/3);
-				lastAlt = true;
-			}
+		if(w.getStartX() < 0){
+			w.setStartX(0);
 		}
-		
-		if(nbZones == 4){
-			if(alt == 0){
-				for(int i = 0; i < 4; i++){
-					windows.get(i).setPosition(x+5+(i*width/2)%width, y+5+(int)(i/2)*height/2, (width-20)/2, (height-20)/2);
-				}
-			}
-			else if(alt == 1){
-				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
-				windows.get(1).setPosition(x+5+width/2, y+5, (width-20)/2, (height-30)/3);
-				windows.get(2).setPosition(x+5+width/2, y+5+height/3, (width-20)/2, (height-30)/3);
-				windows.get(3).setPosition(x+5+width/2, y+5+2*height/3, (width-20)/2, (height-30)/3);
-			}
-			else if(alt == 2){
-				windows.get(0).setPosition(x+5, y+5, width-10, (height-20)/2);
-				windows.get(1).setPosition(x+5, y+5+height/2, (width-30)/3, (height-20)/2);
-				windows.get(2).setPosition(x+5+width/3, y+5+height/2, (width-30)/3, (height-20)/2);
-				windows.get(3).setPosition(x+5+2*width/3, y+5+height/2, (width-30)/3, (height-20)/2);
-			}
-			else if(alt == 3){
-				windows.get(0).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
-				windows.get(1).setPosition(x+5, y+5, (width-20)/2, (height-30)/3);
-				windows.get(2).setPosition(x+5, y+5+height/3, (width-20)/2, (height-30)/3);
-				windows.get(3).setPosition(x+5, y+5+2*height/3, (width-20)/2, (height-30)/3);
-			}
-			else if(alt == 4){
-				windows.get(0).setPosition(x+5, y+5+height/2, width-10, (height-20)/2);
-				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-20)/2);
-				windows.get(2).setPosition(x+5+width/3, y+5, (width-30)/3, (height-20)/2);
-				windows.get(3).setPosition(x+5+2*width/3, y+5, (width-30)/3, (height-20)/2);
-			}
-			else if(alt == 5){
-				windows.get(0).setPosition(x+5, y+5+height/3, width-10, 2*(height-15)/3);
-				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-30)/3);
-				windows.get(2).setPosition(x+5+width/3, y+5, (width-30)/3, (height-30)/3);
-				windows.get(3).setPosition(x+5+2*width/3, y+5, (width-30)/3, (height-30)/3);
-			}
-			else if(alt == 6){
-				windows.get(0).setPosition(x+5+width/3, y+5+height/3, 2*(width-15)/3, 2*(height-15)/3);
-				windows.get(1).setPosition(x+5, y+5, (width-30)/3, (height-30)/3);
-				windows.get(2).setPosition(x+5+width/3, y+5, 2*(width-15)/3, (height-30)/3);
-				windows.get(3).setPosition(x+5, y+5+height/3, (width-30)/3, 2*(height-15)/3);
-				lastAlt = true;
-			}
+		if(w.getStartY() > img.getHeight()-w.getHeight()){
+			w.setStartY(img.getHeight()-w.getHeight());
 		}
-		
-		if(nbZones == 5){
-			if(alt == 0){
-				for(int i = 0; i < 5; i++){
-					if(i < 3) windows.get(i).setPosition(x+5+i*width/3, y+5+(int)(i/3)*height/2, (width-30)/3, (height-20)/2);
-					else windows.get(i).setPosition(x+5+((i-1)*width/2)%width, y+5+(int)((i-1)/2)*height/2, (width-20)/2, (height-20)/2);
-				}
-			}
-			else if(alt == 1){
-				for(int i = 0; i < 5; i++){
-					if(i < 2) windows.get(i).setPosition(x+5+i*width/2, y+5+(int)(i/2)*height/2, (width-20)/2, (height-20)/2);
-					else windows.get(i).setPosition(x+5+((i+1)*width/3)%width, y+5+(int)((i+1)/3)*height/2, (width-30)/3, (height-20)/2);
-				}
-			}
-			else if(alt == 2){
-				windows.get(0).setPosition(x+5, y+5, (width-20)/2, height-10);
-				windows.get(1).setPosition(x+5+width/2, y+5, (width-40)/4, (height-20)/2);
-				windows.get(2).setPosition(x+5+3*width/4, y+5, (width-40)/4, (height-20)/2);
-				windows.get(3).setPosition(x+5+width/2, y+5+height/2, (width-40)/4, (height-20)/2);
-				windows.get(4).setPosition(x+5+3*width/4, y+5+height/2, (width-40)/4, (height-20)/2);
-			}
-			else if(alt == 3){
-				windows.get(0).setPosition(x+5+width/2, y+5, (width-20)/2, height-10);
-				windows.get(1).setPosition(x+5, y+5, (width-40)/4, (height-20)/2);
-				windows.get(2).setPosition(x+5+width/4, y+5, (width-40)/4, (height-20)/2);
-				windows.get(3).setPosition(x+5, y+5+height/2, (width-40)/4, (height-20)/2);
-				windows.get(4).setPosition(x+5+width/4, y+5+height/2, (width-40)/4, (height-20)/2);
-				lastAlt = true;
-			}
+		if(w.getStartY() < 0){
+			w.setStartY(0);
 		}
-		
-		if(nbZones == 6){
-			for(int i = 0; i < 6; i++){
-				windows.get(i).setPosition(x+5+i*(width/3)%width, y+5+(int)(i/3)*(height/2), (width-30)/3, (height-20)/2);
-			}
-			lastAlt = true;
-		}
-		
-		if(nbZones == 7){
-			for(int i = 0; i < 7; i++){
-				if(alt == 0){
-					if(i < 4) windows.get(i).setPosition(x+5+i*width/4, y+5+(int)(i/4)*height/2, (width-40)/4, (height-20)/2);
-					else windows.get(i).setPosition(x+5+((i-1)*width/3)%width, y+5+(int)((i-1)/3)*height/2, (width-30)/3, (height-20)/2);
-				}
-				else{
-					if(i < 3) windows.get(i).setPosition(x+5+i*width/3, y+5+(int)(i/3)*height/2, (width-30)/3, (height-20)/2);
-					else windows.get(i).setPosition(x+5+((i+1)*width/4)%width, y+5+(int)((i+1)/4)*height/2, (width-40)/4, (height-20)/2);			
-					lastAlt = true;
-				}
-			}
-		}
-		
-		if(nbZones == 8){
-			for(int i = 0; i < 8; i++){
-				windows.get(i).setPosition(x+5+(i*width/4)%width, y+5+(int)(i/4)*height/2, (width-40)/4, (height-20)/2);
-			}
-			lastAlt = true;
-		}
-		
-		if(nbZones == 9){
-			for(int i = 0; i < nbZones; i++){
-				windows.get(i).setPosition(x+5+(i*width/3)%width, y+5+(int)(i/3)*height/3, (width-30)/3, (height-30)/3);
-			}
-			lastAlt = true;
-		}
-		
 	}
 	
 	public void updateWindows(ArrayList<Window> windows){
 		this.windows = windows;
+		lb.update(windows, currentImage);
 	}
 	
 	public void updateImages(ArrayList<ImageModule> images){
@@ -307,13 +173,33 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	}
 
 	public void keyPressed(KeyEvent ke) {
+		
 		if(ke.getKeyCode() > 96 && ke.getKeyCode() < 106){
 			this.currentImage = ke.getKeyCode()-97;
 		}
+		else if(ke.getKeyCode() == 37){
+			lb.setPosition("Gauche");
+			lb.setOrientation("Vertical");
+		}
+		else if(ke.getKeyCode() == 38){
+			lb.setPosition("Haut");
+			lb.setOrientation("Horizontal");
+		}
+		else if(ke.getKeyCode() == 40){
+			lb.setPosition("Bas");
+			lb.setOrientation("Horizontal");
+		}
+		else if(ke.getKeyCode() == 39){
+			lb.setPosition("Droite");
+			lb.setOrientation("Vertical");
+		}
+		else if(ke.getKeyCode() == 32){
+			lb.setVisible();
+		}
+		lb.update(windows, currentImage);
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		this.movesMouse = true;
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {
@@ -340,9 +226,11 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void updateTuioObject(TuioObject t) {}
 	
 	public void mousePressed(MouseEvent e) {
+		this.movesMouse = true;
 		for(Window w : windows){
-			w.isInside(e.getX(), e.getY());
+			w.isInsideMain(e.getX(), e.getY());
 		}	
+		currentImage = lb.selectImage(e);
 	}
 	
 	public void mouseReleased(MouseEvent e) {
