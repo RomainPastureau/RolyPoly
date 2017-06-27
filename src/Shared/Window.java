@@ -15,7 +15,7 @@ public class Window implements Serializable {
 	protected Dimension d;
 	protected boolean active, current;
 	protected Color color;
-	protected long time, now;
+	protected long time, now, currentTime;
 	protected boolean canChangeColor;
 	protected int moduleID;
 	protected int startX, startY, lastStartX, lastStartY;
@@ -43,6 +43,7 @@ public class Window implements Serializable {
 		this.mainY = 0;
 		this.lastStartX = 0;
 		this.lastStartY = 0;
+		this.currentTime = System.currentTimeMillis();
 	}
 	
 	public void setPosition(int x, int y, int width, int height){
@@ -76,7 +77,7 @@ public class Window implements Serializable {
 		if(this.x < x && x < this.x+width && this.y < y && y < this.y+height){
 			if(!this.current){
 				this.canChangeColor = true;
-				this.time = System.currentTimeMillis();
+				this.time = currentTime;
 				this.now = 0;
 			}
 			else if(this.now >= 2000){
@@ -98,7 +99,7 @@ public class Window implements Serializable {
 		if(this.startX < x && x < this.startX+mainWidth && this.startY < y && y < this.startY+mainHeight){
 			if(!this.current){
 				this.canChangeColor = true;
-				this.time = System.currentTimeMillis();
+				this.time = currentTime;
 				this.now = 0;
 			}
 			else if(this.now >= 2000){
@@ -117,12 +118,13 @@ public class Window implements Serializable {
 	}
 	
 	public void paintComponent(Graphics2D g2d){
+		this.currentTime = System.currentTimeMillis();
 		g2d.setColor(color);
 		g2d.setStroke(new BasicStroke(10));
 		g2d.drawRect(x, y, width, height);
 		if(canChangeColor){
 			if(now < 2000){
-				now = System.currentTimeMillis()-time;
+				now = currentTime-time;
 			}
 			if(now >= 2000){
 				now = 2000;
@@ -139,7 +141,7 @@ public class Window implements Serializable {
 		g2d.drawRect(mainX, mainY, mainWidth, mainHeight);
 		if(canChangeColor){
 			if(now < 2000){
-				now = System.currentTimeMillis()-time;
+				now = currentTime-time;
 			}
 			if(now >= 2000){
 				now = 2000;

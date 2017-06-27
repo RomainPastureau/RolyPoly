@@ -54,7 +54,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MainView Test", "0.3", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly MainView Test", "0.15", options, colors, 0.5f, d);
 		this.test = new TestLayer(4, d);
 		this.menu = true;
 		this.connect = false;
@@ -72,7 +72,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MainView Test", "0.3", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly MainView Test", "0.15", options, colors, 0.5f, d);
 		this.test = new TestLayer(4, x, y, d);
 		this.menu = true;
 		this.connect = false;
@@ -93,12 +93,14 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 			if(!connect){
 				col = Color.RED;
 				con = "Non connecté";
+				CenterText.center((Graphics2D)g, con, font, 80, col, width-430, height-140, new Dimension(300, 60));
 			}
 			else{
 				col = new Color(153, 204, 0);
 				con = "Connecté";
+				CenterText.center((Graphics2D)g, con, font, 80, col, width-320, height-140, new Dimension(300, 60));
 			}
-			CenterText.center((Graphics2D)g, con, font, 80, col, width-300, height-140, new Dimension(300, 60));
+			
 		}
 		else{
 			test.paintComponent((Graphics2D)g);

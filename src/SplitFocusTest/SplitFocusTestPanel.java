@@ -53,7 +53,7 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly SplitFocus Test", "0.3", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly SplitFocus Test", "0.15", options, colors, 0.5f, d);
 		this.test = new TestLayer(2, d);
 		this.connect = false;
 		this.menu = true;
@@ -71,7 +71,7 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "0.3", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "0.15", options, colors, 0.5f, d);
 		this.test = new TestLayer(2, x, y, d);
 		this.connect = false;
 		this.menu = true;
@@ -89,12 +89,14 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 			if(!connect){
 				col = Color.RED;
 				con = "Non connecté";
+				CenterText.center((Graphics2D)g, con, font, 80, col, width-430, height-140, new Dimension(300, 60));
 			}
 			else{
 				col = new Color(153, 204, 0);
 				con = "Connecté";
+				CenterText.center((Graphics2D)g, con, font, 80, col, width-320, height-140, new Dimension(300, 60));
 			}
-			CenterText.center((Graphics2D)g, con, font, 80, col, width-300, height-140, new Dimension(300, 60));
+			
 
 			if(tl.getMenu() == false){
 				menu = false;

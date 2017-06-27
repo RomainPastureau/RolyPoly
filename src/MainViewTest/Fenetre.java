@@ -42,7 +42,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly SplitFocus Test 0.3");
+		this.setTitle("RolyPoly SplitFocus Test 0.15");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -104,21 +104,15 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				windows = sft.getWindows();
 				while(alive){
 					try {
-						System.out.println("Réception.");
 						info = ois.readBoolean();
-						System.out.print("Moves ? "+info+" - ");
 						if(info){
-							System.out.print("Réception de fenêtres. - ");
 							tempW = (ArrayList<Window>)ois.readObject();
 							if(tempW != null){
 								windows = tempW;
 								sft.updateWindows(windows);
 							}
 						}
-						alive = (boolean)ois.readObject();
-						System.out.print("En vie ? "+alive);
 						sft.setAlive(alive);
-						System.out.print("\n");
 					} catch (NullPointerException e){
 						System.out.println("Rien n'a été reçu.");
 					} catch (SocketException e) {

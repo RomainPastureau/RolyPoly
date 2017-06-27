@@ -69,11 +69,13 @@ public class DualScreenTestPanel extends JPanel implements MouseListener, KeyLis
 			Color col;
 			if(!connect){
 				col = Color.RED;
+				CenterText.center((Graphics2D)g, type, font, 80, col, width-430, height-140, new Dimension(300, 60));
 			}
 			else{
 				col = new Color(153, 204, 0);
+				CenterText.center((Graphics2D)g, type, font, 80, col, width-320, height-140, new Dimension(300, 60));
 			}
-			CenterText.center((Graphics2D)g, type, font, 80, col, width-300, height-140, new Dimension(300, 60));
+			
 			if(tl.getMenu() == false){
 				menu = false;
 				tl.setMenu(true);
