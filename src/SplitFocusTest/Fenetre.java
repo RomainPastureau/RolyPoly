@@ -7,13 +7,17 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 import Shared.PressKey;
+import Shared.Window;
 import TUIO.TuioBlob;
 import TUIO.TuioClient;
 import TUIO.TuioCursor;
@@ -32,10 +36,11 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected ServerSocket serveurSocket;
 	protected Socket clientSocket;
 	protected ObjectOutputStream oos;
+	protected ObjectInputStream ois;
 	protected boolean on, startThreads, menu; 
-	protected volatile boolean moves;
+	protected volatile boolean moves, alive;
 	protected InitThread it;
-	protected Thread envoi;
+	protected Thread envoi, recevoir;
 	
 	public Fenetre(){
 		
@@ -95,18 +100,22 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	
 	public void initThreads(){
 		this.envoi = new Thread(new Runnable() {
+			boolean mv;
 			public void run(){
 				while(true){
 					try{
-						if(moves){
-							System.out.println(System.currentTimeMillis());
+						mv = moves;
+						oos.writeBoolean(mv);
+						oos.flush();
+						oos.reset();
+						if(mv){
 							oos.writeObject(sft.getWindows());
 							oos.flush();
 							oos.reset();
-							oos.writeBoolean(sft.getAlive());
-							oos.flush();
-							oos.reset();
 						}
+						oos.writeBoolean(sft.getAlive());
+						oos.flush();
+						oos.reset();
 					} catch(NullPointerException e){
 						//System.out.println("Rien n'est envoyé.");
 					} catch(IOException e){
@@ -115,6 +124,40 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				}	
 			}
 		});
+//		this.recevoir = new Thread(new Runnable() {
+//			ArrayList<Window> windows, tempW;
+//			@Override
+//			public void run() {
+//				windows = sft.getWindows();
+//				while(sft.getAlive()){
+//					try {
+//						System.out.println("Réception.");
+//						tempW = (ArrayList<Window>)ois.readObject();
+//						if(tempW != null){
+//							windows = tempW;
+//							sft.updateWindows(windows);
+//						}
+//						alive = (boolean)ois.readObject();
+//						sft.setAlive(alive);
+//					} catch (NullPointerException e){
+//						System.out.println("Rien n'a été reçu.");
+//					} catch (SocketException e) {
+//						System.out.println("Système déconnecté.");
+//					} catch (IOException e){
+//						e.printStackTrace();
+//					} catch (ClassNotFoundException e){
+//						e.printStackTrace();
+//					}
+//				}
+//				try{
+//					System.out.println("Serveur déconnecté");
+//					ois.close();
+//					clientSocket.close();
+//				} catch(IOException e){
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {

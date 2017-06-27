@@ -37,7 +37,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected ObjectInputStream ois;
 	protected boolean on, startThreads, menu;
 	protected InitThread it;
-	protected Thread recevoir;
+	protected Thread envoi, recevoir;
 	
 	public Fenetre(){
 		
@@ -98,16 +98,20 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		this.recevoir = new Thread(new Runnable() {
 			ArrayList<Window> windows, tempW;
 			boolean alive = true;
+			boolean info = true;
 			@Override
 			public void run() {
 				windows = sft.getWindows();
 				while(alive){
 					try {
 						System.out.println("Réception.");
-						tempW = (ArrayList<Window>)ois.readObject();
-						if(tempW != null){
-							windows = tempW;
-							sft.updateWindows(windows);
+						info = ois.readBoolean();
+						if(info){
+							tempW = (ArrayList<Window>)ois.readObject();
+							if(tempW != null){
+								windows = tempW;
+								sft.updateWindows(windows);
+							}
 						}
 						alive = (boolean)ois.readObject();
 						sft.setAlive(alive);

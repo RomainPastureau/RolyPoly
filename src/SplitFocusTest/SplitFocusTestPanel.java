@@ -123,6 +123,10 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		return(test.getWindows());
 	}
 	
+	public void updateWindows(ArrayList<Window> windows){
+		test.updateWindows(windows);
+	}
+	
 	public void mouseClicked(MouseEvent e) {
 		this.tl.mouseClicked(e);
 	}
@@ -141,6 +145,10 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 	
 	public boolean getAlive(){
 		return(this.alive);
+	}
+	
+	public void setAlive(boolean alive){
+		this.alive = alive;
 	}
 	
 	public void keyPressed(KeyEvent ke) {

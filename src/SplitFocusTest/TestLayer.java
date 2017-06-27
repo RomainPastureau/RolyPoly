@@ -101,6 +101,10 @@ public class TestLayer extends Layer implements KeyListener, MouseMotionListener
 		return(windows);
 	}
 	
+	public void updateWindows(ArrayList<Window> windows){
+		this.windows = windows;
+	}
+	
 	public boolean moves(){
 		return(this.movesMouse || this.movesTUIO);
 	}
