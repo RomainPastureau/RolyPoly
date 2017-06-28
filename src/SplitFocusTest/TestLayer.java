@@ -40,6 +40,7 @@ public class TestLayer extends Layer implements KeyListener, MouseMotionListener
 	protected int previous;
 	protected boolean lastAlt;
 	protected boolean movesMouse, movesTUIO;
+	protected String control;
 	
 	public TestLayer(int nbZones, Dimension d){
 		super(d);
@@ -317,6 +318,10 @@ public class TestLayer extends Layer implements KeyListener, MouseMotionListener
 			this.previous = ke.getKeyCode()-96;
 			setAreaPlacement();
 		}
+	}
+	
+	public void setControl(String control){
+		this.control = control;
 	}
 	
 	public void mouseClicked(MouseEvent e) {

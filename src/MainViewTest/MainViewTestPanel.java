@@ -116,6 +116,10 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		}
 	}
 	
+	public void setControl(String control){
+		test.setControl(control);
+	}
+	
 	public boolean getAlive(){
 		return(this.alive);
 	}

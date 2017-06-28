@@ -41,6 +41,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	protected int previous;
 	protected boolean lastAlt, movesMouse, movesTUIO;
 	protected LateralBar lb;
+	protected String control;
 	
 	public TestLayer(int nbZones, Dimension d){
 		super(d);
@@ -95,6 +96,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		
 		this.movesMouse = false;
 		this.movesTUIO = false;
+		this.control = "SplitView";
 		
 		//Mise en place de l'arrangement initial
 		if(nbZones == 4){
@@ -127,7 +129,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		
 		//Affichage des fenêtres courantes
 		for(Window win : windows){
-			if(win.getActive()){
+			if(win.getActive() && control == "MainView"){
 				currentImage = win.getModuleID();
 				move((int)mouse.getX(), (int)mouse.getY(), win, img);
 			}
@@ -150,7 +152,12 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		return(this.windows);
 	}
 	
+	public void setControl(String control){
+		this.control = control;
+	}
+	
 	public void move(int a, int b, Window w, ImageModule img){
+		
 		if(w.getActive()){
 			w.setMainX(w.getLastMainX()+(a-w.getContactX()), img);
 			w.setMainY(w.getLastMainY()+(b-w.getContactY()), img);

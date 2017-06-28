@@ -38,9 +38,10 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected ObjectInputStream ois;
 	protected ObjectOutputStream oos;
 	protected boolean on, startThreads, menu;
-	protected volatile boolean moves;
+	protected volatile boolean moves, ctrl, alive;
 	protected InitThread it;
 	protected Thread envoi, recevoir;
+	protected volatile String control;
 	
 	public Fenetre(){
 		
@@ -76,6 +77,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		
 		this.on = false;
 		this.startThreads = true;
+		this.control = "SplitView";
 		
 		this.it = new InitThread(this);
 		this.it.start();
@@ -98,23 +100,29 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		}		
 	}
 	
+	public void setControl(){
+		sft.setControl(control);
+	}
+	
 	public void initThreads(){		
 		this.recevoir = new Thread(new Runnable() {
 			ArrayList<Window> windows, tempW;
-			boolean alive = true;
-			String control = "SplitView";
-			boolean ctrl = false;
 			@Override
 			public void run() {
+				alive = true;
+				control = "SplitView";
+				ctrl = false;
 				windows = sft.getWindows();
 				while(alive){
 					try {
 						ctrl = ois.readBoolean();
 						if(ctrl == true){
 							control = "SplitView";
+							setControl();
 						}
 						else{
 							control = "MainView";
+							setControl();
 						}
 						if(control == "SplitView"){
 							tempW = (ArrayList<Window>)ois.readObject();

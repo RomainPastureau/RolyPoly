@@ -113,6 +113,10 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		return(menu);
 	}
 	
+	public void setControl(String control){
+		test.setControl(control);
+	}
+	
 	public void setConnect(boolean connect){
 		this.connect = connect;
 	}
