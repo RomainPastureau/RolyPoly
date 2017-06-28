@@ -73,7 +73,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		//Définition des fenêtres
 		this.windows = new ArrayList<Window>();
 		for(int i = 0; i < 9; i++){
-			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i), i, 1.f));
+			this.windows.add(new Window(i, 0, 0, 0, 0, colors.get(i), 0, 1.f));
 		}
 		
 		//Ouverture des fichiers images
@@ -83,9 +83,9 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		//Définition des modules images
 		this.modules = new ArrayList<ImageModule>();
 		System.out.print("Lecture des fichiers image...");
-		for(int i = 0; i < 9; i++){
+		for(int i = 0; i < 1; i++){
 			try{
-				BufferedImage bim = ImageIO.read(files.get(i));
+				BufferedImage bim = ImageIO.read(files.get(0));
 				ImageModule mod = new ImageModule(bim);
 				this.modules.add(mod);
 			} catch(IOException e){

@@ -1,9 +1,10 @@
-/DualScreenTest/
-/MultiTouchTest/
-/TUIO/
-/Garbage/
-/fr/
-/XIMU/
 /AreaTest/
+/DualScreenTest/
+/Garbage/
 /MainViewTest/
+/MultiTouchTest/
+/ResolutionTest/
+/Shared/
 /SplitFocusTest/
+/TUIO/
+/fr/
