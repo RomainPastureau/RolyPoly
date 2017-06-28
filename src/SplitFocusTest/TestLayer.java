@@ -278,6 +278,10 @@ public class TestLayer extends Layer implements KeyListener, MouseMotionListener
 			lastAlt = true;
 		}
 		
+		for(int i = nbZones; i < 9; i++){
+			windows.get(i).setPosition(0, 0, 0, 0);
+		}
+		
 	}
 	
 	public void paintComponent(Graphics g){
