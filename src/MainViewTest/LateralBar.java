@@ -64,13 +64,13 @@ public class LateralBar {
 		g.setColor(new Color(80, 80, 80, (int)opacity));
 		g.fillRoundRect(x, y, width, height, 20, 20);
 		g.setColor(new Color(150, 150, 150, (int)opacity));
-		for(int i:activeImages){
+		for(int i = 0; i < activeImages.size(); i++){
 			if(activeImages.get(i) == currentImage){
 				if(this.orientation == "Horizontal"){
-					g.fillRect(20+x+(((width-40)/9)*currentImage), y, (width-40)/9, 100);
+					g.fillRect(20+x+(((width-40)/9)*i), y, (width-40)/9, 100);
 				}
 				else{
-					g.fillRect(x, 20+y+(((height-40)/9)*currentImage), 100, (height-40)/9);
+					g.fillRect(x, 20+y+(((height-40)/9)*i), 100, (height-40)/9);
 				}
 				break;
 			}

@@ -83,9 +83,9 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		//Définition des modules images
 		this.modules = new ArrayList<ImageModule>();
 		System.out.print("Lecture des fichiers image...");
-		for(int i = 0; i < 1; i++){
+		for(int i = 0; i < 9; i++){
 			try{
-				BufferedImage bim = ImageIO.read(files.get(0));
+				BufferedImage bim = ImageIO.read(files.get(2));
 				ImageModule mod = new ImageModule(bim);
 				this.modules.add(mod);
 			} catch(IOException e){
