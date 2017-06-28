@@ -79,22 +79,22 @@ public class LateralBar {
 					im.paintComponent(g, 20+x+(((width-40)/9)*i), y+10, (width-40)/9, 80);
 					int j = 0;
 					for(Window w:windows){
-						if(w.getWidth() > 0 && w.getID() == i){
+						//if(w.getWidth() > 0 && w.getID() == i){
 							g.setColor(w.getColor());
 							g.fillRect(20+x+(((width-40)/9)*i)+((j%3)*25)+(((width-40)/9)/2)-35, y+15+((int)(j/3)*25), 20, 20);
 							j++;
-						}
+						//}
 					}
 				}
 				else{
 					im.paintComponent(g, x+10, 20+y+(((height-40)/9)*i), 80, (height-40)/9);
 					int j = 0;
 					for(Window w:windows){
-						if(w.getWidth() > 0 && w.getID() == i){
+						//if(w.getWidth() > 0 && w.getID() == i){
 							g.setColor(w.getColor());
 							g.fillRect(x+15+((j%3)*25), 20+y+(((height-40)/9)*i)+((int)(j/3)*25)+(((height-40)/9)/2)-35, 20, 20);
 							j++;
-						}
+						//}
 					}
 				}
 			}

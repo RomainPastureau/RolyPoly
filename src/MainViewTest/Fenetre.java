@@ -37,8 +37,8 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected Socket clientSocket;
 	protected ObjectInputStream ois;
 	protected ObjectOutputStream oos;
-	protected boolean on, startThreads, menu;
-	protected volatile boolean moves, ctrl, alive;
+	protected boolean startThreads, menu;
+	protected volatile boolean on, moves, ctrl, alive;
 	protected InitThread it;
 	protected Thread envoi, recevoir;
 	protected volatile String control;
