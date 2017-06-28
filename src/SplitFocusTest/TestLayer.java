@@ -45,7 +45,6 @@ public class TestLayer extends Layer implements KeyListener, MouseMotionListener
 		super(d);
 		this.nbZones = nbZones;
 		setup();
-
 	}
 	
 	public TestLayer(int nbZones, int x, int y, Dimension d){

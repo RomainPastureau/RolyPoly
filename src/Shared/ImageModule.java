@@ -85,6 +85,14 @@ public class ImageModule extends Module {
 		return(new Dimension(this.resizedWidth, this.resizedHeight));
 	}
 	
+	public int getResizedWidth(){
+		return(this.resizedWidth);
+	}
+	
+	public int getResizedHeight(){
+		return(this.resizedHeight);
+	}
+	
 	public float getRatio(){
 		float ratio = (float)this.resizedWidth/(float)this.width;
 		if(ratio <= 1){

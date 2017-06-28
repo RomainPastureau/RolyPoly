@@ -18,7 +18,7 @@ public class Window implements Serializable {
 	protected long time, now, currentTime;
 	protected boolean canChangeColor;
 	protected int moduleID;
-	protected int startX, startY, lastStartX, lastStartY;
+	protected int startX, startY, lastStartX, lastStartY, lastMainX, lastMainY;
 	protected float ratio;
 	
 	public Window(int id, int x, int y, int width, int height, Color color, int moduleID, float ratio){
@@ -41,6 +41,8 @@ public class Window implements Serializable {
 		this.startY = 0;
 		this.mainX = 0;
 		this.mainY = 0;
+		this.lastMainX = 0;
+		this.lastMainY = 0;
 		this.lastStartX = 0;
 		this.lastStartY = 0;
 		this.currentTime = System.currentTimeMillis();
@@ -73,6 +75,11 @@ public class Window implements Serializable {
 		this.lastStartY = this.startY;
 	}
 	
+	public void updateCornerMain(){
+		this.lastMainX = this.mainX;
+		this.lastMainY = this.mainY;
+	}
+	
 	public boolean isInside(int x, int y){
 		if(this.x < x && x < this.x+width && this.y < y && y < this.y+height){
 			if(!this.current){
@@ -95,8 +102,8 @@ public class Window implements Serializable {
 		return(false);
 	}
 	
-	public boolean isInsideMain(int x, int y){
-		if(this.startX < x && x < this.startX+mainWidth && this.startY < y && y < this.startY+mainHeight){
+	public boolean isInsideMain(int x, int y, int currentImage){
+		if(this.startX < x && x < this.startX+mainWidth && this.startY < y && y < this.startY+mainHeight && this.moduleID == currentImage){
 			if(!this.current){
 				this.canChangeColor = true;
 				this.time = currentTime;
@@ -212,6 +219,30 @@ public class Window implements Serializable {
 		return(this.lastStartY);
 	}
 	
+	public int getLastMainX(){
+		return(this.lastMainX);
+	}
+	
+	public int getLastMainY(){
+		return(this.lastMainY);
+	}
+	
+	public int getMainX(){
+		return(this.mainX);
+	}
+	
+	public int getMainY(){
+		return(this.mainY);
+	}
+	
+	public int getMainWidth(){
+		return(this.mainWidth);
+	}
+	
+	public int getMainHeight(){
+		return(this.mainHeight);
+	}
+	
 	public void setStartX(int startX){
 		this.startX = startX;
 	}
@@ -219,6 +250,18 @@ public class Window implements Serializable {
 	public void setStartY(int startY){
 		this.startY = startY;
 	}
+	
+	public void setMainX(int mainX, ImageModule img){
+		this.mainX = mainX;
+		this.startX = (int)((mainX - img.getStartX())/ratio);
+	}
+	
+	public void setMainY(int mainY, ImageModule img){
+		this.mainY = mainY;
+		this.startY = (int)((mainY - img.getStartY())/ratio);
+	}
+	
+	
 	
 	public void update(float ratio, int imgStartX, int imgStartY){
 		this.ratio = ratio;

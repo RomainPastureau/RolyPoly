@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -120,10 +122,14 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		//Calcul du ratio de l'image en cours
 		float ratio = img.getRatio();
 		
+		//Récupération des informations du pointeur
+		Point mouse = MouseInfo.getPointerInfo().getLocation();
+		
 		//Affichage des fenêtres courantes
 		for(Window win : windows){
 			if(win.getActive()){
 				currentImage = win.getModuleID();
+				move((int)mouse.getX(), (int)mouse.getY(), win, img);
 			}
 			if(win.getModuleID() == currentImage){
 				win.update(ratio, img.getStartX(), img.getStartY());
@@ -146,20 +152,20 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	public void move(int a, int b, Window w, ImageModule img){
 		if(w.getActive()){
-			w.setStartX(w.getLastStartX()-(a-w.getContactX()));
-			w.setStartY(w.getLastStartY()-(b-w.getContactY()));
+			w.setMainX(w.getLastMainX()+(a-w.getContactX()), img);
+			w.setMainY(w.getLastMainY()+(b-w.getContactY()), img);
 		}
-		if(w.getStartX() > img.getWidth()-w.getWidth()){
-			w.setStartX(img.getWidth()-w.getWidth());
+		if(w.getMainX() > img.getStartX()+img.getResizedWidth()-w.getMainWidth()){
+			w.setMainX(img.getStartX()+img.getResizedWidth()-w.getMainWidth(), img);
 		}
-		if(w.getStartX() < 0){
-			w.setStartX(0);
+		if(w.getMainX() < img.getStartX()){
+			w.setMainX(img.getStartX(), img);
 		}
-		if(w.getStartY() > img.getHeight()-w.getHeight()){
-			w.setStartY(img.getHeight()-w.getHeight());
+		if(w.getMainY() > img.getStartY()+img.getResizedHeight()-w.getMainHeight()){
+			w.setMainY(img.getStartY()+img.getResizedHeight()-w.getMainHeight(), img);
 		}
-		if(w.getStartY() < 0){
-			w.setStartY(0);
+		if(w.getMainY() < img.getStartY()){
+			w.setMainY(img.getStartY(), img);
 		}
 	}
 	
@@ -228,13 +234,17 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void mousePressed(MouseEvent e) {
 		this.movesMouse = true;
 		for(Window w : windows){
-			w.isInsideMain(e.getX(), e.getY());
+			w.isInsideMain(e.getX(), e.getY(), currentImage);
 		}	
 		currentImage = lb.selectImage(e);
 	}
 	
 	public void mouseReleased(MouseEvent e) {
 		this.movesMouse = false;
+		for(Window w:windows){
+			w.setInactive();
+			w.updateCornerMain();
+		}
 	}
 	
 	public void keyReleased(KeyEvent ke) {}
