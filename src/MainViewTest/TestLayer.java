@@ -133,7 +133,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 				currentImage = win.getModuleID();
 				move((int)mouse.getX(), (int)mouse.getY(), win, img);
 			}
-			if(win.getModuleID() == currentImage){
+			if(win.getModuleID() == currentImage && win.getWidth() != 0){
 				win.update(ratio, img.getStartX(), img.getStartY());
 				win.paintComponentMain(g2d);
 			}
@@ -154,6 +154,10 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	public void setControl(String control){
 		this.control = control;
+	}
+	
+	public String getControl(){
+		return(this.control);
 	}
 	
 	public void move(int a, int b, Window w, ImageModule img){
@@ -217,6 +221,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	public void addTuioCursor(TuioCursor tc) {
 		if(tc.getCursorID() == 0){
+			this.control = "MainView";
 			this.movesTUIO = true;
 		}
 	}
@@ -239,6 +244,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void updateTuioObject(TuioObject t) {}
 	
 	public void mousePressed(MouseEvent e) {
+		this.control = "MainView";
 		this.movesMouse = true;
 		for(Window w : windows){
 			w.isInsideMain(e.getX(), e.getY(), currentImage);

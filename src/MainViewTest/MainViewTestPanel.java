@@ -55,7 +55,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MainView Test", "0.17", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly MainView Test", "0.25", options, colors, 0.5f, d);
 		this.test = new TestLayer(4, d);
 		this.menu = true;
 		this.connect = false;
@@ -74,7 +74,7 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MainView Test", "0.17", options, colors, 0.5f, d);
+		this.tl = new TitleLayer("RolyPoly MainView Test", "0.25", options, colors, 0.5f, d);
 		this.test = new TestLayer(4, x, y, d);
 		this.menu = true;
 		this.connect = false;
@@ -118,6 +118,10 @@ public class MainViewTestPanel extends JPanel implements MouseListener, KeyListe
 	
 	public void setControl(String control){
 		test.setControl(control);
+	}
+	
+	public String getControl(String control){
+		return(test.getControl());
 	}
 	
 	public boolean getAlive(){

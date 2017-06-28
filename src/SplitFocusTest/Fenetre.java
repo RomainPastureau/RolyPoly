@@ -46,7 +46,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly SplitFocus Test 0.17");
+		this.setTitle("RolyPoly SplitFocus Test 0.25");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -113,6 +113,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 					try{
 						if(moves){
 							control = "SplitView";
+							ctrl = true;
 						}
 						oos.writeBoolean(ctrl);
 						oos.flush();
@@ -136,43 +137,54 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				}	
 			}
 		});
-//		this.recevoir = new Thread(new Runnable() {
-//			ArrayList<Window> windows, tempW;
-//			boolean alive = true;
-//			String control = "SplitView";
-//			@Override
-//			public void run() {
-//				windows = sft.getWindows();
-//				while(alive){
-//					try {
-//						control = ois.readUTF();
-//						if(control == "MainView"){
-//							tempW = (ArrayList<Window>)ois.readObject();
-//							if(tempW != null){
-//								windows = tempW;
-//								sft.updateWindows(windows);
-//							}
-//						}
-//						sft.setAlive(alive);
-//					} catch (NullPointerException e){
-//						//System.out.println("Rien n'a été reçu.");
-//					} catch (SocketException e) {
-//						System.out.println("Système déconnecté.");
-//					} catch (IOException e){
-//						e.printStackTrace();
-//					} catch (ClassNotFoundException e){
-//						e.printStackTrace();
-//					}
-//				}
-//				try{
-//					System.out.println("Serveur déconnecté");
-//					ois.close();
-//					clientSocket.close();
-//				} catch(IOException e){
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+		this.recevoir = new Thread(new Runnable() {
+			ArrayList<Window> windows, tempW;
+			@Override
+			public void run() {
+				windows = sft.getWindows();
+				alive = true;
+				control = "SplitView";
+				ctrl = false;
+				windows = sft.getWindows();
+				while(alive){
+					try {
+						ctrl = ois.readBoolean();
+						if(ctrl == true){
+							control = "SplitView";
+							setControl();
+						}
+						else{
+							control = "MainView";
+							setControl();
+						}
+						if(control == "MainView"){
+							tempW = (ArrayList<Window>)ois.readObject();
+							sft.setControl(control);
+							if(tempW != null){
+								windows = tempW;
+								sft.updateWindows(windows);
+							}
+						}
+						sft.setAlive(alive);
+					} catch (NullPointerException e){
+						//System.out.println("Rien n'a été reçu.");
+					} catch (SocketException e) {
+						System.out.println("Système déconnecté.");
+					} catch (IOException e){
+						e.printStackTrace();
+					} catch (ClassNotFoundException e){
+						e.printStackTrace();
+					}
+				}
+				try{
+					System.out.println("Serveur déconnecté");
+					ois.close();
+					clientSocket.close();
+				} catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	public void addTuioCursor(TuioCursor tc) {
