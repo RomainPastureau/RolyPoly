@@ -103,12 +103,19 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 			ArrayList<Window> windows, tempW;
 			boolean alive = true;
 			String control = "SplitView";
+			boolean ctrl = false;
 			@Override
 			public void run() {
 				windows = sft.getWindows();
 				while(alive){
 					try {
-						control = ois.readUTF();
+						ctrl = ois.readBoolean();
+						if(ctrl == true){
+							control = "SplitView";
+						}
+						else{
+							control = "MainView";
+						}
 						if(control == "SplitView"){
 							tempW = (ArrayList<Window>)ois.readObject();
 							if(tempW != null){
@@ -122,6 +129,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 						//System.out.println("Rien n'a été reçu.");
 					} catch (SocketException e) {
 						System.out.println("Système déconnecté.");
+						break;
 					} catch (IOException e){
 						e.printStackTrace();
 					} catch (ClassNotFoundException e){

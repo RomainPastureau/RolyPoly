@@ -101,13 +101,14 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public void initThreads(){
 		this.envoi = new Thread(new Runnable() {
 			String control = "SplitView";
+			boolean ctrl = true; 
 			public void run(){
 				while(true){
 					try{
 						if(moves){
 							control = "SplitView";
 						}
-						oos.writeUTF(control);
+						oos.writeBoolean(ctrl);
 						oos.flush();
 						oos.reset();
 						if(control == "SplitView"){
@@ -120,6 +121,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 						oos.reset();
 					} catch(NullPointerException e){
 						//System.out.println("Rien n'est envoyé.");
+					} catch(SocketException e){
+						System.out.println("Déconnexion");
+						break;
 					} catch(IOException e){
 						e.printStackTrace();
 					}

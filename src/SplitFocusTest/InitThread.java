@@ -25,10 +25,11 @@ public class InitThread extends Thread {
 			try{
 				fenetre.serveurSocket = new ServerSocket(4242);
 				fenetre.clientSocket = fenetre.serveurSocket.accept();
-				System.out.println("Connexion OK");
 				fenetre.on = true;
 				fenetre.oos = new ObjectOutputStream(new BufferedOutputStream(fenetre.clientSocket.getOutputStream()));
-				//fenetre.ois = new ObjectInputStream(new BufferedInputStream(fenetre.clientSocket.getInputStream()));
+				System.out.println("Connexion entrante OK");
+				fenetre.ois = new ObjectInputStream(new BufferedInputStream(fenetre.clientSocket.getInputStream()));
+				System.out.println("Connexion sortante OK");
 			} catch(IOException e){
 				e.printStackTrace();
 			}

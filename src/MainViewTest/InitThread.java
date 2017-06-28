@@ -26,8 +26,9 @@ public class InitThread extends Thread {
 			try{
 				fenetre.clientSocket = new Socket("141.115.72.18", 4242);
 				fenetre.ois = new ObjectInputStream(new BufferedInputStream(fenetre.clientSocket.getInputStream()));
-				//fenetre.oos = new ObjectOutputStream(new BufferedOutputStream(fenetre.clientSocket.getOutputStream()));
-				System.out.println("Connexion OK");
+				System.out.println("Connexion sortante OK");
+				fenetre.oos = new ObjectOutputStream(new BufferedOutputStream(fenetre.clientSocket.getOutputStream()));
+				System.out.println("Connexion entrante OK");
 				fenetre.sft.setConnect(true);
 				fenetre.on = true;
 			} catch(ConnectException e){
