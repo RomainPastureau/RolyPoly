@@ -149,15 +149,10 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				while(alive){
 					try {
 						ctrl = ois.readBoolean();
-						if(ctrl == true){
-							control = "SplitView";
+						if(!moves){
 							setControl();
 						}
-						else{
-							control = "MainView";
-							setControl();
-						}
-						if(control == "MainView"){
+						if(!ctrl){
 							tempW = (ArrayList<Window>)ois.readObject();
 							sft.setControl(control);
 							if(tempW != null){

@@ -221,7 +221,6 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	
 	public void addTuioCursor(TuioCursor tc) {
 		if(tc.getCursorID() == 0){
-			this.control = "MainView";
 			this.movesTUIO = true;
 		}
 	}
@@ -244,7 +243,6 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 	public void updateTuioObject(TuioObject t) {}
 	
 	public void mousePressed(MouseEvent e) {
-		this.control = "MainView";
 		this.movesMouse = true;
 		for(Window w : windows){
 			w.isInsideMain(e.getX(), e.getY(), currentImage);
