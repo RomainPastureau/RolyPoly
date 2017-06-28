@@ -116,6 +116,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 								sft.updateWindows(windows);
 							}
 						}
+						alive = ois.readBoolean();
 						sft.setAlive(alive);
 					} catch (NullPointerException e){
 						//System.out.println("Rien n'a été reçu.");
@@ -136,33 +137,33 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				}
 			}
 		});
-		this.envoi = new Thread(new Runnable() {
-			String control = "SplitView";
-			public void run(){
-				while(true){
-					try{
-						if(moves){
-							control = "MainView";
-						}
-						oos.writeUTF(control);
-						oos.flush();
-						oos.reset();
-						if(control == "MainView"){
-							oos.writeObject(sft.getWindows());
-							oos.flush();
-							oos.reset();
-						}
-						oos.writeBoolean(sft.getAlive());
-						oos.flush();
-						oos.reset();
-					} catch(NullPointerException e){
-						System.out.println("Rien n'est envoyé.");
-					} catch(IOException e){
-						e.printStackTrace();
-					}
-				}	
-			}
-		});
+//		this.envoi = new Thread(new Runnable() {
+//			String control = "SplitView";
+//			public void run(){
+//				while(true){
+//					try{
+//						if(moves){
+//							control = "MainView";
+//						}
+//						oos.writeUTF(control);
+//						oos.flush();
+//						oos.reset();
+//						if(control == "MainView"){
+//							oos.writeObject(sft.getWindows());
+//							oos.flush();
+//							oos.reset();
+//						}
+//						oos.writeBoolean(sft.getAlive());
+//						oos.flush();
+//						oos.reset();
+//					} catch(NullPointerException e){
+//						System.out.println("Rien n'est envoyé.");
+//					} catch(IOException e){
+//						e.printStackTrace();
+//					}
+//				}	
+//			}
+//		});
 	}
 	
 	public boolean moves(){
