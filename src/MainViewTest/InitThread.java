@@ -27,16 +27,19 @@ public class InitThread extends Thread {
 				fenetre.clientSocket = new Socket("141.115.72.18", 4242);
 				fenetre.oos = new ObjectOutputStream(new BufferedOutputStream(fenetre.clientSocket.getOutputStream()));
 				System.out.println("Connexion sortante OK");
+				fenetre.envoi.start();
 				fenetre.ois = new ObjectInputStream(new BufferedInputStream(fenetre.clientSocket.getInputStream()));
 				System.out.println("Connexion entrante OK");
+				fenetre.recevoir.start();
 				fenetre.sft.setConnect(true);
-				fenetre.on = true;
+				fenetre.on = true;				
 			} catch(ConnectException e){
 				System.out.println("Connexion refusée.");
 			} catch(IOException e){
 				e.printStackTrace();
 			} 
 		} 	
+
 		this.interrupt();
 	}
 

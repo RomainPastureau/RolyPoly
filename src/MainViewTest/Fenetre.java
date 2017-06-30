@@ -33,10 +33,10 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected PressKey pk;
 	protected TuioClient client;
 	protected MainViewTestPanel sft;
-	protected ServerSocket serveurSocket;
-	protected Socket clientSocket;
-	protected ObjectInputStream ois;
-	protected ObjectOutputStream oos;
+	protected volatile ServerSocket serveurSocket, serveurSocket2;
+	protected volatile Socket clientSocket, clientSocket2;
+	protected volatile ObjectInputStream ois;
+	protected volatile ObjectOutputStream oos;
 	protected boolean startThreads, menu;
 	protected volatile boolean on, moves, ctrlHere, ctrlThere, alive;
 	protected InitThread it;
@@ -91,9 +91,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public void go(){		
 		while(true){
 			menu = sft.getMenu();
-			if(!menu && startThreads){
-				envoi.start();
-				recevoir.start();
+			if(!menu && startThreads && on){
+//				envoi.start();
+//				recevoir.start();
 				startThreads = false;
 			}
 			sft.repaint();
@@ -170,7 +170,10 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 						oos.writeBoolean(sft.getAlive());
 						oos.flush();
 						oos.reset();
-					} catch(NullPointerException e){
+					} catch(SocketException e){
+						System.out.println("Socket Exception");
+						break;
+					}catch(NullPointerException e){
 						System.out.println("Rien n'est envoyé.");
 					} catch(IOException e){
 						e.printStackTrace();

@@ -96,7 +96,7 @@ public class TestLayer extends Layer implements KeyListener, MouseListener, Tuio
 		
 		this.movesMouse = false;
 		this.movesTUIO = false;
-		this.control = "SplitView";
+		this.control = "MainView";
 		
 		//Mise en place de l'arrangement initial
 		if(nbZones == 4){
