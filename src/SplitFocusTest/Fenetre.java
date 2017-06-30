@@ -27,26 +27,39 @@ import TUIO.TuioTime;
 
 public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioListener {
 	
+	//VARIABLES
 	private static final long serialVersionUID = 1L;
-	protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	protected int width, height;
-	protected PressKey pk;
-	protected TuioClient client;
-	protected SplitFocusTestPanel sft;
-	protected volatile ServerSocket serveurSocket;
+	
+	//Général
+	protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //Taille de la fenêtre
+	protected int width, height; //Taille de la fenêtre
+	protected SplitFocusTestPanel sft; //Panel JFrame
+	
+	//Entrées souris/tactiles/clavier
+	protected PressKey pk; //Permet de fermer la fenêtre
+	protected TuioClient client; //Permet de récupérer le multitouch
+	
+	//Communication
+	protected volatile ServerSocket serveurSocket; 
 	protected volatile Socket clientSocket;
 	protected volatile ObjectOutputStream oos;
 	protected volatile ObjectInputStream ois;
-	protected boolean startThreads, menu; 
-	protected volatile boolean on, moves, alive, ctrlHere, ctrlThere;
-	protected InitThread it;
-	protected Thread envoi, recevoir;
+	
+	//Booléens et String divers
+	protected volatile boolean moves; //True si une action est effectuée sur la fenêtre en cours, false sinon
+	protected volatile boolean alive; //True si le programme n'a pas été fermé
+	protected volatile boolean ctrlHere, ctrlThere; //True si un controle est effectué sur la SplitView/la MainView
 	public volatile String control;
 	
+	//Threads
+	protected InitThread it;
+	protected Thread envoi, recevoir;
+	
+	//CONSTRUCTEUR
 	public Fenetre(){
 		
 		//Titre de fenêtre
-		this.setTitle("RolyPoly SplitFocus Test 0.25");
+		this.setTitle("RolyPoly SplitFocus Test 0.33");
 		
 		//Taille de la fenêtre
 		width = (int)screenSize.getWidth();
@@ -59,6 +72,8 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		
 		//Action à la fermeture
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//Insertion du panel
 		sft = new SplitFocusTestPanel(this.screenSize);
 		this.setContentPane(sft);
 		
@@ -75,139 +90,43 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		client.addTuioListener(this);
 		client.connect();
 		
-		this.on = false;
-		this.startThreads = true;
+		//Définition des booléens
 		this.control = "SplitView";
+		this.ctrlHere = true;
+		this.ctrlThere = false;
 		
+		//Lancement des threads
 		this.it = new InitThread(this);
 		this.it.start();
-		initThreads();
+		createThreads();
 	}	
 	
+	//BOUCLE GLOBALE
 	public void go(){
 		while(true){
-			menu = sft.getMenu();
-			if(!menu && startThreads && on){
-				//envoi.start();
-				//recevoir.start();
-				startThreads = false;
-			}
-			sft.repaint();
-			this.moves = this.moves();
+			sft.repaint(); //Actualisation du panel
+			this.moves = sft.moves(); //True si une action est effectuée
 		}
 	}
 	
-	public boolean moves(){
-		return(sft.moves());
-	}
-	
+	//Fonction de mise à jour du controle
 	public void setControl(){
 		sft.setControl(control);
 	}
 	
-	public void initThreads(){
-		this.envoi = new Thread(new Runnable() {
-			public void run(){
-				ctrlHere = true;
-				ctrlThere = false; 
-				while(true){
-					try{
-//						if(moves){
-//							control = "SplitView";
-//							ctrlHere = true;
-//						}
-//						else{
-//							ctrlHere = false;
-//						}
-						oos.writeBoolean(moves);
-						oos.flush();
-						oos.reset();
-						if(moves){
-							oos.writeObject(sft.getWindows());
-							oos.flush();
-							oos.reset();
-						}
-						oos.writeBoolean(sft.getAlive());
-						oos.flush();
-						oos.reset();
-					} catch(NullPointerException e){
-						//System.out.println("Rien n'est envoyé.");
-					} catch(SocketException e){
-						System.out.println("Déconnexion");
-						break;
-					} catch(IOException e){
-						e.printStackTrace();
-					}
-				}	
-			}
-		});
-		this.recevoir = new Thread(new Runnable() {
-			ArrayList<Window> windows, tempW;
-			@Override
-			public void run() {
-				windows = sft.getWindows();
-				while(alive){
-					try {
-//						ctrlThere = ois.readBoolean();
-//						if(!moves && ctrlThere){
-//							control = "MainView";
-//							setControl();
-//						}
-						ctrlThere = ois.readBoolean();
-						if(ctrlThere){
-							tempW = (ArrayList<Window>)ois.readObject();
-							sft.setControl(control);
-							if(tempW != null){
-								windows = tempW;
-								sft.updateWindows(windows);
-							}
-						}
-						sft.setAlive(alive);
-					} catch (NullPointerException e){
-						//System.out.println("Rien n'a été reçu.");
-					} catch (SocketException e) {
-						System.out.println("Système déconnecté.");
-					} catch (IOException e){
-						e.printStackTrace();
-					} catch (ClassNotFoundException e){
-						e.printStackTrace();
-					}
-				}
-				try{
-					System.out.println("Serveur déconnecté");
-					ois.close();
-					clientSocket.close();
-				} catch(IOException e){
-					e.printStackTrace();
-				}
-			}
-		});
+	public void createThreads(){
+		//Thread d'envoi
+		this.envoi = new SendThread("SplitFocus", this);
+		//Thread de réception
+		this.recevoir = new ReceiveThread("SplitFocus", this);
 	}
 	
-	public void addTuioCursor(TuioCursor tc) {
-		sft.addTuioCursor(tc);
-	}
-	
-	public void removeTuioCursor(TuioCursor tc) {
-		sft.removeTuioCursor(tc);
-	}
-
-	public void mouseClicked(MouseEvent e) {
-		sft.mouseClicked(e);		
-	}
-	
-	public void keyPressed(KeyEvent ke) {
-		sft.keyPressed(ke);
-	}
-	
-	public void mousePressed(MouseEvent e) {
-		sft.mousePressed(e);
-	}
-	
-	public void mouseReleased(MouseEvent e) {
-		sft.mouseReleased(e);
-	}
-	
+	public void addTuioCursor(TuioCursor tc) {sft.addTuioCursor(tc);}
+	public void removeTuioCursor(TuioCursor tc) {sft.removeTuioCursor(tc);}
+	public void mouseClicked(MouseEvent e) {sft.mouseClicked(e);}
+	public void keyPressed(KeyEvent ke) {sft.keyPressed(ke);}
+	public void mousePressed(MouseEvent e) {sft.mousePressed(e);}
+	public void mouseReleased(MouseEvent e) {sft.mouseReleased(e);}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void keyReleased(KeyEvent e) {}

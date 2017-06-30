@@ -1,16 +1,10 @@
 package SplitFocusTest;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.swing.SingleSelectionModel;
 
 public class InitThread extends Thread {
 
@@ -27,17 +21,15 @@ public class InitThread extends Thread {
 	
 	@Override
 	public void run() {
-		if(!fenetre.on){
-			try{
-				serveurSocket = new ServerSocket(4242);
-				fenetre.clientSocket = serveurSocket.accept();
-				LaunchMyServer();
+		try{
+			serveurSocket = new ServerSocket(4242);
+			fenetre.clientSocket = serveurSocket.accept();
+			LaunchMyServer();
 
-			} catch(IOException e){
-				e.printStackTrace();
-			}
-
+		} catch(IOException e){
+			e.printStackTrace();
 		}
+		
 		this.interrupt();
 	}
 	
@@ -58,15 +50,13 @@ public class InitThread extends Thread {
 					// Affichage seulement
 					fenetre.sft.setConnect(true);
 					// lancer la communication
-					fenetre.on = true;
 					fenetre.envoi.start();
 					fenetre.recevoir.start();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
+
 			}
 		});
 		ServerThread.start();
