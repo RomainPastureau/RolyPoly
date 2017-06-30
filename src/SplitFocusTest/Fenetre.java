@@ -33,10 +33,10 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	protected PressKey pk;
 	protected TuioClient client;
 	protected SplitFocusTestPanel sft;
-	protected ServerSocket serveurSocket;
-	protected Socket clientSocket;
-	protected ObjectOutputStream oos;
-	protected ObjectInputStream ois;
+	protected volatile ServerSocket serveurSocket;
+	protected volatile Socket clientSocket;
+	protected volatile ObjectOutputStream oos;
+	protected volatile ObjectInputStream ois;
 	protected boolean startThreads, menu; 
 	protected volatile boolean on, moves, alive, ctrlHere, ctrlThere;
 	protected InitThread it;
@@ -87,9 +87,9 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public void go(){
 		while(true){
 			menu = sft.getMenu();
-			if(!menu && startThreads){
-				envoi.start();
-				recevoir.start();
+			if(!menu && startThreads && on){
+				//envoi.start();
+				//recevoir.start();
 				startThreads = false;
 			}
 			sft.repaint();
@@ -112,17 +112,17 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				ctrlThere = false; 
 				while(true){
 					try{
-						if(moves){
-							control = "SplitView";
-							ctrlHere = true;
-						}
-						else{
-							ctrlHere = false;
-						}
-						oos.writeBoolean(ctrlHere);
+//						if(moves){
+//							control = "SplitView";
+//							ctrlHere = true;
+//						}
+//						else{
+//							ctrlHere = false;
+//						}
+						oos.writeBoolean(moves);
 						oos.flush();
 						oos.reset();
-						if(ctrlHere){
+						if(moves){
 							oos.writeObject(sft.getWindows());
 							oos.flush();
 							oos.reset();
@@ -148,11 +148,12 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 				windows = sft.getWindows();
 				while(alive){
 					try {
+//						ctrlThere = ois.readBoolean();
+//						if(!moves && ctrlThere){
+//							control = "MainView";
+//							setControl();
+//						}
 						ctrlThere = ois.readBoolean();
-						if(!moves && ctrlThere){
-							control = "MainView";
-							setControl();
-						}
 						if(ctrlThere){
 							tempW = (ArrayList<Window>)ois.readObject();
 							sft.setControl(control);
