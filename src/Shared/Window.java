@@ -22,98 +22,105 @@ public class Window implements Serializable {
 	protected float ratio;
 	
 	public Window(int id, int x, int y, int width, int height, Color color, int moduleID, float ratio){
-		this.id = id;
-		this.x = x;
+		this.id = id; //Identifiant de la fenêtre (entre 1 et 9)
+		this.moduleID = moduleID; //Identifiant du module, càd de l'image assignée à la fenêtre (entre 1 et 9)
+		
+		//Position de la fenêtre (SplitView)
+		this.x = x; 
 		this.y = y;
+		
+		//Position de la fenêtre (MainView)
+		this.mainX = 0;
+		this.mainY = 0;
+		
+		//Taille de la fenêtre (SplitView)
 		this.width = width;
 		this.height = height;
-		this.ratio = ratio;
+		
+		//Taille de la fenêtre (MainView)
 		this.mainWidth = (int)(ratio*width);
 		this.mainHeight = (int)(ratio*height);
+		
+		//Ratio de l'image dans la fenêtre (width/height de l'image)
+		this.ratio = ratio;
+
+		//Couleur de la fenêtre
 		this.color = color;
-		this.active = false;
+		
+		//Position de la fenêtre sur l'image
+		this.startX = 0;
+		this.startY = 0;
+		
+		//Position lors du clic sur l'image
+		this.lastMainX = 0;
+		this.lastMainY = 0;
+		
+		//Position lors du clic sur l'image
+		this.lastStartX = 0;
+		this.lastStartY = 0;
+		
+		//Définit si l'image déplacée est l'image courante
 		this.current = false;
+		this.active = false;
+		
+		//Variables de fondu d'activation		
 		this.time = 0;
 		this.now = 2000;
 		this.canChangeColor = false;
-		this.moduleID = moduleID;
-		this.startX = 0;
-		this.startY = 0;
-		this.mainX = 0;
-		this.mainY = 0;
-		this.lastMainX = 0;
-		this.lastMainY = 0;
-		this.lastStartX = 0;
-		this.lastStartY = 0;
 		this.currentTime = System.currentTimeMillis();
 	}
 	
-	public void setPosition(int x, int y, int width, int height){
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-	}
+	//MÉTHODES - Général
 	
-	public void setMainPosition(int x, int y, int width, int height){
-		this.startX = x;
-		this.startY = y;
-		this.width = width;
-		this.height = height;
-	}
-	
-	public void setModuleID(int moduleID){
-		this.moduleID = moduleID;
-	}
-	
-	public int getModuleID(){
-		return(this.moduleID);
-	}
-	
-	public void updateCorner(){
-		this.lastStartX = this.startX;
-		this.lastStartY = this.startY;
-	}
-	
-	public void updateCornerMain(){
-		this.lastMainX = this.mainX;
-		this.lastMainY = this.mainY;
-	}
-	
+	//Renvoie true si les coordonnées sont dans la fenêtre
 	public boolean isInside(int x, int y){
+		
+		//Vérifie que les coordonnées soient bien dans la fenêtre
 		if(this.x < x && x < this.x+width && this.y < y && y < this.y+height){
+			//Si ce n'est pas la fenêtre courante, on affiche un dégradé
 			if(!this.current){
 				this.canChangeColor = true;
 				this.time = currentTime;
 				this.now = 0;
 			}
+			//Sinon on n'affiche pas le dégradé
 			else if(this.now >= 2000){
 				this.canChangeColor = false;
 			}
+			
 			this.current = true;
 			this.active = true;
+			
+			//On met à jour le point de contact
 			this.contactX = x;
 			this.contactY = y;
 			
 			return(true);
 		}
+		//
 		this.current = false;
 		this.active = false;
 		return(false);
 	}
 	
 	public boolean isInsideMain(int x, int y, int currentImage){
-		if(this.startX < x && x < this.startX+mainWidth && this.startY < y && y < this.startY+mainHeight && this.moduleID == currentImage){
+		//Vérifie que les coordonnées soient bien dans la fenêtre et que le module courant soit bien celui affiché
+		if(this.mainX < x && x < this.mainX+mainWidth && this.mainY < y && y < this.mainY+mainHeight && this.moduleID == currentImage){
+			//Si ce n'est pas la fenêtre courante, on affiche un dégradé
 			if(!this.current){
 				this.canChangeColor = true;
 				this.time = currentTime;
 				this.now = 0;
 			}
+			//Sinon on n'affiche pas le dégradé
 			else if(this.now >= 2000){
 				this.canChangeColor = false;
 			}
+			
 			this.current = true;
 			this.active = true;
+			
+			//On met à jour le point de contact
 			this.contactX = x;
 			this.contactY = y;
 			
@@ -124,8 +131,29 @@ public class Window implements Serializable {
 		return(false);
 	}
 	
+	//Mise à jour des coordonées lorsque la souris est relachée (SplitView)
+	public void updateCorner(){
+		this.lastStartX = this.startX;
+		this.lastStartY = this.startY;
+	}
+	
+	//Mise à jour des coordonnées lorsque la souris est relachée (MainView)
+	public void updateCornerMain(){
+		this.lastMainX = this.mainX;
+		this.lastMainY = this.mainY;
+	}
+	
+	//MÉTHODES - Affichage
+	
 	public void paintComponent(Graphics2D g2d){
-		this.currentTime = System.currentTimeMillis();
+		paintComponent(g2d, x, y, width, height);
+	}
+	
+	public void paintComponentMain(Graphics2D g2d){
+		paintComponent(g2d, mainX, mainY, mainWidth, mainHeight);
+	}
+	
+	private void paintComponent(Graphics2D g2d, int x, int y, int width, int height){
 		g2d.setColor(color);
 		g2d.setStroke(new BasicStroke(10));
 		g2d.drawRect(x, y, width, height);
@@ -139,24 +167,30 @@ public class Window implements Serializable {
 			}
 		}
 		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)(128 - ((now/1000.)*64))));
-		g2d.fillRect(x, y, width, height);
+		g2d.fillRect(x, y, width, height);  
 	}
 	
-	public void paintComponentMain(Graphics2D g2d){
-		g2d.setColor(color);
-		g2d.setStroke(new BasicStroke(10));
-		g2d.drawRect(mainX, mainY, mainWidth, mainHeight);
-		if(canChangeColor){
-			if(now < 2000){
-				now = currentTime-time;
-			}
-			if(now >= 2000){
-				now = 2000;
-				canChangeColor = false;
-			}
-		}
-		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)(128 - ((now/1000.)*64))));
-		g2d.fillRect(mainX, mainY, mainWidth, mainHeight);  
+	//MÉTHODES - Getters/Setters
+	public void setPosition(int x, int y, int width, int height){
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
+	
+	public void setMainPosition(int x, int y, int width, int height){
+		this.mainX = x;
+		this.mainY = y;
+		this.mainWidth = width;
+		this.mainHeight = height;
+	}
+	
+	public void setModuleID(int moduleID){
+		this.moduleID = moduleID;
+	}
+	
+	public int getModuleID(){
+		return(this.moduleID);
 	}
 	
 	public Color getColor(){
@@ -260,8 +294,6 @@ public class Window implements Serializable {
 		this.mainY = mainY;
 		this.startY = (int)((mainY - img.getStartY())/ratio);
 	}
-	
-	
 	
 	public void update(float ratio, int imgStartX, int imgStartY){
 		this.ratio = ratio;

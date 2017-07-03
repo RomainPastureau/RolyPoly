@@ -30,24 +30,48 @@ import TUIO.TuioTime;
 
 public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyListener, TuioListener {
 		
+	//VARIABLES
 	private static final long serialVersionUID = 1L;
-	protected int width, height;
-	protected int x, y;
-	protected Dimension d;
-	protected BackgroundLayer bg;
-	protected TitleLayer tl;
-	protected HashMap<String, ArrayList<String>> options = new HashMap<String, ArrayList<String>>();
-	protected TestLayer test;
-	protected boolean menu;
-	protected boolean connect;
-	protected boolean alive;
 	
+	//Général
+	protected int width, height; //Taille de la fenêtre
+	protected int x, y; //Point de départ de l'affichage de la fenêtre
+	protected Dimension d; //Dimension de la fenêtre
+	
+	//Couches
+	protected BackgroundLayer bg; //Fond d'écran
+	protected TitleLayer tl; //Couche titre
+	protected TestLayer test; //Couche test
+	
+	//Divers
+	protected HashMap<String, ArrayList<String>> options = new HashMap<String, ArrayList<String>>(); //Liste des options (non utilisé)
+	
+	//Booléens
+	protected boolean menu; //True si l'on est sur le menu
+	protected boolean connect; //True si l'on est connecté au client
+	protected boolean alive; //True si le programme n'a pas été fermé sur aucun des deux écrans
+	
+	//CONSTRUCTEURS
 	public SplitFocusTestPanel(Dimension d){
 		this.width = (int)d.getWidth();
 		this.height = (int)d.getHeight();
 		this.x = 0;
 		this.y = 0;
 		this.d = d;
+		setup();
+	}
+	
+	public SplitFocusTestPanel(int x, int y, Dimension d){
+		this.width = (int)d.getWidth();
+		this.height = (int)d.getHeight();
+		this.x = x;
+		this.y = y;
+		this.d = d;
+		setup();
+	}
+	
+	//Fonction commune aux deux constructeurs
+	public void setup(){
 		this.bg = new BackgroundLayer(new Color(200, 238, 255), new Color(130, 215, 215), new Color(130, 215, 215), 120, d);
 		Color mainColor = new Color(0, 174, 255);
 		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
@@ -60,32 +84,24 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		this.alive = true;
 	}
 	
-	public SplitFocusTestPanel(int x, int y, Dimension d){
-		this.width = (int)d.getWidth();
-		this.height = (int)d.getHeight();
-		this.x = x;
-		this.y = y;
-		this.d = d;
-		this.bg = new BackgroundLayer(new Color(200, 238, 255), new Color(130, 215, 215), new Color(130, 215, 215), 120, d);
-		Color mainColor = new Color(0, 174, 255);
-		Color[] tempCol = {mainColor.brighter(), mainColor, mainColor.darker()};
-		ArrayList<Color> colors = new ArrayList<Color>();
-		colors.addAll(Arrays.asList(tempCol));
-		this.tl = new TitleLayer("RolyPoly MultiTouch Test", "0.25", options, colors, 0.5f, d);
-		this.test = new TestLayer(2, x, y, d);
-		this.connect = false;
-		this.menu = true;
-		this.alive = true;
+	//MÉTHODES - GÉNÉRAL
+	
+	public boolean checkIfMoves(){
+		return(test.checkIfMoves());
 	}
+	
+	//MÉTHODES - AFFICHAGE
 	
 	public void paintComponent(Graphics g){
 		bg.paintComponent(g);
 		
+		//Si on est sur le menu
 		if(menu){
 			tl.paintComponent(g);
 			Font font = new Font("Calibri", Font.ITALIC, 80);
 			String con;
 			Color col;
+			//Affichage de la connexion au client
 			if(!connect){
 				col = Color.RED;
 				con = "Non connecté";
@@ -95,19 +111,21 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 				col = new Color(153, 204, 0);
 				con = "Connecté";
 				CenterText.center((Graphics2D)g, con, font, 80, col, width-347, height-140, new Dimension(300, 60));
-			}
-			
-
+			}	
+			//Si on clique sur le bouton, on passe au test
 			if(tl.getMenu() == false){
 				menu = false;
 				tl.setMenu(true);
 			}	
 		}
 		
+		//Sinon
 		else{
 			test.paintComponent((Graphics2D)g);
 		}
 	}
+	
+	//MÉTHODES - GETTERS/SETTERS
 	
 	public boolean getMenu(){
 		return(menu);
@@ -121,32 +139,12 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		this.connect = connect;
 	}
 	
-	public boolean moves(){
-		return(test.moves());
-	}
-	
 	public ArrayList<Window> getWindows(){
 		return(test.getWindows());
 	}
 	
-	public void updateWindows(ArrayList<Window> windows){
-		test.updateWindows(windows);
-	}
-	
-	public void mouseClicked(MouseEvent e) {
-		this.tl.mouseClicked(e);
-	}
-	
-	public void addTuioCursor(TuioCursor tc) {
-		if(!menu){
-			this.test.addTuioCursor(tc);
-		}
-	}
-	
-	public void removeTuioCursor(TuioCursor t) {
-		if(!menu){
-			this.test.removeTuioCursor(t);
-		}
+	public void setWindows(ArrayList<Window> windows){
+		test.setWindows(windows);
 	}
 	
 	public boolean getAlive(){
@@ -157,6 +155,28 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 		this.alive = alive;
 	}
 	
+	//MÉTHODES - ENTRÉES SOURIS/CLAVIER/TUIO
+	
+	//Souris pressée
+	public void mouseClicked(MouseEvent e) {
+		this.tl.mouseClicked(e);
+	}
+	
+	//Tactile pressé
+	public void addTuioCursor(TuioCursor tc) {
+		if(!menu){
+			this.test.addTuioCursor(tc);
+		}
+	}
+	
+	//Tactile relâché
+	public void removeTuioCursor(TuioCursor t) {
+		if(!menu){
+			this.test.removeTuioCursor(t);
+		}
+	}
+	
+	//Touche pressée	
 	public void keyPressed(KeyEvent ke) {
 		if(!menu){
 			this.test.keyPressed(ke);
@@ -168,20 +188,23 @@ public class SplitFocusTestPanel extends JPanel implements MouseListener, KeyLis
 	
 	//Fonction de fermeture du programme
 	public void escape(){
-		this.alive = false;
+		this.alive = false; //On passe alive à false
 		System.out.println("Fermeture du programme.");
 		Frame[] frames = JFrame.getFrames();
 		frames[0].dispatchEvent(new WindowEvent(frames[0], WindowEvent.WINDOW_CLOSING));
 	}
 	
+	//Souris pressée
 	public void mousePressed(MouseEvent e) {
 		test.mousePressed(e);
 	}
 	
+	//Souris relâchée
 	public void mouseReleased(MouseEvent e) {
 		test.mouseReleased(e);
 	}
 	
+	//Fonctions non-utilisées forcées par l'interfaces
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void keyReleased(KeyEvent e) {}

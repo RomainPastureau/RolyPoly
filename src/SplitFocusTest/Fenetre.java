@@ -1,23 +1,22 @@
 package SplitFocusTest;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 import Shared.PressKey;
-import Shared.Window;
 import TUIO.TuioBlob;
 import TUIO.TuioClient;
 import TUIO.TuioCursor;
@@ -105,7 +104,7 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 	public void go(){
 		while(true){
 			sft.repaint(); //Actualisation du panel
-			this.moves = sft.moves(); //True si une action est effectuée
+			this.moves = sft.checkIfMoves(); //True si une action est effectuée
 		}
 	}
 	
@@ -121,10 +120,34 @@ public class Fenetre extends JFrame implements MouseListener, KeyListener, TuioL
 		this.recevoir = new ReceiveThread("SplitFocus", this);
 	}
 	
+	//Touche pressée
+	public void keyPressed(KeyEvent ke){
+		sft.keyPressed(ke);
+		if(ke.getKeyCode() == ke.VK_ESCAPE){
+			escape();
+		}
+	}
+
+	//Fonction de fermeture du programme
+	public void escape(){
+		try{
+			this.oos.close();
+			this.ois.close();
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+		this.alive = false;
+		envoi.interrupt();
+		recevoir.interrupt();
+		it.interrupt();
+		System.out.println("Fermeture du programme.");
+		Frame[] frames = JFrame.getFrames();
+		frames[0].dispatchEvent(new WindowEvent(frames[0], WindowEvent.WINDOW_CLOSING));
+	}
+	
 	public void addTuioCursor(TuioCursor tc) {sft.addTuioCursor(tc);}
 	public void removeTuioCursor(TuioCursor tc) {sft.removeTuioCursor(tc);}
 	public void mouseClicked(MouseEvent e) {sft.mouseClicked(e);}
-	public void keyPressed(KeyEvent ke) {sft.keyPressed(ke);}
 	public void mousePressed(MouseEvent e) {sft.mousePressed(e);}
 	public void mouseReleased(MouseEvent e) {sft.mouseReleased(e);}
 	public void mouseEntered(MouseEvent e) {}

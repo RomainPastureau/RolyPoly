@@ -35,25 +35,25 @@ public class InitThread extends Thread {
 	
 	
 	public void LaunchMyServer(){
-		
 		Thread ServerThread = new Thread(new Runnable() {
 			public void run(){
 				
 				try {
-					
+					//Lancement de l'écriture
 					fenetre.oos = new ObjectOutputStream(fenetre.clientSocket.getOutputStream());
 					System.out.println("Connexion sortante OK");
 
+					//Lancement de la lecture
 					fenetre.ois = new ObjectInputStream(fenetre.clientSocket.getInputStream());
 					System.out.println("Connexion entrante OK");
 					
-					// Affichage seulement
+					//Gestion de l'affichage
 					fenetre.sft.setConnect(true);
-					// lancer la communication
+					
+					//Lancement de la communication
 					fenetre.envoi.start();
 					fenetre.recevoir.start();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 

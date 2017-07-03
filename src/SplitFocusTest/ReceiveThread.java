@@ -21,23 +21,24 @@ public class ReceiveThread extends Thread {
 		windows = fenetre.sft.getWindows();
 		while(fenetre.alive){
 			try {
-//				ctrlThere = ois.readBoolean();
-//				if(!moves && ctrlThere){
-//					control = "MainView";
-//					setControl();
-//				}
+				//On lit le booléen.
 				fenetre.ctrlThere = fenetre.ois.readBoolean();
+				if(!fenetre.moves && fenetre.ctrlThere){
+					fenetre.control = "MainView";
+					fenetre.setControl();
+				}
+				//S'il est à true, on lit la liste de fenêtres
 				if(fenetre.ctrlThere){
 					tempW = (ArrayList<Window>)fenetre.ois.readObject();
-					fenetre.sft.setControl(fenetre.control);
 					if(tempW != null){
 						windows = tempW;
-						fenetre.sft.updateWindows(windows);
+						fenetre.sft.setWindows(windows);
 					}
 				}
+				//Enfin, on vérifie que le programme distant soit vivant.
 				fenetre.sft.setAlive(fenetre.alive);
 			} catch (NullPointerException e){
-				//System.out.println("Rien n'a été reçu.");
+				System.out.println("Rien n'a été reçu.");
 			} catch (SocketException e) {
 				System.out.println("Système déconnecté.");
 			} catch (IOException e){
